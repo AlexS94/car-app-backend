@@ -1,4 +1,4 @@
-package de.fakult.t73.galvanize.carapp.api.carappapi;
+package de.fakultaet73.galvanize.carapp.api.carappapi;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
