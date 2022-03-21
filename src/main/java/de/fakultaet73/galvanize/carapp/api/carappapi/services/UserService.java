@@ -1,14 +1,19 @@
 package de.fakultaet73.galvanize.carapp.api.carappapi.services;
 
 import de.fakultaet73.galvanize.carapp.api.carappapi.entities.User;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
+@AllArgsConstructor
 @Service
 public class UserService {
+
+    UserRepository userRepository;
+
     public Optional<User> getUser(int id) {
-        return null;
+        return userRepository.findById(id);
     }
 
     public Optional<User> validate(String input, String password) {
