@@ -15,7 +15,16 @@ public class UserService {
         return null;
     }
 
-    public Optional<User> addUser(User user) {
+    public User addUser(User user) {
         return null;
     }
+
+    public Optional<User> updateUser(User user) {
+        return null;
+    }
+
+    private boolean verifyUser(User user) {
+        return false;
+    }
+
 }

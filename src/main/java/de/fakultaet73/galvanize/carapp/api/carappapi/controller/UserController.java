@@ -1,8 +1,11 @@
 package de.fakultaet73.galvanize.carapp.api.carappapi.controller;
 
 import de.fakultaet73.galvanize.carapp.api.carappapi.entities.User;
+import de.fakultaet73.galvanize.carapp.api.carappapi.exceptions.InvalidUserException;
+import de.fakultaet73.galvanize.carapp.api.carappapi.exceptions.UserAlreadyExistsException;
 import de.fakultaet73.galvanize.carapp.api.carappapi.services.UserService;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,16 +30,25 @@ public class UserController {
     }
 
     @PostMapping("/user")
-    public ResponseEntity<User> addUser(@RequestBody User user) {
-        Optional<User> optionalUser = userService.addUser(user);
-        return ResponseEntity.ok(optionalUser.get());
-        //return optionalUser.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    public User addUser(@RequestBody User user) {
+        return userService.addUser(user);
     }
 
+    @PutMapping("/user")
+    public ResponseEntity<User>updateUser(@RequestBody User user) {
+        Optional<User> optionalUser = userService.updateUser(user);
+        return optionalUser.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    }
 
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public void UserAlreadyExistsExceptionHandler(UserAlreadyExistsException exception) {
+    }
 
-
-
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public void InvalidUserException(InvalidUserException exception) {
+    }
 
 
 }

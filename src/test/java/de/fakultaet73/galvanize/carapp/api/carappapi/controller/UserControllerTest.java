@@ -1,8 +1,12 @@
 package de.fakultaet73.galvanize.carapp.api.carappapi.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.fakultaet73.galvanize.carapp.api.carappapi.entities.User;
+import de.fakultaet73.galvanize.carapp.api.carappapi.exceptions.InvalidUserException;
+import de.fakultaet73.galvanize.carapp.api.carappapi.exceptions.UserAlreadyExistsException;
 import de.fakultaet73.galvanize.carapp.api.carappapi.services.UserService;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,11 +35,18 @@ public class UserControllerTest {
 
     ObjectMapper mapper = new ObjectMapper();
 
+    User user;
+    String json;
+
+    @BeforeEach
+    void setUp() throws JsonProcessingException {
+        user = User.builder().userName("Max").lastName("Mustermann").build();
+        json = mapper.writeValueAsString(this.user);
+    }
+
     @Test
     void getUser_id_returnsUser() throws Exception {
         // Arrange
-        User user = User.builder().userName("Max").lastName("Mustermann").build();
-        String json = mapper.writeValueAsString(user);
         when(userService.getUser(anyInt())).thenReturn(Optional.of(user));
 
         // Act
@@ -70,9 +81,6 @@ public class UserControllerTest {
     @Test
     void validateUser_input_password_returnsUser() throws Exception {
         // Arrange
-        User user = User.builder().userName("Max").lastName("Mustermann").build();
-        String json = mapper.writeValueAsString(user);
-
         when(userService.validate(anyString(), anyString())).thenReturn(Optional.of(user));
 
         // Act
@@ -96,10 +104,7 @@ public class UserControllerTest {
     @Test
     void addUser_User_returnsUser() throws Exception {
         // Arrange
-        User user = User.builder().userName("Max").lastName("Mustermann").build();
-        String json = mapper.writeValueAsString(user);
-
-        when(userService.addUser(any(User.class))).thenReturn(Optional.of(user));
+        when(userService.addUser(any(User.class))).thenReturn(user);
 
         // Act
         mockMvc.perform(post("/user")
@@ -112,17 +117,70 @@ public class UserControllerTest {
 
     @Test
     void addUser_User_alreadyExists_returnsConflict() throws Exception {
+        // Arrange
+        when(userService.addUser(any(User.class))).thenThrow(UserAlreadyExistsException.class);
+
+        // Act
+        mockMvc.perform(post("/user")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json))
+                // Assert
+                .andExpect(status().isConflict());
     }
 
     @Test
-    void addUser_User_wrongFormat_returnsBadRequest() throws Exception {
+    void addUser_emptyObject_returnsBadRequest() throws Exception {
+        // Arrange
+        json = "{}";
+        when(userService.addUser(any(User.class))).thenThrow(InvalidUserException.class);
+
+        // Act
+        mockMvc.perform(post("/user")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json))
+                // Assert
+                .andExpect(status().isBadRequest());
     }
 
+    @Test
+    void updateUser_User_returnsUser() throws Exception {
+        // Arrange
+        when(userService.updateUser(any(User.class))).thenReturn(Optional.of(user));
 
+        // Act
+        mockMvc.perform(put("/user")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json))
+                // Assert
+                .andExpect(status().isOk())
+                .andExpect(content().json(json));
+    }
 
-    /*
-        PATCH update
-        POST create
-     */
+    @Test
+    void updateUser_User_UserNotExists_returnsNotFound() throws Exception {
+        // Arrange
+        when(userService.updateUser(any(User.class))).thenReturn(Optional.empty());
+
+        // Act
+        mockMvc.perform(put("/user")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json))
+                // Assert
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void updateUser_emptyObject_returnsBadRequest() throws Exception {
+        // Arrange
+        json = "{}";
+        when(userService.updateUser(any(User.class))).thenThrow(InvalidUserException.class);
+
+        // Act
+        mockMvc.perform(put("/user")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json))
+                // Assert
+                .andExpect(status().isBadRequest());
+    }
 
 }

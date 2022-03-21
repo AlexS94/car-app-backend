@@ -1,11 +1,9 @@
 package de.fakultaet73.galvanize.carapp.api.carappapi.entities;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import de.fakultaet73.galvanize.carapp.api.carappapi.Address;
 import de.fakultaet73.galvanize.carapp.api.carappapi.Rating;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.bson.types.Binary;
 
 import java.time.LocalDate;
@@ -17,6 +15,7 @@ import java.util.List;
 @Builder
 public class User {
 
+    private int id;
     private String firstName;
     private String lastName;
     private String userName;
