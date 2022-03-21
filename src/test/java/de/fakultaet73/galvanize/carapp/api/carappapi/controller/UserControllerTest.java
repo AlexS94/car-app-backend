@@ -11,8 +11,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.util.Optional;
 
@@ -36,7 +34,7 @@ public class UserControllerTest {
     @Test
     void getUser_id_returnsUser() throws Exception {
         // Arrange
-        User user = new User("Max", "Mustermann");
+        User user = User.builder().userName("Max").lastName("Mustermann").build();
         String json = mapper.writeValueAsString(user);
         when(userService.getUser(anyInt())).thenReturn(Optional.of(user));
 
@@ -72,7 +70,7 @@ public class UserControllerTest {
     @Test
     void validateUser_input_password_returnsUser() throws Exception {
         // Arrange
-        User user = new User("Max", "Mustermann");
+        User user = User.builder().userName("Max").lastName("Mustermann").build();
         String json = mapper.writeValueAsString(user);
 
         when(userService.validate(anyString(), anyString())).thenReturn(Optional.of(user));
@@ -98,7 +96,7 @@ public class UserControllerTest {
     @Test
     void addUser_User_returnsUser() throws Exception {
         // Arrange
-        User user = new User("Max", "Mustermann");
+        User user = User.builder().userName("Max").lastName("Mustermann").build();
         String json = mapper.writeValueAsString(user);
 
         when(userService.addUser(any(User.class))).thenReturn(Optional.of(user));
