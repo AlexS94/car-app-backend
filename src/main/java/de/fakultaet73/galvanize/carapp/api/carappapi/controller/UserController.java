@@ -1,6 +1,6 @@
 package de.fakultaet73.galvanize.carapp.api.carappapi.controller;
 
-import de.fakultaet73.galvanize.carapp.api.carappapi.entities.User;
+import de.fakultaet73.galvanize.carapp.api.carappapi.documents.User;
 import de.fakultaet73.galvanize.carapp.api.carappapi.exceptions.UserAlreadyExistsException;
 import de.fakultaet73.galvanize.carapp.api.carappapi.services.UserService;
 import lombok.AllArgsConstructor;
@@ -18,7 +18,7 @@ public class UserController {
     UserService userService;
 
     @GetMapping("/user/{id}")
-    public ResponseEntity<User> getUser(@PathVariable int id) {
+    public ResponseEntity<User> getUser(@PathVariable long id) {
         Optional<User> optionalUser = userService.getUser(id);
         return optionalUser.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }

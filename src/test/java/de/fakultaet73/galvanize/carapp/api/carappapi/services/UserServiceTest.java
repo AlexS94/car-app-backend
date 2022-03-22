@@ -1,8 +1,9 @@
 package de.fakultaet73.galvanize.carapp.api.carappapi.services;
 
 import de.fakultaet73.galvanize.carapp.api.carappapi.Address;
-import de.fakultaet73.galvanize.carapp.api.carappapi.entities.User;
+import de.fakultaet73.galvanize.carapp.api.carappapi.documents.User;
 import de.fakultaet73.galvanize.carapp.api.carappapi.exceptions.UserAlreadyExistsException;
+import de.fakultaet73.galvanize.carapp.api.carappapi.repositories.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -24,13 +25,15 @@ class UserServiceTest {
     @Mock
     UserRepository userRepository;
 
+    @Mock
+    SequenceGeneratorService sequenceGeneratorService;
+
     User validUser;
 
     @BeforeEach
     void setUp() {
-        userService = new UserService(userRepository);
+        userService = new UserService(userRepository, sequenceGeneratorService);
         validUser = User.builder()
-                .id(1)
                 .firstName("Max")
                 .lastName("Mustermann")
                 .userName("MrMax")
@@ -44,7 +47,7 @@ class UserServiceTest {
     @Test
     void getUser_id_returnsUserOptional() {
         // Arrange
-        when(userRepository.findById(anyInt())).thenReturn(Optional.of(validUser));
+        when(userRepository.findById(anyLong())).thenReturn(Optional.of(validUser));
 
         // Act
         Optional<User> result = userService.getUser(1);
@@ -56,7 +59,7 @@ class UserServiceTest {
     @Test
     void getUser_id_notExists_returnsEmptyOptional() {
         // Arrange
-        when(userRepository.findById(anyInt())).thenReturn(Optional.empty());
+        when(userRepository.findById(anyLong())).thenReturn(Optional.empty());
 
         // Act
         Optional<User> result = userService.getUser(1);
