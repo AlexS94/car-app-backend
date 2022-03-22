@@ -9,6 +9,9 @@ import de.fakultaet73.galvanize.carapp.api.carappapi.Address;
 import de.fakultaet73.galvanize.carapp.api.carappapi.Rating;
 import lombok.*;
 import org.bson.types.Binary;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Email;
@@ -20,17 +23,19 @@ import java.util.List;
 @AllArgsConstructor
 @Getter
 @Builder
+@Document
 public class User {
 
+    @Id
     private int id;
 
     @NotNull
     private String firstName;
     @NotNull
     private String lastName;
-    @NotNull
+    @NotNull @Indexed(unique = true)
     private String userName;
-    @NotNull @Email
+    @NotNull @Email @Indexed(unique = true)
     private String email;
     @NotNull
     private String password;

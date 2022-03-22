@@ -115,7 +115,7 @@ public class UserControllerTest {
     void addUser_User_returnsUser() throws Exception {
         // Arrange
         when(userService.addUser(any(User.class))).thenReturn(validUser);
-
+        System.out.println(json);
         // Act
         mockMvc.perform(post("/user")
                         .contentType(MediaType.APPLICATION_JSON)

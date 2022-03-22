@@ -39,7 +39,7 @@ public class UserService {
     }
 
     private boolean userExists(User user) {
-        return userRepository.findByUserNameOrEmailExists(
+        return userRepository.existsUserByUserNameOrEmail(
                 user.getUserName(), user.getEmail()
         );
     }
