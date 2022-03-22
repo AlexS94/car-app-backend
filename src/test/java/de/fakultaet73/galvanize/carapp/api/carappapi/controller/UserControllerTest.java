@@ -2,8 +2,8 @@ package de.fakultaet73.galvanize.carapp.api.carappapi.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import de.fakultaet73.galvanize.carapp.api.carappapi.Address;
 import de.fakultaet73.galvanize.carapp.api.carappapi.entities.User;
-import de.fakultaet73.galvanize.carapp.api.carappapi.exceptions.InvalidUserException;
 import de.fakultaet73.galvanize.carapp.api.carappapi.exceptions.UserAlreadyExistsException;
 import de.fakultaet73.galvanize.carapp.api.carappapi.services.UserService;
 import org.junit.jupiter.api.BeforeEach;
@@ -16,6 +16,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.time.LocalDate;
 import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.*;
@@ -35,19 +36,28 @@ public class UserControllerTest {
 
     ObjectMapper mapper = new ObjectMapper();
 
-    User user;
+    User validUser;
     String json;
 
     @BeforeEach
     void setUp() throws JsonProcessingException {
-        user = User.builder().userName("Max").lastName("Mustermann").build();
-        json = mapper.writeValueAsString(this.user);
+        validUser = User.builder()
+                .id(1)
+                .firstName("Max")
+                .lastName("Mustermann")
+                .userName("Max")
+                .email("mustermann@web.de")
+                .password("password")
+                .dateOfBirth(LocalDate.of(1999, 1, 1))
+                .address(new Address("Examplestreet", 12, "Berlin", 12345))
+                .build();
+        json = mapper.writeValueAsString(this.validUser);
     }
 
     @Test
     void getUser_id_returnsUser() throws Exception {
         // Arrange
-        when(userService.getUser(anyInt())).thenReturn(Optional.of(user));
+        when(userService.getUser(anyInt())).thenReturn(Optional.of(validUser));
 
         // Act
         mockMvc.perform(get("/user/1"))
@@ -81,7 +91,7 @@ public class UserControllerTest {
     @Test
     void validateUser_input_password_returnsUser() throws Exception {
         // Arrange
-        when(userService.validate(anyString(), anyString())).thenReturn(Optional.of(user));
+        when(userService.validate(anyString(), anyString())).thenReturn(Optional.of(validUser));
 
         // Act
         mockMvc.perform(get("/validate?input=max&password=test"))
@@ -104,7 +114,7 @@ public class UserControllerTest {
     @Test
     void addUser_User_returnsUser() throws Exception {
         // Arrange
-        when(userService.addUser(any(User.class))).thenReturn(user);
+        when(userService.addUser(any(User.class))).thenReturn(validUser);
 
         // Act
         mockMvc.perform(post("/user")
@@ -132,7 +142,6 @@ public class UserControllerTest {
     void addUser_emptyObject_returnsBadRequest() throws Exception {
         // Arrange
         json = "{}";
-        when(userService.addUser(any(User.class))).thenThrow(InvalidUserException.class);
 
         // Act
         mockMvc.perform(post("/user")
@@ -143,9 +152,77 @@ public class UserControllerTest {
     }
 
     @Test
+    void addUser_missingParam_returnsBadRequest() throws Exception {
+        // Act
+        User invalidUser = User.builder()
+                .id(1)
+                .firstName("Max")
+                .lastName("Mustermann")
+                .email("mustermann.de")
+                .password("password")
+                .dateOfBirth(LocalDate.of(1999, 1, 1))
+                .address(new Address("Examplestreet", 12, "Berlin", 12345))
+                .build();
+        json = mapper.writeValueAsString(invalidUser);
+
+        mockMvc.perform(post("/user")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json))
+                // Assert
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void addUser_validAddress_returnsUser() throws Exception {
+        // Act
+        when(userService.addUser(any(User.class))).thenReturn(validUser);
+
+        mockMvc.perform(post("/user")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json))
+                // Assert
+                .andExpect(status().isOk())
+                .andExpect(content().json(json));
+    }
+
+    @Test
+    void addUser_invalidAddress_returnsBadRequest() throws Exception {
+        // Act
+        String json = "{\"id\":1,\"firstName\":\"Max\",\"lastName\":\"Mustermann\",\"userName\":\"Max\",\"email\":\"mustermann@web.de\",\"password\":\"password\",\"dateOfBirth\":\"1999-01-01\",\"image\":null,\"address\":{\"street\":\"Examplestreet\",\"number\":12,\"city\":\"Berlin\"},\"ratings\":null,\"cars\":null,\"bookedCars\":null}";
+
+        mockMvc.perform(post("/user")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json))
+                // Assert
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void addUser_invalidEmail_returnsBadRequest() throws Exception {
+        // Act
+        User invalidUser = User.builder()
+                .id(1)
+                .firstName("Max")
+                .lastName("Mustermann")
+                .userName("Max")
+                .email("mustermann.de")
+                .password("password")
+                .dateOfBirth(LocalDate.of(1999, 1, 1))
+                .address(new Address("Examplestreet", 12, "Berlin", 12345))
+                .build();
+        json = mapper.writeValueAsString(invalidUser);
+
+        mockMvc.perform(post("/user")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json))
+                // Assert
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
     void updateUser_User_returnsUser() throws Exception {
         // Arrange
-        when(userService.updateUser(any(User.class))).thenReturn(Optional.of(user));
+        when(userService.updateUser(any(User.class))).thenReturn(Optional.of(validUser));
 
         // Act
         mockMvc.perform(put("/user")
@@ -173,7 +250,6 @@ public class UserControllerTest {
     void updateUser_emptyObject_returnsBadRequest() throws Exception {
         // Arrange
         json = "{}";
-        when(userService.updateUser(any(User.class))).thenThrow(InvalidUserException.class);
 
         // Act
         mockMvc.perform(put("/user")
