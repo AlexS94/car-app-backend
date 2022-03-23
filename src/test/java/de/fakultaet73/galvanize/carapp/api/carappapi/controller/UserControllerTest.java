@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import de.fakultaet73.galvanize.carapp.api.carappapi.Address;
 import de.fakultaet73.galvanize.carapp.api.carappapi.documents.User;
 import de.fakultaet73.galvanize.carapp.api.carappapi.exceptions.UserAlreadyExistsException;
+import de.fakultaet73.galvanize.carapp.api.carappapi.services.CarService;
 import de.fakultaet73.galvanize.carapp.api.carappapi.services.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -33,6 +34,9 @@ public class UserControllerTest {
 
     @MockBean
     UserService userService;
+
+    @MockBean
+    CarService carService;
 
     ObjectMapper mapper = new ObjectMapper();
 
@@ -68,7 +72,7 @@ public class UserControllerTest {
     @Test
     void getUser_id_notFound_returnsNotFound() throws Exception {
         // Arrange
-        when(userService.getUser(anyInt())).thenReturn(Optional.empty());
+        when(userService.getUser(anyLong())).thenReturn(Optional.empty());
 
         // Act
         mockMvc.perform(get("/user/1"))
@@ -79,7 +83,7 @@ public class UserControllerTest {
     @Test
     void getUser_id_wrongFormat_returnsBadRequest() throws Exception {
         // Arrange
-        when(userService.getUser(anyInt())).thenReturn(Optional.empty());
+        when(userService.getUser(anyLong())).thenReturn(Optional.empty());
 
         // Act
         mockMvc.perform(get("/user/aa"))
