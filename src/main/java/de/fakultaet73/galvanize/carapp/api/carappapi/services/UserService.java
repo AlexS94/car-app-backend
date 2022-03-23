@@ -41,6 +41,14 @@ public class UserService {
                 Optional.of(userRepository.save(user)) : Optional.empty();
     }
 
+    public boolean deleteUser(long id) {
+        if (userRepository.existsById(id)) {
+            userRepository.deleteById(id);
+            return true;
+        }
+        return false;
+    }
+
     private boolean userExists(User user) {
         return userRepository.existsUserByUserNameOrEmail(
                 user.getUserName(), user.getEmail()

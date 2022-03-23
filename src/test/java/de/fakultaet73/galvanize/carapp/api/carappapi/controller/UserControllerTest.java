@@ -256,4 +256,40 @@ public class UserControllerTest {
                 .andExpect(status().isBadRequest());
     }
 
+    @Test
+    void deleteUser_id_returnsOk() throws Exception {
+        when(userService.deleteUser(anyLong())).thenReturn(true);
+
+        // Act
+        mockMvc.perform(delete("/user/1"))
+        // Assert
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    void deleteUser_id_notFound_returnsNoContent() throws Exception {
+        when(userService.deleteUser(anyLong())).thenReturn(false);
+
+        // Act
+        mockMvc.perform(delete("/user/1"))
+                // Assert
+                .andExpect(status().isNoContent());
+    }
+
+    @Test
+    void deleteUser_noParam_returnsMethodNotAllowed() throws Exception {
+        // Act
+        mockMvc.perform(delete("/user"))
+                // Assert
+                .andExpect(status().isMethodNotAllowed());
+    }
+
+    @Test
+    void deleteUser_wrongFormat_returnsBadRequest() throws Exception {
+        // Act
+        mockMvc.perform(delete("/user/aa"))
+                // Assert
+                .andExpect(status().isBadRequest());
+    }
+
 }

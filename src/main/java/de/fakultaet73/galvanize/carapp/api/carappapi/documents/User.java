@@ -16,6 +16,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.util.List;
@@ -33,17 +34,16 @@ public class User {
     @Setter
     private long id;
 
-    @NotNull
+    @NotNull @NotEmpty
     private String firstName;
-    @NotNull
+    @NotNull @NotEmpty
     private String lastName;
-    @NotNull @Indexed(unique = true)
+    @NotNull @NotEmpty @Indexed(unique = true)
     private String userName;
-    @NotNull @Email @Indexed(unique = true)
+    @NotNull @NotEmpty @Email @Indexed(unique = true)
     private String email;
-    @NotNull
+    @NotNull @NotEmpty
     private String password;
-
 
     @JsonDeserialize(using = LocalDateDeserializer.class)
     @JsonSerialize(using = LocalDateSerializer.class)

@@ -35,9 +35,14 @@ public class UserController {
     }
 
     @PutMapping("/user")
-    public ResponseEntity<User>updateUser(@Valid @RequestBody User user) {
+    public ResponseEntity<User> updateUser(@Valid @RequestBody User user) {
         Optional<User> optionalUser = userService.updateUser(user);
         return optionalUser.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @DeleteMapping("/user/{id}")
+    public ResponseEntity<User> deleteUser(@PathVariable long id) {
+        return userService.deleteUser(id) ? ResponseEntity.ok().build() : ResponseEntity.noContent().build();
     }
 
     @ExceptionHandler

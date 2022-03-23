@@ -15,7 +15,7 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class UserServiceTest {
@@ -194,7 +194,7 @@ class UserServiceTest {
         when(userRepository.save(any(User.class))).thenReturn(validUser);
 
         // Act
-        Optional<User>result = userService.updateUser(validUser);
+        Optional<User> result = userService.updateUser(validUser);
 
         // Assert
         assertEquals(Optional.of(validUser), result);
@@ -206,10 +206,35 @@ class UserServiceTest {
         when(userRepository.existsUserByUserNameOrEmail(anyString(), anyString()))
                 .thenReturn(false);
         // Act
-        Optional<User>result = userService.updateUser(validUser);
+        Optional<User> result = userService.updateUser(validUser);
 
         // Assert
         assertTrue(result.isEmpty());
+    }
+
+    @Test
+    void deleteUser_id_returnsTrue() {
+        // Arrange
+        when(userRepository.existsById(anyLong())).thenReturn(true);
+        doNothing().when(userRepository).deleteById(anyLong());
+
+        // Act
+        boolean result = userService.deleteUser(validUser.getId());
+
+        // Assert
+        assertTrue(result);
+        verify(userRepository).deleteById(anyLong());
+    }
+
+    @Test
+    void deleteUser_id_notExists_returnsFalse() {
+        // Arrange
+        when(userRepository.existsById(anyLong())).thenReturn(false);
+        // Act
+        boolean result = userService.deleteUser(validUser.getId());
+
+        // Assert
+        assertFalse(result);
     }
 
 }

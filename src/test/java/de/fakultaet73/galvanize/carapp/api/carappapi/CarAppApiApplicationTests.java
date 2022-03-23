@@ -1,6 +1,5 @@
 package de.fakultaet73.galvanize.carapp.api.carappapi;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.fakultaet73.galvanize.carapp.api.carappapi.documents.User;
 import de.fakultaet73.galvanize.carapp.api.carappapi.repositories.UserRepository;
@@ -27,6 +26,7 @@ class CarAppApiApplicationTests {
 
     @Autowired
     TestRestTemplate restTemplate;
+    /*RestTemplate restTemplate;*/
 
     @Autowired
     UserRepository userRepository;
@@ -57,7 +57,7 @@ class CarAppApiApplicationTests {
 
         for (int i = 0; i < 5; i++) {
             User userTmp = User.builder()
-                    .id(i+1)
+                    .id(i + 1)
                     .firstName(firstNameArray[i])
                     .lastName(lastNamesArray[i])
                     .userName(userNameArray[i])
@@ -75,6 +75,10 @@ class CarAppApiApplicationTests {
         userRepository.deleteAll();
     }
 
+    @Test
+    public void applicationStarts() {
+        CarAppApiApplication.main(new String[]{});
+    }
 
     @Test
     void checkDatabase() {
@@ -90,11 +94,6 @@ class CarAppApiApplicationTests {
             System.out.println(user.toString());
             assertEquals(user.getUserName(), testUserList.get(i).getUserName());
         }
-    }
-
-    @Test
-    public void applicationStarts() {
-        CarAppApiApplication.main(new String[] {});
     }
 
     @Test
@@ -137,9 +136,9 @@ class CarAppApiApplicationTests {
     }
 
     @Test
-    void add_User() throws JsonProcessingException {
+    void add_User_User_returnsUser() throws Exception {
         // Arrange
-        User userTmp = User.builder()
+        User user = User.builder()
                 .firstName("Vorname")
                 .lastName("Nachname")
                 .userName("Nutzername")
@@ -149,12 +148,11 @@ class CarAppApiApplicationTests {
                 .address(new Address("Examplestreet", 12, "Berlin", 12345))
                 .build();
 
-        String json =   mapper.writeValueAsString(userTmp);
-        System.out.println(json);
+        String json = mapper.writeValueAsString(user);
 
         HttpHeaders headers = new HttpHeaders();
         headers.set("Content-Type", MediaType.APPLICATION_JSON_VALUE);
-        HttpEntity<User> request = new HttpEntity<>(userTmp, headers);
+        HttpEntity<User> request = new HttpEntity<>(user, headers);
 
         // Act
         ResponseEntity<User> response = restTemplate.postForEntity("/user", request, User.class);
@@ -165,9 +163,56 @@ class CarAppApiApplicationTests {
     }
 
     @Test
+    void updateAuto_returnsUpdatedAuto() throws Exception {
+        // Arrange
+        User expected = testUserList.get(0);
+
+        User user = User.builder()
+                .id(1)
+                .firstName("David")
+                .lastName("Muller")
+                .userName("firefox")
+                .email("muller@web.de")
+                .password("password")
+                .dateOfBirth(LocalDate.of(1999, 1, 1))
+                .address(new Address("New Street", 13, "Hanover", 11223))
+                .build();
+
+        String json = mapper.writeValueAsString(user);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Content-Type", MediaType.APPLICATION_JSON_VALUE);
+        HttpEntity<User> request = new HttpEntity<>(user, headers);
+
+        // Act
+        ResponseEntity<User> response = restTemplate.exchange("/user", HttpMethod.PUT, request, User.class);
+
+        //Assert
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(response.getBody()).isNotNull();
+        assertEquals(response.getBody().getAddress().getCity(), user.getAddress().getCity());
+        assertEquals(response.getBody().getAddress().getZip(), user.getAddress().getZip());
+    }
+
+    @Test
+    void deleteUser_Id_returnsOk() throws Exception {
+        // Act
+        ResponseEntity<User> getUserBeforeDeleteResponse = restTemplate.getForEntity("/user/1", User.class);
+        ResponseEntity<Void> deleteUserResponse = restTemplate.exchange("/user/1", HttpMethod.DELETE, null, Void.class);
+        ResponseEntity<User> getUserAfterDeleteResponse = restTemplate.getForEntity("/user/1", User.class);
+
+        //Assert
+        assertThat(getUserBeforeDeleteResponse.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(getUserBeforeDeleteResponse.getBody()).isNotNull();
+
+        assertThat(deleteUserResponse.getStatusCode()).isEqualTo(HttpStatus.OK);
+
+        assertThat(getUserAfterDeleteResponse.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
+    }
+
+    @Test
     void contextLoads() {
 
     }
-
 
 }
