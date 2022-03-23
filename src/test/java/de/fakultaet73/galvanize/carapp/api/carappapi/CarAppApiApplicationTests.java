@@ -57,7 +57,7 @@ class CarAppApiApplicationTests {
 
         for (int i = 0; i < 5; i++) {
             User userTmp = User.builder()
-                    .id(i)
+                    .id(i+1)
                     .firstName(firstNameArray[i])
                     .lastName(lastNamesArray[i])
                     .userName(userNameArray[i])
@@ -90,6 +90,11 @@ class CarAppApiApplicationTests {
             System.out.println(user.toString());
             assertEquals(user.getUserName(), testUserList.get(i).getUserName());
         }
+    }
+
+    @Test
+    public void applicationStarts() {
+        CarAppApiApplication.main(new String[] {});
     }
 
     @Test

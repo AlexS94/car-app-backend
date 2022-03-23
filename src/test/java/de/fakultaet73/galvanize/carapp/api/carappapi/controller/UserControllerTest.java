@@ -56,7 +56,7 @@ public class UserControllerTest {
     @Test
     void getUser_id_returnsUser() throws Exception {
         // Arrange
-        when(userService.getUser(anyInt())).thenReturn(Optional.of(validUser));
+        when(userService.getUser(anyLong())).thenReturn(Optional.of(validUser));
 
         // Act
         mockMvc.perform(get("/user/1"))
