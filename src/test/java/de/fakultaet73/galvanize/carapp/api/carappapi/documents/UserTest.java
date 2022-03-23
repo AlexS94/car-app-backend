@@ -1,4 +1,4 @@
-package de.fakultaet73.galvanize.carapp.api.carappapi.entities;
+package de.fakultaet73.galvanize.carapp.api.carappapi.documents;
 
 import de.fakultaet73.galvanize.carapp.api.carappapi.Address;
 import de.fakultaet73.galvanize.carapp.api.carappapi.Rating;

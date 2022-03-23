@@ -1,8 +1,9 @@
 package de.fakultaet73.galvanize.carapp.api.carappapi.services;
 
 import de.fakultaet73.galvanize.carapp.api.carappapi.Address;
-import de.fakultaet73.galvanize.carapp.api.carappapi.entities.User;
+import de.fakultaet73.galvanize.carapp.api.carappapi.documents.User;
 import de.fakultaet73.galvanize.carapp.api.carappapi.exceptions.UserAlreadyExistsException;
+import de.fakultaet73.galvanize.carapp.api.carappapi.repositories.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -14,7 +15,7 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class UserServiceTest {
@@ -24,13 +25,15 @@ class UserServiceTest {
     @Mock
     UserRepository userRepository;
 
+    @Mock
+    SequenceGeneratorService sequenceGeneratorService;
+
     User validUser;
 
     @BeforeEach
     void setUp() {
-        userService = new UserService(userRepository);
+        userService = new UserService(userRepository, sequenceGeneratorService);
         validUser = User.builder()
-                .id(1)
                 .firstName("Max")
                 .lastName("Mustermann")
                 .userName("MrMax")
@@ -44,7 +47,7 @@ class UserServiceTest {
     @Test
     void getUser_id_returnsUserOptional() {
         // Arrange
-        when(userRepository.findById(anyInt())).thenReturn(Optional.of(validUser));
+        when(userRepository.findById(anyLong())).thenReturn(Optional.of(validUser));
 
         // Act
         Optional<User> result = userService.getUser(1);
@@ -56,7 +59,7 @@ class UserServiceTest {
     @Test
     void getUser_id_notExists_returnsEmptyOptional() {
         // Arrange
-        when(userRepository.findById(anyInt())).thenReturn(Optional.empty());
+        when(userRepository.findById(anyLong())).thenReturn(Optional.empty());
 
         // Act
         Optional<User> result = userService.getUser(1);
@@ -191,7 +194,7 @@ class UserServiceTest {
         when(userRepository.save(any(User.class))).thenReturn(validUser);
 
         // Act
-        Optional<User>result = userService.updateUser(validUser);
+        Optional<User> result = userService.updateUser(validUser);
 
         // Assert
         assertEquals(Optional.of(validUser), result);
@@ -203,10 +206,35 @@ class UserServiceTest {
         when(userRepository.existsUserByUserNameOrEmail(anyString(), anyString()))
                 .thenReturn(false);
         // Act
-        Optional<User>result = userService.updateUser(validUser);
+        Optional<User> result = userService.updateUser(validUser);
 
         // Assert
         assertTrue(result.isEmpty());
+    }
+
+    @Test
+    void deleteUser_id_returnsTrue() {
+        // Arrange
+        when(userRepository.existsById(anyLong())).thenReturn(true);
+        doNothing().when(userRepository).deleteById(anyLong());
+
+        // Act
+        boolean result = userService.deleteUser(validUser.getId());
+
+        // Assert
+        assertTrue(result);
+        verify(userRepository).deleteById(anyLong());
+    }
+
+    @Test
+    void deleteUser_id_notExists_returnsFalse() {
+        // Arrange
+        when(userRepository.existsById(anyLong())).thenReturn(false);
+        // Act
+        boolean result = userService.deleteUser(validUser.getId());
+
+        // Assert
+        assertFalse(result);
     }
 
 }

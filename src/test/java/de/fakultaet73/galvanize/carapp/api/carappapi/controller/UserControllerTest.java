@@ -3,7 +3,7 @@ package de.fakultaet73.galvanize.carapp.api.carappapi.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.fakultaet73.galvanize.carapp.api.carappapi.Address;
-import de.fakultaet73.galvanize.carapp.api.carappapi.entities.User;
+import de.fakultaet73.galvanize.carapp.api.carappapi.documents.User;
 import de.fakultaet73.galvanize.carapp.api.carappapi.exceptions.UserAlreadyExistsException;
 import de.fakultaet73.galvanize.carapp.api.carappapi.services.UserService;
 import org.junit.jupiter.api.BeforeEach;
@@ -42,7 +42,6 @@ public class UserControllerTest {
     @BeforeEach
     void setUp() throws JsonProcessingException {
         validUser = User.builder()
-                .id(1)
                 .firstName("Max")
                 .lastName("Mustermann")
                 .userName("Max")
@@ -57,7 +56,7 @@ public class UserControllerTest {
     @Test
     void getUser_id_returnsUser() throws Exception {
         // Arrange
-        when(userService.getUser(anyInt())).thenReturn(Optional.of(validUser));
+        when(userService.getUser(anyLong())).thenReturn(Optional.of(validUser));
 
         // Act
         mockMvc.perform(get("/user/1"))
@@ -155,7 +154,6 @@ public class UserControllerTest {
     void addUser_missingParam_returnsBadRequest() throws Exception {
         // Act
         User invalidUser = User.builder()
-                .id(1)
                 .firstName("Max")
                 .lastName("Mustermann")
                 .email("mustermann.de")
@@ -201,7 +199,6 @@ public class UserControllerTest {
     void addUser_invalidEmail_returnsBadRequest() throws Exception {
         // Act
         User invalidUser = User.builder()
-                .id(1)
                 .firstName("Max")
                 .lastName("Mustermann")
                 .userName("Max")
@@ -255,6 +252,42 @@ public class UserControllerTest {
         mockMvc.perform(put("/user")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json))
+                // Assert
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void deleteUser_id_returnsOk() throws Exception {
+        when(userService.deleteUser(anyLong())).thenReturn(true);
+
+        // Act
+        mockMvc.perform(delete("/user/1"))
+        // Assert
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    void deleteUser_id_notFound_returnsNoContent() throws Exception {
+        when(userService.deleteUser(anyLong())).thenReturn(false);
+
+        // Act
+        mockMvc.perform(delete("/user/1"))
+                // Assert
+                .andExpect(status().isNoContent());
+    }
+
+    @Test
+    void deleteUser_noParam_returnsMethodNotAllowed() throws Exception {
+        // Act
+        mockMvc.perform(delete("/user"))
+                // Assert
+                .andExpect(status().isMethodNotAllowed());
+    }
+
+    @Test
+    void deleteUser_wrongFormat_returnsBadRequest() throws Exception {
+        // Act
+        mockMvc.perform(delete("/user/aa"))
                 // Assert
                 .andExpect(status().isBadRequest());
     }

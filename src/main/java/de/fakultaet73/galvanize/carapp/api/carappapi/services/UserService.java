@@ -1,7 +1,8 @@
 package de.fakultaet73.galvanize.carapp.api.carappapi.services;
 
-import de.fakultaet73.galvanize.carapp.api.carappapi.entities.User;
+import de.fakultaet73.galvanize.carapp.api.carappapi.documents.User;
 import de.fakultaet73.galvanize.carapp.api.carappapi.exceptions.UserAlreadyExistsException;
+import de.fakultaet73.galvanize.carapp.api.carappapi.repositories.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -12,8 +13,9 @@ import java.util.Optional;
 public class UserService {
 
     UserRepository userRepository;
+    SequenceGeneratorService sequenceGeneratorService;
 
-    public Optional<User> getUser(int id) {
+    public Optional<User> getUser(long id) {
         return userRepository.findById(id);
     }
 
@@ -30,12 +32,21 @@ public class UserService {
         if (userExists(user)) {
             throw new UserAlreadyExistsException("User already exists");
         }
+        user.setId(sequenceGeneratorService.generateSequence(User.SEQUENCE_NAME));
         return userRepository.save(user);
     }
 
     public Optional<User> updateUser(User user) {
         return userExists(user) ?
                 Optional.of(userRepository.save(user)) : Optional.empty();
+    }
+
+    public boolean deleteUser(long id) {
+        if (userRepository.existsById(id)) {
+            userRepository.deleteById(id);
+            return true;
+        }
+        return false;
     }
 
     private boolean userExists(User user) {
