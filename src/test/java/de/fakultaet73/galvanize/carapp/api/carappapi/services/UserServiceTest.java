@@ -10,6 +10,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import javax.validation.constraints.AssertTrue;
 import java.time.LocalDate;
 import java.util.Optional;
 
@@ -42,6 +43,18 @@ class UserServiceTest {
                 .dateOfBirth(LocalDate.of(1999, 1, 1))
                 .address(new Address("Examplestreet", 12, "Berlin", 12345))
                 .build();
+    }
+
+    @Test
+    void userExists_id_returnsTrue() {
+        // Arrange
+        when(userRepository.existsById(anyLong())).thenReturn(true);
+
+        // Act
+        boolean result = userService.userExists(1);
+
+        // Assert
+        assertTrue(result);
     }
 
     @Test
@@ -174,7 +187,7 @@ class UserServiceTest {
     }
 
     @Test
-    void addUser_user_alreadyExists_returnsConflict() {
+    void addUser_user_alreadyExists_throwsUserAlreadyExistsException() {
         // Arrange
         when(userRepository.existsUserByUserNameOrEmail(anyString(), anyString()))
                 .thenReturn(true);

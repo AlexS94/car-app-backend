@@ -31,7 +31,7 @@ public class Car {
     @Setter
     private long id;
 
-    @NotNull @NotEmpty
+    @NotNull
     private Long hostUserId;
     @NotNull @NotEmpty
     private String make;
@@ -39,7 +39,7 @@ public class Car {
     private String model;
     @NotNull @NotEmpty
     private String type;
-    @NotNull @NotEmpty
+    @NotNull
     private Integer year;
     @NotNull @Valid
     private Address address;
@@ -48,7 +48,7 @@ public class Car {
     private String description;
     private String[] guidelines;
 
-    @NotNull @NotEmpty
+    @NotNull
     private Integer pricePerDay;
     private Integer distancePerDay;
 

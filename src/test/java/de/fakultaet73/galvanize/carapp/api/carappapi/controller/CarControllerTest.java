@@ -3,8 +3,8 @@ package de.fakultaet73.galvanize.carapp.api.carappapi.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.fakultaet73.galvanize.carapp.api.carappapi.Address;
 import de.fakultaet73.galvanize.carapp.api.carappapi.CarDetails;
-import de.fakultaet73.galvanize.carapp.api.carappapi.CarFilter;
 import de.fakultaet73.galvanize.carapp.api.carappapi.documents.Car;
+import de.fakultaet73.galvanize.carapp.api.carappapi.exceptions.HostNotExistsException;
 import de.fakultaet73.galvanize.carapp.api.carappapi.services.CarService;
 import de.fakultaet73.galvanize.carapp.api.carappapi.services.UserService;
 import org.junit.jupiter.api.BeforeEach;
@@ -13,6 +13,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -20,10 +21,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -44,6 +45,7 @@ public class CarControllerTest {
     ObjectMapper mapper = new ObjectMapper();
 
     Car validCar;
+    String validCarJson;
     String json;
 
     @BeforeEach
@@ -60,7 +62,10 @@ public class CarControllerTest {
                 .address(new Address("Musterstreet", 12, "Berlin", 12345))
                 .build();
         json = mapper.writeValueAsString(validCar);
+        validCarJson = "{\"id\":0,\"hostUserId\":1,\"make\":\"Volkswagen\",\"model\":\"Golf\",\"type\":\"Hatchback\",\"year\":2013,\"address\":{\"street\":\"Musterstreet\",\"number\":12,\"city\":\"Berlin\",\"zip\":12345},\"features\":null,\"description\":null,\"guidelines\":null,\"pricePerDay\":15,\"distancePerDay\":null,\"details\":{\"fuelType\":\"diesel\",\"seats\":4,\"doors\":5,\"hp\":115,\"transmission\":\"manual\"},\"images\":null,\"ratings\":null,\"bookings\":null}";
+
     }
+
 
     @Test
     void getCar_id_returnsCar() throws Exception {
@@ -85,7 +90,6 @@ public class CarControllerTest {
                 .andExpect(status().isNotFound());
     }
 
-    //ToDO
     @Test
     void getCar_id_wrongFormat_returnsBadRequest() throws Exception {
         // Arrange
@@ -114,7 +118,7 @@ public class CarControllerTest {
     }
 
     @Test
-    void getCars_hostUserId_returnsCars() throws Exception {
+    void getCarsByHostUserId_hostUserId_returnsCars() throws Exception {
         // Arrange
         List<Car> carList = new ArrayList<>();
         carList.add(validCar);
@@ -122,98 +126,235 @@ public class CarControllerTest {
         carList.add(validCar);
         String jsonList = mapper.writeValueAsString(carList);
 
-        when(carService.getCars(anyLong())).thenReturn(carList);
+        when(carService.getCarsByHostUserId(anyLong())).thenReturn(carList);
 
         // Act
-        mockMvc.perform(get("/cars/1"))
+        mockMvc.perform(get("/cars/host/1"))
                 // Assert
                 .andExpect(status().isOk())
                 .andExpect(content().json(jsonList));
     }
 
     @Test
-    void getCars_hostUserId_returnsEmptyList() throws Exception {
+    void getCarsByHostUserId_hostUserId_returnsEmptyList() throws Exception {
         // Arrange
         List<Car> carList = new ArrayList<>();
-        when(carService.getCars(anyLong())).thenReturn(carList);
+        when(carService.getCarsByHostUserId(anyLong())).thenReturn(carList);
 
         // Act
-        mockMvc.perform(get("/cars/99"))
+        mockMvc.perform(get("/cars/host/99"))
                 // Assert
                 .andExpect(status().isOk());
     }
 
     @Test
-    void getCars_hostUserId_returnsBadRequest() throws Exception {
-        // Arrange
-        List<Car> carList = new ArrayList<>();
-        when(carService.getCars(anyLong())).thenReturn(carList);
-
+    void getCarsByHostUserId_hostUserId_returnsBadRequest() throws Exception {
         // Act
-        mockMvc.perform(get("/cars/aa"))
+        mockMvc.perform(get("/cars/host/aa"))
                 // Assert
                 .andExpect(status().isBadRequest());
     }
 
     @Test
-    void getFilteredCars_Makes_returnsCars() throws Exception {
+    void getCarsByCity_city_returnsCars() throws Exception {
         //Arrange
         List<Car> carList = new ArrayList<>();
         carList.add(validCar);
         carList.add(validCar);
         carList.add(validCar);
         String jsonList = mapper.writeValueAsString(carList);
-        when(carService.getFilteredCars(any(CarFilter.class))).thenReturn(carList);
+        when(carService.getCarsByCity(anyString())).thenReturn(carList);
         //Act
-        mockMvc.perform(get("/cars/filter?make=volkswagen"))
+        mockMvc.perform(get("/cars/city/wolfsburg"))
                 // Assert
                 .andExpect(status().isOk())
                 .andExpect(content().json(jsonList));
     }
 
     @Test
-    void getFilteredCars_simpleFilters_returnsCars() throws Exception {
+    void getCarsByCity_city_returnsEmptyList() throws Exception {
         //Arrange
         List<Car> carList = new ArrayList<>();
-        carList.add(validCar);
-        carList.add(validCar);
-        carList.add(validCar);
         String jsonList = mapper.writeValueAsString(carList);
-        when(carService.getFilteredCars(any(CarFilter.class))).thenReturn(carList);
+        when(carService.getCarsByCity(anyString())).thenReturn(carList);
         //Act
-        mockMvc.perform(get("/cars/" +
-                        "filter?make=volkswagen&model=golf&type=sov&features=smokeFree,petsFree&" +
-                        "pricePerDay=10&details:{fuelType,seats,doors,hp,transmission&" +
-                        "rating=2.5}"))
+        mockMvc.perform(get("/cars/city/wolfsburg"))
                 // Assert
                 .andExpect(status().isOk())
-                .andExpect(content().json(jsonList));
+                .andExpect(content().json(jsonList))
+                .andDo(print());
     }
 
+    @Test
+    void addCar_Car_returnsCar() throws Exception {
+        // Arrange
+        when(carService.addCar(any(Car.class))).thenReturn(validCar);
+        System.out.println(json);
+        // Act
+        mockMvc.perform(post("/car")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json))
+                // Assert
+                .andExpect(status().isOk())
+                .andExpect(content().json(json));
+    }
 
+    @Test
+    void addCar_emptyObject_returnsBadRequest() throws Exception {
+        // Arrange
+        json = "{}";
 
+        // Act
+        mockMvc.perform(post("/car")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json))
+                // Assert
+                .andExpect(status().isBadRequest());
+    }
 
-    /*
-Filter
-Fuel
-Cartype
-Seats
-Transmission
-------------
-Doors
-Makes
-(Model)
-(Features)
-*/
+    @Test
+    void addCar_Car_missingParam_returnsBadRequest() throws Exception {
+        // Act
+        Car invalidCar = Car.builder()
+                .hostUserId(1L)
+                .make("Volkswagen")
+                .type("Hatchback")
+                .year(2013)
+                .details(new CarDetails("diesel", 4, 5, 115, "manual"))
+                .pricePerDay(15)
+                .address(new Address("Musterstreet", 12, "Berlin", 12345))
+                .build();
+        json = mapper.writeValueAsString(invalidCar);
 
-    // Ein Auto nach Id
-    // Alle Autos
-    // Alle Autos die zu eine Hostid gehören
-    // Alle Autos die zu einer City gehören
-    // Alle Autos die zu einer Zip gehören
-    // Alle Autos die zu Marke
-    // Alle Autos die zu einen Typ gehören
-    //
+        mockMvc.perform(post("/car")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json))
+                // Assert
+                .andExpect(status().isBadRequest());
+    }
 
+    @Test
+    void addCar_Car_validAddress_returnsCar() throws Exception {
+        // Act
+        when(carService.addCar(any(Car.class))).thenReturn(validCar);
+
+        mockMvc.perform(post("/car")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json))
+                // Assert
+                .andExpect(status().isOk())
+                .andExpect(content().json(json));
+    }
+
+    @Test
+    void addCar_Car_invalidAddress_returnsBadRequest() throws Exception {
+        // Act
+        String json = "{\"id\":0,\"hostUserId\":1,\"make\":\"Volkswagen\",\"model\":\"Golf\",\"type\":\"Hatchback\",\"year\":2013,\"address\":{\"street\":\"Musterstreet\",\"city\":\"Berlin\",\"zip\":12345},\"features\":null,\"description\":null,\"guidelines\":null,\"pricePerDay\":15,\"distancePerDay\":null,\"details\":{\"fuelType\":\"diesel\",\"seats\":4,\"doors\":5,\"hp\":115,\"transmission\":\"manual\"},\"images\":null,\"ratings\":null,\"bookings\":null}";
+
+        mockMvc.perform(post("/car")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json))
+                // Assert
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void addCar_Car_invalidDetails_returnsBadRequest() throws Exception {
+        // Act
+        String json = "{\"id\":0,\"hostUserId\":1,\"make\":\"Volkswagen\",\"model\":\"Golf\",\"type\":\"Hatchback\",\"year\":2013,\"address\":{\"street\":\"Musterstreet\",\"number\":12,\"city\":\"Berlin\",\"zip\":12345},\"features\":null,\"description\":null,\"guidelines\":null,\"pricePerDay\":15,\"distancePerDay\":null,\"details\":{\"fuelType\":\"diesel\",\"doors\":5,\"hp\":115,\"transmission\":\"manual\"},\"images\":null,\"ratings\":null,\"bookings\":null}";
+        mockMvc.perform(post("/car")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json))
+                // Assert
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void addCar_Car_hostUserIdNotExists_returnsBadRequest() throws Exception {
+        // Arrange
+        when(carService.addCar(any(Car.class))).thenThrow(HostNotExistsException.class);
+        // Act
+        mockMvc.perform(post("/car")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json))
+                // Assert
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void updateCar_Car_returnsCar() throws Exception {
+        // Arrange
+        when(carService.updateCar(any(Car.class))).thenReturn(Optional.of(validCar));
+
+        // Act
+        mockMvc.perform(put("/car")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json))
+                // Assert
+                .andExpect(status().isOk())
+                .andExpect(content().json(json));
+    }
+
+    @Test
+    void updateCar_emptyObject_returnsBadRequest() throws Exception {
+        // Arrange
+        json = "{}";
+
+        // Act
+        mockMvc.perform(put("/car")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json))
+                // Assert
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void updateCar_carNotExists_or_hostUserIdDeviating_returnsNotFound() throws Exception {
+        // Arrange
+        when(carService.updateCar(any(Car.class))).thenReturn(Optional.empty());
+
+        // Act
+        mockMvc.perform(put("/car")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json))
+                // Assert
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void deleteCar_id_returnsOk() throws Exception {
+        when(carService.deleteCar(anyLong())).thenReturn(true);
+
+        // Act
+        mockMvc.perform(delete("/car/1"))
+                // Assert
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    void deleteCar_id_notFound_returnsNoContent() throws Exception {
+        when(carService.deleteCar(anyLong())).thenReturn(false);
+
+        // Act
+        mockMvc.perform(delete("/car/1"))
+                // Assert
+                .andExpect(status().isNoContent());
+    }
+
+    @Test
+    void deleteCar_noParam_returnsMethodNotAllowed() throws Exception {
+        // Act
+        mockMvc.perform(delete("/car"))
+                // Assert
+                .andExpect(status().isMethodNotAllowed());
+    }
+
+    @Test
+    void deleteCar_wrongFormat_returnsBadRequest() throws Exception {
+        // Act
+        mockMvc.perform(delete("/car/aa"))
+                // Assert
+                .andExpect(status().isBadRequest());
+    }
 
 }
