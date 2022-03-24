@@ -52,7 +52,7 @@ public class UserControllerTest {
                 .email("mustermann@web.de")
                 .password("password")
                 .dateOfBirth(LocalDate.of(1999, 1, 1))
-                .address(new Address("Examplestreet", 12, "Berlin", 12345))
+                .address(new Address("Examplestreet", "12", "Berlin", 12345))
                 .build();
         json = mapper.writeValueAsString(this.validUser);
     }
@@ -118,7 +118,6 @@ public class UserControllerTest {
     void addUser_User_returnsUser() throws Exception {
         // Arrange
         when(userService.addUser(any(User.class))).thenReturn(validUser);
-        System.out.println(json);
         // Act
         mockMvc.perform(post("/user")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -163,7 +162,7 @@ public class UserControllerTest {
                 .email("mustermann.de")
                 .password("password")
                 .dateOfBirth(LocalDate.of(1999, 1, 1))
-                .address(new Address("Examplestreet", 12, "Berlin", 12345))
+                .address(new Address("Examplestreet", "12", "Berlin", 12345))
                 .build();
         json = mapper.writeValueAsString(invalidUser);
 
@@ -209,7 +208,7 @@ public class UserControllerTest {
                 .email("mustermann.de")
                 .password("password")
                 .dateOfBirth(LocalDate.of(1999, 1, 1))
-                .address(new Address("Examplestreet", 12, "Berlin", 12345))
+                .address(new Address("Examplestreet", "12", "Berlin", 12345))
                 .build();
         json = mapper.writeValueAsString(invalidUser);
 

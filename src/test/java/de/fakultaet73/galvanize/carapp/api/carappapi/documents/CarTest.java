@@ -26,7 +26,7 @@ public class CarTest {
                 new Booking(1, LocalDate.of(2013, 1, 1), LocalDate.of(2013, 1, 5)),
                 new Booking(2, LocalDate.of(2013, 2, 2), LocalDate.of(2013, 3, 1))
         );
-        Address address = new Address("Musterstreet", 12, "Berlin", 12345);
+        Address address = new Address("Musterstreet", "12", "Berlin", 12345);
 
         Car car = Car.builder()
                 .hostUserId(1L)

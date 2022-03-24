@@ -3,6 +3,7 @@ package de.fakultaet73.galvanize.carapp.api.carappapi.services;
 import de.fakultaet73.galvanize.carapp.api.carappapi.Address;
 import de.fakultaet73.galvanize.carapp.api.carappapi.CarDetails;
 import de.fakultaet73.galvanize.carapp.api.carappapi.documents.Car;
+import de.fakultaet73.galvanize.carapp.api.carappapi.documents.User;
 import de.fakultaet73.galvanize.carapp.api.carappapi.exceptions.HostNotExistsException;
 import de.fakultaet73.galvanize.carapp.api.carappapi.repositories.CarRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -11,6 +12,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -47,7 +49,7 @@ class CarServiceTest {
                 .year(2013)
                 .details(new CarDetails("diesel", 4, 5, 115, "manual"))
                 .pricePerDay(15)
-                .address(new Address("Musterstreet", 12, "Berlin", 12345))
+                .address(new Address("Musterstreet", "12", "Berlin", 12345))
                 .build();
     }
 
@@ -157,12 +159,13 @@ class CarServiceTest {
     void addCar_Car_returnsCar() {
         // Arrange
         when(userService.userExists(anyLong())).thenReturn(true);
+        doNothing().when(userService).addCarIdToHostUser(anyLong(), anyLong());
         when(carRepository.save(any(Car.class))).thenReturn(validCar);
-
         // Act
         Car result = carService.addCar(validCar);
 
         // Assert
+        verify(userService).addCarIdToHostUser(anyLong(), anyLong());
         assertEquals(validCar, result);
     }
 
@@ -207,7 +210,8 @@ class CarServiceTest {
     @Test
     void deleteCar_id_returnsTrue() {
         // Arrange
-        when(carRepository.existsById(anyLong())).thenReturn(true);
+        when(carRepository.findById(anyLong())).thenReturn(Optional.of(validCar));
+        doNothing().when(userService).deleteCarIdFromHostUser(anyLong(), anyLong());
         doNothing().when(carRepository).deleteById(anyLong());
 
         // Act
@@ -216,12 +220,13 @@ class CarServiceTest {
         // Assert
         assertTrue(result);
         verify(carRepository).deleteById(anyLong());
+        verify(userService).deleteCarIdFromHostUser(anyLong(), anyLong());
     }
 
     @Test
     void deleteCar_id_notExists_returnsFalse() {
         // Arrange
-        when(carRepository.existsById(anyLong())).thenReturn(false);
+        when(carRepository.findById(anyLong())).thenReturn(Optional.empty());
         // Act
         boolean result = carService.deleteCar(validCar.getId());
 
@@ -229,4 +234,15 @@ class CarServiceTest {
         assertFalse(result);
     }
 
+    @Test
+    void deleteAllCarsWithHostUserId_returnNothing() {
+        //Arrange
+        doNothing().when(carRepository).deleteAllByHostUserId(anyLong());
+
+        //Act
+        carService.deleteAllCarsWithHostUserId(validCar.getHostUserId());
+
+        // Assert
+        verify(carRepository).deleteAllByHostUserId(anyLong());
+    }
 }

@@ -15,7 +15,7 @@ class UserTest {
     @Test
     void create_new_user() {
         // Arrange
-        Address address = new Address("Musterstreet", 12, "Berlin", 12345);
+        Address address = new Address("Musterstreet", "12", "Berlin", 12345);
         List<Rating> ratings = new ArrayList<>(List.of(new Rating("Dudebro", 2.8, LocalDate.now(), "Car was meh")));
         LocalDate date = LocalDate.of(1994, 3, 1);
 

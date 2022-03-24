@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import de.fakultaet73.galvanize.carapp.api.carappapi.Address;
+import de.fakultaet73.galvanize.carapp.api.carappapi.Booking;
 import de.fakultaet73.galvanize.carapp.api.carappapi.Rating;
 import lombok.*;
 import org.bson.types.Binary;
@@ -20,6 +21,7 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @AllArgsConstructor
 @Getter
@@ -56,7 +58,14 @@ public class User {
     @NotNull @Valid
     private Address address;
     private List<Rating> ratings;
-    private int[] cars;
-    private int[] bookedCars;
+    private List<Long> cars;
+    private List<Booking> bookedCars;
+
+    public void addCarToList(long carId){
+        cars.add(carId);
+    }
+    public void removeCarToList(long carId){
+    cars.remove(carId);
+    }
 
 }

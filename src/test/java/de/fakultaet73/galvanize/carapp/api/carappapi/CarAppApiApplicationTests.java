@@ -49,11 +49,11 @@ class CarAppApiApplicationTests {
         String[] userNameArray = {"firefox", "Ddge", "JohnStar", "LowBoy", "SmartDude"};
         String[] emailsArray = {"muller@web.de", "schulze@icloud.com", "thompson@mail.com", "oneil@yahoo.de", "meyer@aol.com"};
         String[] lastNamesArray = {"Muller", "Schulze", "Thompson", "ONeil", "Meyer"};
-        List<Address> addressesList = List.of(new Address("Examplestreet", 12, "Berlin", 12345),
-                new Address("Musterstraße", 4, "Munich", 54321),
-                new Address("Lindenstrasse", 1, "Wolfsburg", 11111),
-                new Address("Upstate", 335, "New York", 55555),
-                new Address("Compton Blvd", 83, "Los Angeles", 45123));
+        List<Address> addressesList = List.of(new Address("Examplestreet", "12", "Berlin", 12345),
+                new Address("Musterstraße", "4", "Munich", 54321),
+                new Address("Lindenstrasse", "1", "Wolfsburg", 11111),
+                new Address("Upstate", "335", "New York", 55555),
+                new Address("Compton Blvd", "83", "Los Angeles", 45123));
 
         for (int i = 0; i < 5; i++) {
             User userTmp = User.builder()
@@ -145,7 +145,7 @@ class CarAppApiApplicationTests {
                 .email("email@22222222.de")
                 .password("password")
                 .dateOfBirth(LocalDate.of(1999, 1, 1))
-                .address(new Address("Examplestreet", 12, "Berlin", 12345))
+                .address(new Address("Examplestreet", "12", "Berlin", 12345))
                 .build();
 
         String json = mapper.writeValueAsString(user);
@@ -175,7 +175,7 @@ class CarAppApiApplicationTests {
                 .email("muller@web.de")
                 .password("password")
                 .dateOfBirth(LocalDate.of(1999, 1, 1))
-                .address(new Address("New Street", 13, "Hanover", 11223))
+                .address(new Address("New Street", "13", "Hanover", 11223))
                 .build();
 
         String json = mapper.writeValueAsString(user);

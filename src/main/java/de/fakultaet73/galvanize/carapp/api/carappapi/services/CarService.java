@@ -38,6 +38,7 @@ public class CarService {
             throw new HostNotExistsException("hostUserId does not exist");
         }
         car.setId(sequenceGeneratorService.generateSequence(Car.SEQUENCE_NAME));
+        userService.addCarIdToHostUser(car.getHostUserId(), car.getId());
         return carRepository.save(car);
     }
 
@@ -47,7 +48,9 @@ public class CarService {
     }
 
     public boolean deleteCar(long id) {
-        if (carRepository.existsById(id)) {
+        Optional<Car> car = getCar(id);
+        if (car.isPresent()) {
+            userService.deleteCarIdFromHostUser(car.get().getHostUserId(), car.get().getId());
             carRepository.deleteById(id);
             return true;
         }
@@ -58,4 +61,7 @@ public class CarService {
         return carRepository.existsCarByIdAndHostUserId(car.getId(), car.getHostUserId());
     }
 
+    public void deleteAllCarsWithHostUserId(long hostUserId) {
+        carRepository.deleteAllByHostUserId(hostUserId);
+    }
 }

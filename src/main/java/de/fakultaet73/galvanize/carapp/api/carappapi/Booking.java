@@ -15,7 +15,8 @@ import java.time.LocalDate;
 @Getter
 public class Booking {
 
-    private long userId;
+
+    private long id;
 
     @JsonDeserialize(using = LocalDateDeserializer.class)
     @JsonSerialize(using = LocalDateSerializer.class)
