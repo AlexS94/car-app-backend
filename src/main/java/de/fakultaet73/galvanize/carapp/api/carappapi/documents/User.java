@@ -59,6 +59,4 @@ public class User {
     private int[] cars;
     private int[] bookedCars;
 
-
-
 }

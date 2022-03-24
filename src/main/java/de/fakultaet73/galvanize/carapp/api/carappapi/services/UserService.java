@@ -15,6 +15,10 @@ public class UserService {
     UserRepository userRepository;
     SequenceGeneratorService sequenceGeneratorService;
 
+    public boolean userExists(long id) {
+        return userRepository.existsById(id);
+    }
+
     public Optional<User> getUser(long id) {
         return userRepository.findById(id);
     }
