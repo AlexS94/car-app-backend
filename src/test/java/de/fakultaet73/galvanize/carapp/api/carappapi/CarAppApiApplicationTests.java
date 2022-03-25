@@ -2,6 +2,7 @@ package de.fakultaet73.galvanize.carapp.api.carappapi;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.fakultaet73.galvanize.carapp.api.carappapi.documents.User;
+import de.fakultaet73.galvanize.carapp.api.carappapi.repositories.CarRepository;
 import de.fakultaet73.galvanize.carapp.api.carappapi.repositories.UserRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -30,6 +31,9 @@ class CarAppApiApplicationTests {
 
     @Autowired
     UserRepository userRepository;
+
+    @Autowired
+    CarRepository carRepository;
 
     List<User> testUserList;
 

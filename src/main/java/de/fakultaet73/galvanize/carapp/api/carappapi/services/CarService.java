@@ -64,4 +64,5 @@ public class CarService {
     public void deleteAllCarsWithHostUserId(long hostUserId) {
         carRepository.deleteAllByHostUserId(hostUserId);
     }
+
 }

@@ -56,6 +56,6 @@ public class Car {
     private CarDetails details;
     private List<Binary> images;
     private List<Rating> ratings;
-    private List<Booking> bookings;
+    private List<Long> bookingIds;
 
 }

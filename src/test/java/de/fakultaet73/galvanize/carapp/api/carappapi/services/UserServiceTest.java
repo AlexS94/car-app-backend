@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.validation.constraints.AssertTrue;
 import java.time.LocalDate;
@@ -30,7 +31,6 @@ class UserServiceTest {
 
     @Mock
     CarService carService;
-
 
     @Mock
     SequenceGeneratorService sequenceGeneratorService;
