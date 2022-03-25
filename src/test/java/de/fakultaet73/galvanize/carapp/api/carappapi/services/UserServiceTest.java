@@ -33,13 +33,16 @@ class UserServiceTest {
     CarService carService;
 
     @Mock
+    BookingService bookingService;
+
+    @Mock
     SequenceGeneratorService sequenceGeneratorService;
 
     User validUser;
 
     @BeforeEach
     void setUp() {
-        userService = new UserService(userRepository, carService, sequenceGeneratorService);
+        userService = new UserService(userRepository, carService, bookingService, sequenceGeneratorService);
         validUser = User.builder()
                 .firstName("Max")
                 .lastName("Mustermann")

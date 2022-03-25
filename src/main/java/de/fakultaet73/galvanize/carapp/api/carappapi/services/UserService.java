@@ -13,11 +13,14 @@ public class UserService {
 
     UserRepository userRepository;
     CarService carService;
+    BookingService bookingService;
     SequenceGeneratorService sequenceGeneratorService;
 
-    public UserService(UserRepository userRepository,@Lazy CarService carService, SequenceGeneratorService sequenceGeneratorService) {
+    public UserService(UserRepository userRepository,@Lazy CarService carService, @Lazy BookingService bookingService,
+                       SequenceGeneratorService sequenceGeneratorService) {
         this.userRepository = userRepository;
         this.carService = carService;
+        this.bookingService = bookingService;
         this.sequenceGeneratorService = sequenceGeneratorService;
     }
 

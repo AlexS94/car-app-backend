@@ -10,14 +10,21 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
-@AllArgsConstructor
+
 @Service
 public class CarService {
 
     CarRepository carRepository;
     UserService userService;
-//    BookingService bookingService;
+    BookingService bookingService;
     SequenceGeneratorService sequenceGeneratorService;
+
+    public CarService(CarRepository carRepository, @Lazy UserService userService, @Lazy BookingService bookingService, SequenceGeneratorService sequenceGeneratorService) {
+        this.carRepository = carRepository;
+        this.userService = userService;
+        this.bookingService = bookingService;
+        this.sequenceGeneratorService = sequenceGeneratorService;
+    }
 
     public Optional<Car> getCar(long id) {
         return carRepository.findById(id);
@@ -52,7 +59,7 @@ public class CarService {
     public boolean deleteCar(long id) {
         Optional<Car> car = getCar(id);
         if (car.isPresent()) {
-           // userService.deleteCarIdFromHostUser(car.get().getHostUserId(), car.get().getId());
+            userService.deleteCarIdFromHostUser(car.get().getHostUserId(), car.get().getId());
             carRepository.deleteById(id);
             return true;
         }

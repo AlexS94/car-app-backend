@@ -43,7 +43,7 @@ class CarServiceTest {
 
     @BeforeEach
     void setUp() {
-        carService = new CarService(carRepository, userService, sequenceGeneratorService);
+        carService = new CarService(carRepository, userService, bookingService, sequenceGeneratorService);
         validCar = Car.builder()
                 .hostUserId(1L)
                 .make("Volkswagen")
