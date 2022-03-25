@@ -56,8 +56,9 @@ public class UserService {
 
     public boolean deleteUser(long id) {
         if (userRepository.existsById(id)) {
+            bookingService.deleteAllWithUserId(id);
+            carService.deleteAllWithHostUserId(id);
             userRepository.deleteById(id);
-            carService.deleteAllCarsWithHostUserId(id);
             return true;
         }
         return false;
@@ -69,22 +70,22 @@ public class UserService {
         );
     }
 
-    public void addCarIdToHostUser(long hostUserId, long carId) {
-        Optional<User> optionalUserToUpdate = userRepository.findById(hostUserId);
-        if (optionalUserToUpdate.isPresent()) {
-            User userToUpdate = optionalUserToUpdate.get();
-            userToUpdate.addCarToList(carId);
-            userRepository.save(userToUpdate);
-        }
-    }
+//    public void addCarIdToHostUser(long hostUserId, long carId) {
+//        Optional<User> optionalUserToUpdate = userRepository.findById(hostUserId);
+//        if (optionalUserToUpdate.isPresent()) {
+//            User userToUpdate = optionalUserToUpdate.get();
+//            userToUpdate.addCarToList(carId);
+//            userRepository.save(userToUpdate);
+//        }
+//    }
 
-    public void deleteCarIdFromHostUser(long hostUserId, long carId) {
-        Optional<User> optionalUserToUpdate = userRepository.findById(hostUserId);
-        if (optionalUserToUpdate.isPresent()) {
-            User userToUpdate = optionalUserToUpdate.get();
-            userToUpdate.addCarToList(carId);
-            userRepository.save(userToUpdate);
-        }
-    }
+//    public void deleteCarIdFromHostUser(long hostUserId, long carId) {
+//        Optional<User> optionalUserToUpdate = userRepository.findById(hostUserId);
+//        if (optionalUserToUpdate.isPresent()) {
+//            User userToUpdate = optionalUserToUpdate.get();
+//            userToUpdate.addCarToList(carId);
+//            userRepository.save(userToUpdate);
+//        }
+//    }
 
 }

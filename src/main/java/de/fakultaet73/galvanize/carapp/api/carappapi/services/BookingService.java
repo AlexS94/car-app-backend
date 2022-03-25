@@ -2,6 +2,8 @@ package de.fakultaet73.galvanize.carapp.api.carappapi.services;
 
 import de.fakultaet73.galvanize.carapp.api.carappapi.Booking;
 import de.fakultaet73.galvanize.carapp.api.carappapi.documents.Car;
+import de.fakultaet73.galvanize.carapp.api.carappapi.exceptions.CarNotExistsException;
+import de.fakultaet73.galvanize.carapp.api.carappapi.exceptions.HostNotExistsException;
 import de.fakultaet73.galvanize.carapp.api.carappapi.repositories.BookingRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -30,8 +32,13 @@ public class BookingService {
         return bookingRepository.findByCarId(id);
     }
 
+
     public Booking addBooking(Booking booking) {
-        booking.setId(sequenceGeneratorService.generateSequence(Booking.SEQUENCE_NAME));
+        Optional<Car> carOptional = carService.getCar(booking.getCarId());
+        if(carOptional.isEmpty()){
+            throw new CarNotExistsException("hostUserId does not exist");
+        }
+
         return bookingRepository.save(booking);
     }
 
@@ -48,4 +55,11 @@ public class BookingService {
         return false;
     }
 
+    public void deleteAllWithCarId(long id) {
+        bookingRepository.deleteAllByCarId(id);
+    }
+
+    public void deleteAllWithUserId(long id) {
+        bookingRepository.deleteAllByUserId(id);
+    }
 }

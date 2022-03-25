@@ -3,7 +3,9 @@ package de.fakultaet73.galvanize.carapp.api.carappapi.services;
 import de.fakultaet73.galvanize.carapp.api.carappapi.documents.Car;
 import de.fakultaet73.galvanize.carapp.api.carappapi.exceptions.HostNotExistsException;
 import de.fakultaet73.galvanize.carapp.api.carappapi.repositories.CarRepository;
-import lombok.AllArgsConstructor;
+import de.fakultaet73.galvanize.carapp.api.carappapi.services.BookingService;
+import de.fakultaet73.galvanize.carapp.api.carappapi.services.SequenceGeneratorService;
+import de.fakultaet73.galvanize.carapp.api.carappapi.services.UserService;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
@@ -47,7 +49,6 @@ public class CarService {
             throw new HostNotExistsException("hostUserId does not exist");
         }
         car.setId(sequenceGeneratorService.generateSequence(Car.SEQUENCE_NAME));
-        userService.addCarIdToHostUser(car.getHostUserId(), car.getId());
         return carRepository.save(car);
     }
 
@@ -59,7 +60,8 @@ public class CarService {
     public boolean deleteCar(long id) {
         Optional<Car> car = getCar(id);
         if (car.isPresent()) {
-            userService.deleteCarIdFromHostUser(car.get().getHostUserId(), car.get().getId());
+            //userService.deleteCarIdFromHostUser(car.get().getHostUserId(), car.get().getId());
+            bookingService.deleteAllWithCarId(id);
             carRepository.deleteById(id);
             return true;
         }
@@ -70,7 +72,7 @@ public class CarService {
         return carRepository.existsCarByIdAndHostUserId(car.getId(), car.getHostUserId());
     }
 
-    public void deleteAllCarsWithHostUserId(long hostUserId) {
+    public void deleteAllWithHostUserId(long hostUserId) {
         carRepository.deleteAllByHostUserId(hostUserId);
     }
 

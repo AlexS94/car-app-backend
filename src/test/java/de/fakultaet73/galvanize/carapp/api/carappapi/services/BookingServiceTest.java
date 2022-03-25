@@ -1,6 +1,10 @@
 package de.fakultaet73.galvanize.carapp.api.carappapi.services;
 
+import de.fakultaet73.galvanize.carapp.api.carappapi.Address;
 import de.fakultaet73.galvanize.carapp.api.carappapi.Booking;
+import de.fakultaet73.galvanize.carapp.api.carappapi.CarDetails;
+import de.fakultaet73.galvanize.carapp.api.carappapi.documents.Car;
+import de.fakultaet73.galvanize.carapp.api.carappapi.exceptions.CarNotExistsException;
 import de.fakultaet73.galvanize.carapp.api.carappapi.repositories.BookingRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -132,7 +136,18 @@ class BookingServiceTest {
     @Test
     void addBooking_booking_returnsBooking() {
         // Arrange
+        Car car = Car.builder()
+                .hostUserId(1L)
+                .make("Volkswagen")
+                .model("Golf")
+                .type("Hatchback")
+                .year(2013)
+                .details(new CarDetails("diesel", 4, 5, 115, "manual"))
+                .pricePerDay(15)
+                .address(new Address("Musterstreet", "12", "Berlin", 12345))
+                .build();
        // when(bookingService.bookingExists(anyLong())).thenReturn(true);
+        when(carService.getCar(anyLong())).thenReturn(Optional.of(car));
         when(bookingRepository.save(any(Booking.class))).thenReturn(validBooking);
 
         // Act
@@ -141,6 +156,18 @@ class BookingServiceTest {
         // Assert
       //  verify(userService).addCarIdToHostUser(anyLong(), anyLong());
         assertEquals(validBooking, result);
+    }
+
+
+    @Test
+    void addBooking_booking_carNotExists_throwsCarNotExistsException(){
+        // when(bookingService.bookingExists(anyLong())).thenReturn(true);
+        when(carService.getCar(anyLong())).thenReturn(Optional.empty());
+        // Assert
+                assertThrows(CarNotExistsException.class,
+                () -> bookingService.addBooking(validBooking),
+                "Exception was expected");
+
     }
 
 //    @Test
@@ -187,7 +214,7 @@ class BookingServiceTest {
 
 
     @Test
-    void deleteCar_id_returnsTrue() {
+    void deleteBooking_id_returnsTrue() {
         // Arrange
         when(bookingRepository.findById(anyLong())).thenReturn(Optional.of(validBooking));
 //      doNothing().when(userService).deleteCarIdFromHostUser(anyLong(), anyLong());
@@ -203,7 +230,7 @@ class BookingServiceTest {
     }
 
     @Test
-    void deleteCar_id_notExists_returnsFalse() {
+    void deleteBooking_id_notExists_returnsFalse() {
         // Arrange
         when(bookingRepository.findById(anyLong())).thenReturn(Optional.empty());
         // Act
@@ -220,7 +247,7 @@ class BookingServiceTest {
         doNothing().when(carRepository).deleteAllByHostUserId(anyLong());
 
         //Act
-        carService.deleteAllCarsWithHostUserId(validCar.getHostUserId());
+        carService.deleteAllWithHostUserId(validCar.getHostUserId());
 
         // Assert
         verify(carRepository).deleteAllByHostUserId(anyLong());

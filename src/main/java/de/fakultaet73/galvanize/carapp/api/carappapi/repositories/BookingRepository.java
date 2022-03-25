@@ -11,4 +11,7 @@ public interface BookingRepository extends MongoRepository<Booking, Long> {
 
     List<Booking> findByCarId(long carId);
 
+    void deleteAllByCarId(long carId);
+
+    void deleteAllByUserId(long userId);
 }
