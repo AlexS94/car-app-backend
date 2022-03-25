@@ -29,10 +29,12 @@ class CarServiceTest {
     CarService carService;
 
     @Mock
-    UserService userService;
-
-    @Mock
     CarRepository carRepository;
+    @Mock
+    UserService userService;
+    @Mock
+    BookingService bookingService;
+
 
     @Mock
     SequenceGeneratorService sequenceGeneratorService;

@@ -4,6 +4,7 @@ import de.fakultaet73.galvanize.carapp.api.carappapi.documents.Car;
 import de.fakultaet73.galvanize.carapp.api.carappapi.exceptions.HostNotExistsException;
 import de.fakultaet73.galvanize.carapp.api.carappapi.repositories.CarRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,6 +16,7 @@ public class CarService {
 
     CarRepository carRepository;
     UserService userService;
+//    BookingService bookingService;
     SequenceGeneratorService sequenceGeneratorService;
 
     public Optional<Car> getCar(long id) {
@@ -50,7 +52,7 @@ public class CarService {
     public boolean deleteCar(long id) {
         Optional<Car> car = getCar(id);
         if (car.isPresent()) {
-            userService.deleteCarIdFromHostUser(car.get().getHostUserId(), car.get().getId());
+           // userService.deleteCarIdFromHostUser(car.get().getHostUserId(), car.get().getId());
             carRepository.deleteById(id);
             return true;
         }
