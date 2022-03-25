@@ -5,6 +5,7 @@ import de.fakultaet73.galvanize.carapp.api.carappapi.Address;
 import de.fakultaet73.galvanize.carapp.api.carappapi.CarDetails;
 import de.fakultaet73.galvanize.carapp.api.carappapi.documents.Car;
 import de.fakultaet73.galvanize.carapp.api.carappapi.exceptions.HostNotExistsException;
+import de.fakultaet73.galvanize.carapp.api.carappapi.services.BookingService;
 import de.fakultaet73.galvanize.carapp.api.carappapi.services.CarService;
 import de.fakultaet73.galvanize.carapp.api.carappapi.services.UserService;
 import org.junit.jupiter.api.BeforeEach;
@@ -42,6 +43,9 @@ public class CarControllerTest {
     @MockBean
     UserService userService;
 
+    @MockBean
+    BookingService bookingService;
+
     ObjectMapper mapper = new ObjectMapper();
 
     Car validCar;
@@ -59,7 +63,7 @@ public class CarControllerTest {
                 .year(2013)
                 .details(new CarDetails("diesel", 4, 5, 115, "manual"))
                 .pricePerDay(15)
-                .address(new Address("Musterstreet", 12, "Berlin", 12345))
+                .address(new Address("Musterstreet", "12", "Berlin", 12345))
                 .build();
         json = mapper.writeValueAsString(validCar);
         validCarJson = "{\"id\":0,\"hostUserId\":1,\"make\":\"Volkswagen\",\"model\":\"Golf\",\"type\":\"Hatchback\",\"year\":2013,\"address\":{\"street\":\"Musterstreet\",\"number\":12,\"city\":\"Berlin\",\"zip\":12345},\"features\":null,\"description\":null,\"guidelines\":null,\"pricePerDay\":15,\"distancePerDay\":null,\"details\":{\"fuelType\":\"diesel\",\"seats\":4,\"doors\":5,\"hp\":115,\"transmission\":\"manual\"},\"images\":null,\"ratings\":null,\"bookings\":null}";
@@ -222,7 +226,7 @@ public class CarControllerTest {
                 .year(2013)
                 .details(new CarDetails("diesel", 4, 5, 115, "manual"))
                 .pricePerDay(15)
-                .address(new Address("Musterstreet", 12, "Berlin", 12345))
+                .address(new Address("Musterstreet", "12", "Berlin", 12345))
                 .build();
         json = mapper.writeValueAsString(invalidCar);
 
@@ -356,5 +360,7 @@ public class CarControllerTest {
                 // Assert
                 .andExpect(status().isBadRequest());
     }
+
+
 
 }

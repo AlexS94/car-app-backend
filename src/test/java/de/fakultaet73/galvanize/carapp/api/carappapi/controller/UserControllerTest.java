@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import de.fakultaet73.galvanize.carapp.api.carappapi.Address;
 import de.fakultaet73.galvanize.carapp.api.carappapi.documents.User;
 import de.fakultaet73.galvanize.carapp.api.carappapi.exceptions.UserAlreadyExistsException;
+import de.fakultaet73.galvanize.carapp.api.carappapi.services.BookingService;
 import de.fakultaet73.galvanize.carapp.api.carappapi.services.CarService;
 import de.fakultaet73.galvanize.carapp.api.carappapi.services.UserService;
 import org.junit.jupiter.api.BeforeEach;
@@ -38,6 +39,9 @@ public class UserControllerTest {
     @MockBean
     CarService carService;
 
+    @MockBean
+    BookingService bookingService;
+
     ObjectMapper mapper = new ObjectMapper();
 
     User validUser;
@@ -52,7 +56,7 @@ public class UserControllerTest {
                 .email("mustermann@web.de")
                 .password("password")
                 .dateOfBirth(LocalDate.of(1999, 1, 1))
-                .address(new Address("Examplestreet", 12, "Berlin", 12345))
+                .address(new Address("Examplestreet", "12", "Berlin", 12345))
                 .build();
         json = mapper.writeValueAsString(this.validUser);
     }
@@ -118,7 +122,6 @@ public class UserControllerTest {
     void addUser_User_returnsUser() throws Exception {
         // Arrange
         when(userService.addUser(any(User.class))).thenReturn(validUser);
-        System.out.println(json);
         // Act
         mockMvc.perform(post("/user")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -163,7 +166,7 @@ public class UserControllerTest {
                 .email("mustermann.de")
                 .password("password")
                 .dateOfBirth(LocalDate.of(1999, 1, 1))
-                .address(new Address("Examplestreet", 12, "Berlin", 12345))
+                .address(new Address("Examplestreet", "12", "Berlin", 12345))
                 .build();
         json = mapper.writeValueAsString(invalidUser);
 
@@ -209,7 +212,7 @@ public class UserControllerTest {
                 .email("mustermann.de")
                 .password("password")
                 .dateOfBirth(LocalDate.of(1999, 1, 1))
-                .address(new Address("Examplestreet", 12, "Berlin", 12345))
+                .address(new Address("Examplestreet", "12", "Berlin", 12345))
                 .build();
         json = mapper.writeValueAsString(invalidUser);
 

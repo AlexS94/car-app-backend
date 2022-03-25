@@ -56,7 +56,14 @@ public class User {
     @NotNull @Valid
     private Address address;
     private List<Rating> ratings;
-    private int[] cars;
-    private int[] bookedCars;
+    private List<Long> cars;
+    private List<Long> bookingIds;
+
+    public void addCarToList(long carId){
+        cars.add(carId);
+    }
+    public void removeCarFromList(long carId){
+    cars.remove(carId);
+    }
 
 }

@@ -15,9 +15,10 @@ class UserTest {
     @Test
     void create_new_user() {
         // Arrange
-        Address address = new Address("Musterstreet", 12, "Berlin", 12345);
+        Address address = new Address("Musterstreet", "12", "Berlin", 12345);
         List<Rating> ratings = new ArrayList<>(List.of(new Rating("Dudebro", 2.8, LocalDate.now(), "Car was meh")));
         LocalDate date = LocalDate.of(1994, 3, 1);
+        List<Long> bookingList = List.of(1L,3L,4L);
 
         User user = User.builder()
                 .firstName("Max")
@@ -28,6 +29,7 @@ class UserTest {
                 .dateOfBirth(date)
                 .address(address)
                 .ratings(ratings)
+                .bookingIds(bookingList)
                 .build();
         // Assert
         assertEquals("Max", user.getFirstName());
@@ -38,6 +40,7 @@ class UserTest {
         assertEquals(date, user.getDateOfBirth());
         assertEquals(ratings, user.getRatings());
         assertEquals(address, user.getAddress());
+        assertEquals(bookingList, user.getBookingIds());
     }
 
 }

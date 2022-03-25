@@ -9,9 +9,12 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.validation.constraints.AssertTrue;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -27,13 +30,16 @@ class UserServiceTest {
     UserRepository userRepository;
 
     @Mock
+    CarService carService;
+
+    @Mock
     SequenceGeneratorService sequenceGeneratorService;
 
     User validUser;
 
     @BeforeEach
     void setUp() {
-        userService = new UserService(userRepository, sequenceGeneratorService);
+        userService = new UserService(userRepository, carService, sequenceGeneratorService);
         validUser = User.builder()
                 .firstName("Max")
                 .lastName("Mustermann")
@@ -41,7 +47,8 @@ class UserServiceTest {
                 .email("mustermann@web.de")
                 .password("password")
                 .dateOfBirth(LocalDate.of(1999, 1, 1))
-                .address(new Address("Examplestreet", 12, "Berlin", 12345))
+                .address(new Address("Examplestreet", "12", "Berlin", 12345))
+                .cars(new ArrayList<>())
                 .build();
     }
 
@@ -229,6 +236,7 @@ class UserServiceTest {
     void deleteUser_id_returnsTrue() {
         // Arrange
         when(userRepository.existsById(anyLong())).thenReturn(true);
+        doNothing().when(carService).deleteAllCarsWithHostUserId(anyLong());
         doNothing().when(userRepository).deleteById(anyLong());
 
         // Act
@@ -237,6 +245,7 @@ class UserServiceTest {
         // Assert
         assertTrue(result);
         verify(userRepository).deleteById(anyLong());
+        verify(carService).deleteAllCarsWithHostUserId(anyLong());
     }
 
     @Test
@@ -248,6 +257,35 @@ class UserServiceTest {
 
         // Assert
         assertFalse(result);
+    }
+
+    @Test
+    void addCarIdToHostUser_addCardIdToUser() {
+        // Arrange
+        long carId = 1;
+        when(userRepository.findById(anyLong())).thenReturn(Optional.of(validUser));
+        when(userRepository.save(any(User.class))).thenReturn(validUser);
+        //Act
+        userService.addCarIdToHostUser(validUser.getId(), carId);
+
+        //Assert
+        verify(userRepository).save(any(User.class));
+        verify(userRepository).findById(anyLong());
+    }
+
+    @Test
+    void deleteCarIdFromHostUser_deleteCarFromUser() {
+        // Arrange
+        long carId = 1;
+        when(userRepository.findById(anyLong())).thenReturn(Optional.of(validUser));
+        when(userRepository.save(any(User.class))).thenReturn(validUser);
+
+        //Act
+        userService.deleteCarIdFromHostUser(validUser.getId(), carId);
+
+        //Assert
+        verify(userRepository).save(any(User.class));
+        verify(userRepository).findById(anyLong());
     }
 
 }

@@ -12,4 +12,7 @@ public interface CarRepository extends MongoRepository<Car, Long> {
     List<Car> findByHostUserId(long hostUserId);
 
     boolean existsCarByIdAndHostUserId(long id, long hostUserId);
+
+    void deleteAllByHostUserId(long hostUserId);
+
 }

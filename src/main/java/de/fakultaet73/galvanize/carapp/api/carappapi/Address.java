@@ -12,8 +12,8 @@ public class Address {
 
     @NotNull @NotEmpty
     private String street;
-    @NotNull
-    private Integer number;
+    @NotNull @NotEmpty
+    private String number;
     @NotNull @NotEmpty
     private String city;
     @NotNull

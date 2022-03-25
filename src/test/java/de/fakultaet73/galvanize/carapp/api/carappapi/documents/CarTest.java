@@ -17,19 +17,17 @@ public class CarTest {
     @Test
     void create_new_car() {
         // Arrange
+        Long hostUserId = 3L;
         CarDetails carDetails = new CarDetails("diesel", 4, 5, 115, "manual");
         String[] features = {"smokefree", "petsfree"};
         String[] guidelines = {"parked behind the red building", "please return after use"};
         List<Rating> ratingsList = new ArrayList<>(List.of(
                 new Rating("Dudebro", 2.8, LocalDate.now(), "Car was meh")));
-        List<Booking> bookingsList = List.of(
-                new Booking(1, LocalDate.of(2013, 1, 1), LocalDate.of(2013, 1, 5)),
-                new Booking(2, LocalDate.of(2013, 2, 2), LocalDate.of(2013, 3, 1))
-        );
-        Address address = new Address("Musterstreet", 12, "Berlin", 12345);
+        List<Long> bookingsList = List.of(1L, 2L, 3L);
+        Address address = new Address("Musterstreet", "12", "Berlin", 12345);
 
         Car car = Car.builder()
-                .hostUserId(1L)
+                .hostUserId(hostUserId)
                 .make("Volkswagen")
                 .model("Golf")
                 .type("Hatchback")
@@ -41,11 +39,11 @@ public class CarTest {
                 .ratings(ratingsList)
                 .pricePerDay(15)
                 .distancePerDay(200)
-                .bookings(bookingsList)
+                .bookingIds(bookingsList)
                 .address(address)
                 .build();
         // Assert
-        assertEquals(1, car.getHostUserId());
+        assertEquals(hostUserId, car.getHostUserId());
         assertEquals("Volkswagen", car.getMake());
         assertEquals("Golf", car.getModel());
         assertEquals("Hatchback", car.getType());
@@ -57,7 +55,7 @@ public class CarTest {
         assertEquals(ratingsList, car.getRatings());
         assertEquals(15, car.getPricePerDay());
         assertEquals(200, car.getDistancePerDay());
-        assertEquals(bookingsList, car.getBookings());
+        assertEquals(bookingsList, car.getBookingIds());
         assertEquals(address, car.getAddress());
 
     }

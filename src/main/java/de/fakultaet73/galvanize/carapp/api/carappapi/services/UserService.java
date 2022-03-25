@@ -3,17 +3,23 @@ package de.fakultaet73.galvanize.carapp.api.carappapi.services;
 import de.fakultaet73.galvanize.carapp.api.carappapi.documents.User;
 import de.fakultaet73.galvanize.carapp.api.carappapi.exceptions.UserAlreadyExistsException;
 import de.fakultaet73.galvanize.carapp.api.carappapi.repositories.UserRepository;
-import lombok.AllArgsConstructor;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
-@AllArgsConstructor
 @Service
 public class UserService {
 
     UserRepository userRepository;
+    CarService carService;
     SequenceGeneratorService sequenceGeneratorService;
+
+    public UserService(UserRepository userRepository,@Lazy CarService carService, SequenceGeneratorService sequenceGeneratorService) {
+        this.userRepository = userRepository;
+        this.carService = carService;
+        this.sequenceGeneratorService = sequenceGeneratorService;
+    }
 
     public boolean userExists(long id) {
         return userRepository.existsById(id);
@@ -48,6 +54,7 @@ public class UserService {
     public boolean deleteUser(long id) {
         if (userRepository.existsById(id)) {
             userRepository.deleteById(id);
+            carService.deleteAllCarsWithHostUserId(id);
             return true;
         }
         return false;
@@ -57,6 +64,24 @@ public class UserService {
         return userRepository.existsUserByUserNameOrEmail(
                 user.getUserName(), user.getEmail()
         );
+    }
+
+    public void addCarIdToHostUser(long hostUserId, long carId) {
+        Optional<User> optionalUserToUpdate = userRepository.findById(hostUserId);
+        if (optionalUserToUpdate.isPresent()) {
+            User userToUpdate = optionalUserToUpdate.get();
+            userToUpdate.addCarToList(carId);
+            userRepository.save(userToUpdate);
+        }
+    }
+
+    public void deleteCarIdFromHostUser(long hostUserId, long carId) {
+        Optional<User> optionalUserToUpdate = userRepository.findById(hostUserId);
+        if (optionalUserToUpdate.isPresent()) {
+            User userToUpdate = optionalUserToUpdate.get();
+            userToUpdate.addCarToList(carId);
+            userRepository.save(userToUpdate);
+        }
     }
 
 }
