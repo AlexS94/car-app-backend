@@ -128,85 +128,92 @@ class BookingServiceTest {
         assertTrue(result.isEmpty());
     }
 
-    /*
-    @Test
-    void addBooking_Booking_returnsBooking() {
-        // Arrange
-        when(bookingService.bookingExists(anyLong())).thenReturn(true);
-        when(carRepository.save(any(Car.class))).thenReturn(validCar);
-        // Act
-        Booking result-  = carService.addCar(validCar);
-
-        // Assert
-        verify(userService).addCarIdToHostUser(anyLong(), anyLong());
-        assertEquals(validCar, result);
-    }
 
     @Test
-    void addCar_Car_hostUserIdNotExists_throwsHostNotExistsException() {
+    void addBooking_booking_returnsBooking() {
         // Arrange
-        when(userService.userExists(anyLong())).thenReturn(false);
-
-        // Act // Assert
-        assertThrows(HostNotExistsException.class,
-                () -> carService.addCar(validCar),
-                "Exception was expected");
-    }
-
-    @Test
-    void updateCar_car_returnsCar() {
-        // Arrange
-        when(carRepository.existsCarByIdAndHostUserId(anyLong(), anyLong()))
-                .thenReturn(true);
-        when(carRepository.save(any(Car.class))).thenReturn(validCar);
+       // when(bookingService.bookingExists(anyLong())).thenReturn(true);
+        when(bookingRepository.save(any(Booking.class))).thenReturn(validBooking);
 
         // Act
-        Optional<Car> result = carService.updateCar(validCar);
+        Booking result = bookingService.addBooking(validBooking);
 
         // Assert
-        assertEquals(Optional.of(validCar), result);
+      //  verify(userService).addCarIdToHostUser(anyLong(), anyLong());
+        assertEquals(validBooking, result);
     }
+
+//    @Test
+//    void addCar_Car_hostUserIdNotExists_throwsHostNotExistsException() {
+//        // Arrange
+//        when(userService.userExists(anyLong())).thenReturn(false);
+//
+//        // Act // Assert
+//        assertThrows(HostNotExistsException.class,
+//                () -> carService.addCar(validCar),
+//                "Exception was expected");
+//    }
+
+
 
     @Test
-    void updateCar_hostUserIdDeviating_returnsNotFound() {
+    void updateBooking_booking_returnsCar() {
         // Arrange
-        when(carRepository.existsCarByIdAndHostUserId(anyLong(), anyLong()))
-                .thenReturn(false);
+//        when(carRepository.existsCarByIdAndHostUserId(anyLong(), anyLong()))
+//                .thenReturn(true);
+        when(bookingRepository.save(any(Booking.class))).thenReturn(validBooking);
 
         // Act
-        Optional<Car> result = carService.updateCar(validCar);
+        Optional<Booking> result = bookingService.updateBooking(validBooking);
 
         // Assert
-        assertTrue(result.isEmpty());
+        assertEquals(Optional.of(validBooking), result);
     }
+
+
+//    @Test
+//    void updateCar_hostUserIdDeviating_returnsNotFound() {
+//        // Arrange
+//        when(carRepository.existsCarByIdAndHostUserId(anyLong(), anyLong()))
+//                .thenReturn(false);
+//
+//        // Act
+//        Optional<Car> result = carService.updateCar(validCar);
+//
+//        // Assert
+//        assertTrue(result.isEmpty());
+//    }
+
+
 
     @Test
     void deleteCar_id_returnsTrue() {
         // Arrange
-        when(carRepository.findById(anyLong())).thenReturn(Optional.of(validCar));
-        doNothing().when(userService).deleteCarIdFromHostUser(anyLong(), anyLong());
-        doNothing().when(carRepository).deleteById(anyLong());
+        when(bookingRepository.findById(anyLong())).thenReturn(Optional.of(validBooking));
+//      doNothing().when(userService).deleteCarIdFromHostUser(anyLong(), anyLong());
+        doNothing().when(bookingRepository).deleteById(anyLong());
 
         // Act
-        boolean result = carService.deleteCar(validCar.getId());
+        boolean result = bookingService.deleteBooking(validBooking.getId());
 
         // Assert
         assertTrue(result);
-        verify(carRepository).deleteById(anyLong());
-        verify(userService).deleteCarIdFromHostUser(anyLong(), anyLong());
+//        verify(carRepository).deleteById(anyLong());
+//        verify(userService).deleteCarIdFromHostUser(anyLong(), anyLong());
     }
 
     @Test
     void deleteCar_id_notExists_returnsFalse() {
         // Arrange
-        when(carRepository.findById(anyLong())).thenReturn(Optional.empty());
+        when(bookingRepository.findById(anyLong())).thenReturn(Optional.empty());
         // Act
-        boolean result = carService.deleteCar(validCar.getId());
+        boolean result = bookingService.deleteBooking(validBooking.getId());
 
         // Assert
         assertFalse(result);
     }
 
+/*
     @Test
     void deleteAllCarsWithHostUserId_returnNothing() {
         //Arrange

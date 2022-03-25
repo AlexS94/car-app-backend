@@ -31,14 +31,20 @@ public class BookingService {
     }
 
     public Booking addBooking(Booking booking) {
-        return null;
+        booking.setId(sequenceGeneratorService.generateSequence(Booking.SEQUENCE_NAME));
+        return bookingRepository.save(booking);
     }
 
     public Optional<Booking> updateBooking(Booking booking) {
-        return null;
+        return  Optional.of(bookingRepository.save(booking));
     }
 
     public boolean deleteBooking(long id) {
+        Optional<Booking> booking = getBooking(id);
+        if (booking.isPresent()) {
+            bookingRepository.deleteById(id);
+            return true;
+        }
         return false;
     }
 
