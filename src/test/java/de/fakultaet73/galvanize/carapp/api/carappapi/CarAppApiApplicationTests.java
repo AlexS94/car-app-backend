@@ -1,6 +1,8 @@
 package de.fakultaet73.galvanize.carapp.api.carappapi;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import de.fakultaet73.galvanize.carapp.api.carappapi.Address;
+import de.fakultaet73.galvanize.carapp.api.carappapi.CarAppApiApplication;
 import de.fakultaet73.galvanize.carapp.api.carappapi.documents.User;
 import de.fakultaet73.galvanize.carapp.api.carappapi.repositories.BookingRepository;
 import de.fakultaet73.galvanize.carapp.api.carappapi.repositories.CarRepository;
@@ -13,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.*;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.time.LocalDate;

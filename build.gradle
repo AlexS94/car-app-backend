@@ -2,6 +2,7 @@ plugins {
 	id 'org.springframework.boot' version '2.6.4'
 	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
 	id 'java'
+	id("com.avast.gradle.docker-compose") version "0.14.0"
 }
 
 group = 'de.fakultaet73.galvanize.carapp.api'
@@ -26,6 +27,13 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	implementation 'org.hibernate:hibernate-validator:7.0.4.Final'
 }
+
+// for gradle build add
+dockerCompose {
+	useComposeFiles = ["docker-compose.yaml"]
+	isRequiredBy(tasks.test)
+}
+
 
 tasks.named('test') {
 	useJUnitPlatform()
