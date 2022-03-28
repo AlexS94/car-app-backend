@@ -1,11 +1,13 @@
 package de.fakultaet73.galvanize.carapp.api.carappapi.services;
 
 import de.fakultaet73.galvanize.carapp.api.carappapi.Address;
-import de.fakultaet73.galvanize.carapp.api.carappapi.Booking;
+import de.fakultaet73.galvanize.carapp.api.carappapi.documents.Booking;
 import de.fakultaet73.galvanize.carapp.api.carappapi.CarDetails;
 import de.fakultaet73.galvanize.carapp.api.carappapi.documents.Car;
+import de.fakultaet73.galvanize.carapp.api.carappapi.exceptions.BookingAlreadyExistsException;
 import de.fakultaet73.galvanize.carapp.api.carappapi.exceptions.CarNotExistsException;
 import de.fakultaet73.galvanize.carapp.api.carappapi.exceptions.HostNotExistsException;
+import de.fakultaet73.galvanize.carapp.api.carappapi.exceptions.InvalidBookingException;
 import de.fakultaet73.galvanize.carapp.api.carappapi.repositories.BookingRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -76,7 +78,6 @@ class BookingServiceTest {
         assertTrue(result.isEmpty());
     }
 
-
     @Test
     void getBookingsByUserId_userId_returnsBookingList() {
         // Arrange
@@ -132,7 +133,6 @@ class BookingServiceTest {
         assertTrue(result.isEmpty());
     }
 
-
     @Test
     void addBooking_booking_returnsBooking() {
         // Arrange
@@ -157,20 +157,19 @@ class BookingServiceTest {
         assertEquals(validBooking, result);
     }
 
-
     @Test
-    void addBooking_booking_carNotExists_throwsCarNotExistsException(){
+    void addBooking_booking_carNotExists_throwsCarNotExistsException() {
         // when(bookingService.bookingExists(anyLong())).thenReturn(true);
         when(carService.carExists(anyLong())).thenReturn(false);
         // Assert
-                assertThrows(CarNotExistsException.class,
+        assertThrows(CarNotExistsException.class,
                 () -> bookingService.addBooking(validBooking),
                 "Exception was expected");
 
     }
 
     @Test
-    void addCar_Car_hostUserIdNotExists_throwsHostNotExistsException() {
+    void addBooking_booking_UserIdNotExists_throwsHostNotExistsException() {
         // Arrange
         when(carService.carExists(anyLong())).thenReturn(true);
         when(userService.userExists(anyLong())).thenReturn(false);
@@ -182,8 +181,41 @@ class BookingServiceTest {
     }
 
     @Test
+    void addBooking_booking_timeslotNotAvailable_throwsBookingAlreadyExistsException() {
+        // Arrange
+        when(carService.carExists(anyLong())).thenReturn(true);
+        when(userService.userExists(anyLong())).thenReturn(true);
+
+        long carId = 13;
+        when(bookingRepository.findByCarId(anyLong())).thenReturn(
+                List.of(
+                        new Booking(1, 2L, carId, LocalDate.of(2022, 2, 1), LocalDate.of(2022, 2, 5)),
+                        new Booking(2, 4L, carId, LocalDate.of(2022, 3, 3), LocalDate.of(2022, 3, 12)),
+                        new Booking(3, 6L, carId, LocalDate.of(2022, 4, 1), LocalDate.of(2022, 4, 15))
+                )
+        );
+
+        // Act // Assert
+        assertThrows(BookingAlreadyExistsException.class,
+                () -> bookingService.addBooking(validBooking),
+                "Exception was expected");
+    }
+
+    @Test
+    void addBooking_booking_fromDateAfterUntilDate_throwsInvalidBookingException() {
+        // Arrange
+        Booking invalidBooking = new Booking(1, 2L, 13L, LocalDate.of(2022, 2, 15), LocalDate.of(2022, 2, 10));
+
+        // Act // Assert
+        assertThrows(InvalidBookingException.class,
+                () -> bookingService.addBooking(invalidBooking),
+                "Exception was expected");
+    }
+
+    @Test
     void updateBooking_booking_returnsCar() {
         // Arrange
+        when(bookingRepository.existsBookingByIdAndCarIdAndUserId(anyLong(), anyLong(), anyLong())).thenReturn(true);
         when(bookingRepository.save(any(Booking.class))).thenReturn(validBooking);
 
         // Act
@@ -191,6 +223,30 @@ class BookingServiceTest {
 
         // Assert
         assertEquals(Optional.of(validBooking), result);
+    }
+
+    @Test
+    void updateBooking_bookingNotExists_returnsOptionalEmpty() {
+        // Arrange
+        when(bookingRepository.existsBookingByIdAndCarIdAndUserId(anyLong(), anyLong(), anyLong())).thenReturn(false);
+
+        // Act
+        Optional<Booking> result = bookingService.updateBooking(validBooking);
+
+        // Assert
+        assertTrue(result.isEmpty());
+    }
+
+    @Test
+    void updateBooking_newBookingIsInvalid_throwsInvalidBookingException() {
+        // Arrange
+        when(bookingRepository.existsBookingByIdAndCarIdAndUserId(anyLong(), anyLong(), anyLong())).thenReturn(true);
+        Booking invalidBooking = new Booking(1, 2L, 13L, LocalDate.of(2022, 2, 15), LocalDate.of(2022, 2, 10));
+
+        // Act // Assert
+        assertThrows(InvalidBookingException.class,
+                () -> bookingService.updateBooking(invalidBooking),
+                "Exception was expected");
     }
 
     @Test

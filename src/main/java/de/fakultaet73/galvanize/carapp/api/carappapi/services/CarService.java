@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
-
 @Service
 public class CarService {
 
@@ -57,7 +56,6 @@ public class CarService {
     public boolean deleteCar(long id) {
         Optional<Car> car = getCar(id);
         if (car.isPresent()) {
-            //userService.deleteCarIdFromHostUser(car.get().getHostUserId(), car.get().getId());
             bookingService.deleteAllWithCarId(id);
             carRepository.deleteById(id);
             return true;

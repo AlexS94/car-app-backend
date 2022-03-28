@@ -29,10 +29,10 @@ dependencies {
 }
 
 // for gradle build add
-dockerCompose {
+/*dockerCompose {
 	useComposeFiles = ["docker-compose.yaml"]
 	isRequiredBy(tasks.test)
-}
+}*/
 
 
 tasks.named('test') {
