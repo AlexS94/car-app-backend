@@ -1,4 +1,4 @@
-package de.fakultaet73.galvanize.carapp.api.carappapi.documents;
+package de.fakultaet73.galvanize.carapp.api.carappapi.dtos;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -7,12 +7,11 @@ import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import de.fakultaet73.galvanize.carapp.api.carappapi.Address;
 import de.fakultaet73.galvanize.carapp.api.carappapi.Rating;
+import de.fakultaet73.galvanize.carapp.api.carappapi.documents.Booking;
+import de.fakultaet73.galvanize.carapp.api.carappapi.documents.Car;
 import lombok.*;
 import org.bson.types.Binary;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.annotation.Transient;
-import org.springframework.data.mongodb.core.index.Indexed;
-import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Email;
@@ -23,30 +22,27 @@ import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 @Getter
 @Setter
-@Builder
-@Document
 @ToString
-public class User {
-
-    @Transient
-    public static final String SEQUENCE_NAME = "users_sequence";
+public class UserDTO {
 
     @Id
-    @Setter
     private long id;
 
-    @NotNull @NotEmpty
+    @NotNull
+    @NotEmpty
     private String firstName;
     @NotNull @NotEmpty
     private String lastName;
-    @NotNull @NotEmpty @Indexed(unique = true)
+    @NotNull @NotEmpty
     private String userName;
-    @NotNull @NotEmpty @Email @Indexed(unique = true)
+    @NotNull @NotEmpty @Email
     private String email;
     @NotNull @NotEmpty
     private String password;
+
 
     @JsonDeserialize(using = LocalDateDeserializer.class)
     @JsonSerialize(using = LocalDateSerializer.class)
@@ -61,4 +57,6 @@ public class User {
     @Valid
     private List<Rating> ratings;
 
+    private List<Booking> bookings;
+    private List<Car> cars;
 }

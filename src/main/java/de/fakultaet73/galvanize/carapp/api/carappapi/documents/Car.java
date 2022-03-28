@@ -3,10 +3,7 @@ package de.fakultaet73.galvanize.carapp.api.carappapi.documents;
 import de.fakultaet73.galvanize.carapp.api.carappapi.Address;
 import de.fakultaet73.galvanize.carapp.api.carappapi.CarDetails;
 import de.fakultaet73.galvanize.carapp.api.carappapi.Rating;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.bson.types.Binary;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Transient;
@@ -18,8 +15,11 @@ import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @AllArgsConstructor
+@NoArgsConstructor
 @Getter
+@Setter
 @Builder
+@ToString
 @Document
 public class Car {
 
@@ -27,7 +27,7 @@ public class Car {
     public static final String SEQUENCE_NAME = "cars_sequence";
 
     @Id
-    @Setter
+//    @Setter
     private long id;
 
     @NotNull

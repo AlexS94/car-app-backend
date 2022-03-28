@@ -139,6 +139,8 @@ public class CarControllerTest {
         String jsonList = mapper.writeValueAsString(carList);
 
         when(carService.getAllCars()).thenReturn(carList);
+        when(modelMapper.map(any(Car.class), any()))
+                .thenReturn(validCarDTO);
 
         // Act
         mockMvc.perform(get("/cars"))
@@ -157,6 +159,8 @@ public class CarControllerTest {
         String jsonList = mapper.writeValueAsString(carList);
 
         when(carService.getCarsByHostUserId(anyLong())).thenReturn(carList);
+        when(modelMapper.map(any(Car.class), any()))
+                .thenReturn(validCarDTO);
 
         // Act
         mockMvc.perform(get("/cars/host/1"))
@@ -170,7 +174,8 @@ public class CarControllerTest {
         // Arrange
         List<Car> carList = new ArrayList<>();
         when(carService.getCarsByHostUserId(anyLong())).thenReturn(carList);
-
+        when(modelMapper.map(any(Car.class), any()))
+                .thenReturn(validCarDTO);
         // Act
         mockMvc.perform(get("/cars/host/99"))
                 // Assert
@@ -194,6 +199,8 @@ public class CarControllerTest {
         carList.add(validCar);
         String jsonList = mapper.writeValueAsString(carList);
         when(carService.getCarsByCity(anyString())).thenReturn(carList);
+        when(modelMapper.map(any(Car.class), any()))
+                .thenReturn(validCarDTO);
         //Act
         mockMvc.perform(get("/cars/city/wolfsburg"))
                 // Assert
@@ -207,6 +214,8 @@ public class CarControllerTest {
         List<Car> carList = new ArrayList<>();
         String jsonList = mapper.writeValueAsString(carList);
         when(carService.getCarsByCity(anyString())).thenReturn(carList);
+        when(modelMapper.map(any(Car.class), any()))
+                .thenReturn(validCarDTO);
         //Act
         mockMvc.perform(get("/cars/city/wolfsburg"))
                 // Assert
@@ -219,6 +228,8 @@ public class CarControllerTest {
     void addCar_Car_returnsCar() throws Exception {
         // Arrange
         when(carService.addCar(any(Car.class))).thenReturn(validCar);
+        when(modelMapper.map(any(Car.class), any()))
+                .thenReturn(validCarDTO);
         System.out.println(json);
         // Act
         mockMvc.perform(post("/car")
@@ -267,7 +278,8 @@ public class CarControllerTest {
     void addCar_Car_validAddress_returnsCar() throws Exception {
         // Act
         when(carService.addCar(any(Car.class))).thenReturn(validCar);
-
+        when(modelMapper.map(any(Car.class), any()))
+                .thenReturn(validCarDTO);
         mockMvc.perform(post("/car")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json))
@@ -314,8 +326,11 @@ public class CarControllerTest {
     @Test
     void updateCar_Car_returnsCar() throws Exception {
         // Arrange
+        when(modelMapper.map(any(CarDTO.class), any()))
+                .thenReturn(validCar);
+        when(modelMapper.map(any(Car.class), any()))
+                .thenReturn(validCarDTO);
         when(carService.updateCar(any(Car.class))).thenReturn(Optional.of(validCar));
-
         // Act
         mockMvc.perform(put("/car")
                         .contentType(MediaType.APPLICATION_JSON)

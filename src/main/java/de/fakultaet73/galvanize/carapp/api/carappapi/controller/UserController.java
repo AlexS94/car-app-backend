@@ -1,9 +1,15 @@
 package de.fakultaet73.galvanize.carapp.api.carappapi.controller;
 
+import de.fakultaet73.galvanize.carapp.api.carappapi.documents.Car;
 import de.fakultaet73.galvanize.carapp.api.carappapi.documents.User;
+import de.fakultaet73.galvanize.carapp.api.carappapi.dtos.CarDTO;
+import de.fakultaet73.galvanize.carapp.api.carappapi.dtos.UserDTO;
 import de.fakultaet73.galvanize.carapp.api.carappapi.exceptions.UserAlreadyExistsException;
+import de.fakultaet73.galvanize.carapp.api.carappapi.services.BookingService;
+import de.fakultaet73.galvanize.carapp.api.carappapi.services.CarService;
 import de.fakultaet73.galvanize.carapp.api.carappapi.services.UserService;
 import lombok.AllArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,28 +22,37 @@ import java.util.Optional;
 public class UserController {
 
     UserService userService;
+    BookingService bookingService;
+    CarService carService;
+    ModelMapper modelMapper;
 
     @GetMapping("/user/{id}")
-    public ResponseEntity<User> getUser(@PathVariable long id) {
+    public ResponseEntity<UserDTO> getUser(@PathVariable long id) {
         Optional<User> optionalUser = userService.getUser(id);
-        return optionalUser.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+        return optionalUser.map(
+                body-> ResponseEntity.ok(convertToDTO(body)))
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @GetMapping("/validate")
-    public ResponseEntity<User> validateUser(@RequestParam String input, @RequestParam String password) {
+    public ResponseEntity<UserDTO> validateUser(@RequestParam String input, @RequestParam String password) {
         Optional<User> optionalUser = userService.validate(input, password);
-        return optionalUser.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+        return optionalUser.map(
+                        body-> ResponseEntity.ok(convertToDTO(body)))
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PostMapping("/user")
-    public User addUser(@Valid @RequestBody User user) {
-        return userService.addUser(user);
+    public UserDTO addUser(@Valid @RequestBody User user) {
+        return convertToDTO(userService.addUser(user));
     }
 
     @PutMapping("/user")
-    public ResponseEntity<User> updateUser(@Valid @RequestBody User user) {
-        Optional<User> optionalUser = userService.updateUser(user);
-        return optionalUser.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    public ResponseEntity<UserDTO> updateUser(@Valid @RequestBody UserDTO userDTO) throws Exception {
+        Optional<User> optionalUser = userService.updateUser(convertToDocument(userDTO));
+        return optionalUser.map(
+                        body-> ResponseEntity.ok(convertToDTO(body)))
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @DeleteMapping("/user/{id}")
@@ -49,5 +64,17 @@ public class UserController {
     @ResponseStatus(HttpStatus.CONFLICT)
     public void UserAlreadyExistsExceptionHandler(UserAlreadyExistsException exception) {
     }
+
+    private UserDTO convertToDTO(User user) {
+        UserDTO userDTO = modelMapper.map(user, UserDTO.class);
+        userDTO.setBookings(bookingService.getBookingsByUserId(user.getId()));
+        userDTO.setCars(carService.getCarsByHostUserId(user.getId()));
+        return userDTO;
+    }
+
+    private User convertToDocument(UserDTO userDTO) throws Exception {
+        return modelMapper.map(userDTO, User.class);
+    }
+
 
 }

@@ -4,7 +4,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import de.fakultaet73.galvanize.carapp.api.carappapi.Address;
 import de.fakultaet73.galvanize.carapp.api.carappapi.CarDetails;
 import de.fakultaet73.galvanize.carapp.api.carappapi.Rating;
+import de.fakultaet73.galvanize.carapp.api.carappapi.documents.Booking;
 import de.fakultaet73.galvanize.carapp.api.carappapi.documents.Car;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.modelmapper.ModelMapper;
 
@@ -20,9 +22,11 @@ public class CarDTOUnitTest {
     ModelMapper modelMapper = new ModelMapper();
     ObjectMapper mapper = new ObjectMapper();
 
-    @Test
-    void convertCarToCarDTO_returnsCarDTO() throws Exception {
-        // Arrange
+    Car carValid;
+    CarDTO carTDOValid;
+
+    @BeforeEach
+    void setUp() {
         Long hostUserId = 3L;
         CarDetails carDetails = new CarDetails("diesel", 4, 5, 115, "manual");
         String[] features = {"smokefree", "petsfree"};
@@ -31,7 +35,7 @@ public class CarDTOUnitTest {
                 new Rating("Dudebro", 2.8, LocalDate.now(), "Car was meh")));
         Address address = new Address("Musterstreet", "12", "Berlin", 12345);
 
-        Car car = Car.builder()
+        carValid = Car.builder()
                 .hostUserId(hostUserId)
                 .make("Volkswagen")
                 .model("Golf")
@@ -47,17 +51,37 @@ public class CarDTOUnitTest {
                 .address(address)
                 .build();
 
+        carTDOValid  = CarDTO.builder()
+                .hostUserId(1L)
+                .make("Volkswagen")
+                .model("Golf")
+                .type("Hatchback")
+                .year(2013)
+                .details(new CarDetails("diesel", 4, 5, 115, "manual"))
+                .pricePerDay(15)
+                .address(new Address("Musterstreet", "12", "Berlin", 12345))
+                .bookings(  List.of(
+                        new Booking(1, 2L, 1L, LocalDate.of(2022, 2, 1), LocalDate.of(2022, 2, 5)),
+                        new Booking(2, 4L, 1L, LocalDate.of(2022, 3, 3), LocalDate.of(2022, 3, 12)),
+                        new Booking(3, 6L, 1L, LocalDate.of(2022, 4, 1), LocalDate.of(2022, 4, 15))
+                ))
+                .build();
+    }
+
+    @Test
+    void convertCarToCarDTO_returnsCarDTO() throws Exception {
+        // Arrange
         // Act
-        CarDTO carDTO = modelMapper.map(car, CarDTO.class);
+        CarDTO carDTO = modelMapper.map(carValid, CarDTO.class);
 
         // Assert
-        assertEquals(car.getId(), carDTO.getId());
-        assertEquals(car.getHostUserId(), carDTO.getHostUserId());
-        assertEquals(car.getMake(), carDTO.getMake());
-        assertEquals(car.getModel(), carDTO.getModel());
-        assertEquals(car.getType(), carDTO.getType());
-        assertEquals(car.getYear(), carDTO.getYear());
-        assertEquals(Arrays.toString(car.getFeatures()), Arrays.toString(carDTO.getFeatures()));
+        assertEquals(carValid.getId(), carDTO.getId());
+        assertEquals(carValid.getHostUserId(), carDTO.getHostUserId());
+        assertEquals(carValid.getMake(), carDTO.getMake());
+        assertEquals(carValid.getModel(), carDTO.getModel());
+        assertEquals(carValid.getType(), carDTO.getType());
+        assertEquals(carValid.getYear(), carDTO.getYear());
+        assertEquals(Arrays.toString(carValid.getFeatures()), Arrays.toString(carDTO.getFeatures()));
     /*    assertEquals(car.getDescription(), carDTO.getDescription());
         assertEquals(car.getGuidelines(), carDTO.getGuidelines());
         assertEquals(car.getRatings(), carDTO.getRatings());
@@ -68,16 +92,13 @@ public class CarDTOUnitTest {
 
     }
 
-   /* @Test
-    public void whenConvertPostDtoToPostEntity_thenCorrect() {
-        PostDto postDto = new PostDto();
-        postDto.setId(1L);
-        postDto.setTitle(randomAlphabetic(6));
-        postDto.setUrl("www.test.com");
+    @Test
+    public void whenConvertCarDTOToCarEntity_thenCorrect() {
 
-        Post post = modelMapper.map(postDto, Post.class);
-        assertEquals(postDto.getId(), post.getId());
-        assertEquals(postDto.getTitle(), post.getTitle());
-        assertEquals(postDto.getUrl(), post.getUrl());
-    }*/
+        Car car = modelMapper.map(carTDOValid, Car.class);
+        System.out.println(carTDOValid.toString());
+        System.out.println(car.toString());
+        assertEquals(carTDOValid.getId(), car.getId());
+        assertEquals(carTDOValid.getHostUserId(), car.getHostUserId());
+    }
 }
