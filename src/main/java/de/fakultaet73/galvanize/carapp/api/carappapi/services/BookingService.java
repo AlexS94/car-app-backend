@@ -6,6 +6,7 @@ import de.fakultaet73.galvanize.carapp.api.carappapi.exceptions.CarNotExistsExce
 import de.fakultaet73.galvanize.carapp.api.carappapi.exceptions.HostNotExistsException;
 import de.fakultaet73.galvanize.carapp.api.carappapi.repositories.BookingRepository;
 import lombok.AllArgsConstructor;
+import org.apache.catalina.Host;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -34,11 +35,13 @@ public class BookingService {
 
 
     public Booking addBooking(Booking booking) {
-        Optional<Car> carOptional = carService.getCar(booking.getCarId());
-        if(carOptional.isEmpty()){
-            throw new CarNotExistsException("hostUserId does not exist");
+        if(!carService.carExists(booking.getCarId())){
+            throw new CarNotExistsException("CarIDNotExists does not exist");
         }
-
+        if(!userService.userExists(booking.getUserId())){
+            throw new HostNotExistsException("HostNotExits does not exist");
+        }
+        booking.setId(sequenceGeneratorService.generateSequence(Booking.SEQUENCE_NAME));
         return bookingRepository.save(booking);
     }
 
@@ -47,8 +50,7 @@ public class BookingService {
     }
 
     public boolean deleteBooking(long id) {
-        Optional<Booking> booking = getBooking(id);
-        if (booking.isPresent()) {
+        if (bookingExists(id)) {
             bookingRepository.deleteById(id);
             return true;
         }
@@ -61,5 +63,9 @@ public class BookingService {
 
     public void deleteAllWithUserId(long id) {
         bookingRepository.deleteAllByUserId(id);
+    }
+
+    public boolean bookingExists(long id) {
+        return bookingRepository.existsBookingById(id);
     }
 }

@@ -53,13 +53,26 @@ class UserServiceTest {
     @Test
     void userExists_id_returnsTrue() {
         // Arrange
-        when(userRepository.existsById(anyLong())).thenReturn(true);
+        when(userRepository.existsUserById(anyLong())).thenReturn(true);
 
         // Act
-        boolean result = userService.userExists(1);
+        boolean result = userService.userExists(1L);
 
         // Assert
         assertTrue(result);
+    }
+
+
+    @Test
+    void userExists_id_returnsFalse() {
+        // Arrange
+        when(userRepository.existsUserById(anyLong())).thenReturn(false);
+
+        // Act
+        boolean result = userService.userExists(1L);
+
+        // Assert
+        assertFalse(result);
     }
 
     @Test

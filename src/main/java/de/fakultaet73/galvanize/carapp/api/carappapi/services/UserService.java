@@ -16,16 +16,12 @@ public class UserService {
     BookingService bookingService;
     SequenceGeneratorService sequenceGeneratorService;
 
-    public UserService(UserRepository userRepository,@Lazy CarService carService, @Lazy BookingService bookingService,
+    public UserService(UserRepository userRepository, @Lazy CarService carService, @Lazy BookingService bookingService,
                        SequenceGeneratorService sequenceGeneratorService) {
         this.userRepository = userRepository;
         this.carService = carService;
         this.bookingService = bookingService;
         this.sequenceGeneratorService = sequenceGeneratorService;
-    }
-
-    public boolean userExists(long id) {
-        return userRepository.existsById(id);
     }
 
     public Optional<User> getUser(long id) {
@@ -42,7 +38,7 @@ public class UserService {
     }
 
     public User addUser(User user) {
-        if (userExists(user)) {
+        if (userExistsByUserNameAndEmail(user)) {
             throw new UserAlreadyExistsException("User already exists");
         }
         user.setId(sequenceGeneratorService.generateSequence(User.SEQUENCE_NAME));
@@ -50,7 +46,7 @@ public class UserService {
     }
 
     public Optional<User> updateUser(User user) {
-        return userExists(user) ?
+        return userExistsByUserNameAndEmail(user) ?
                 Optional.of(userRepository.save(user)) : Optional.empty();
     }
 
@@ -64,28 +60,16 @@ public class UserService {
         return false;
     }
 
-    private boolean userExists(User user) {
+    private boolean userExistsByUserNameAndEmail(User user) {
         return userRepository.existsUserByUserNameOrEmail(
                 user.getUserName(), user.getEmail()
         );
     }
 
-//    public void addCarIdToHostUser(long hostUserId, long carId) {
-//        Optional<User> optionalUserToUpdate = userRepository.findById(hostUserId);
-//        if (optionalUserToUpdate.isPresent()) {
-//            User userToUpdate = optionalUserToUpdate.get();
-//            userToUpdate.addCarToList(carId);
-//            userRepository.save(userToUpdate);
-//        }
-//    }
-
-//    public void deleteCarIdFromHostUser(long hostUserId, long carId) {
-//        Optional<User> optionalUserToUpdate = userRepository.findById(hostUserId);
-//        if (optionalUserToUpdate.isPresent()) {
-//            User userToUpdate = optionalUserToUpdate.get();
-//            userToUpdate.addCarToList(carId);
-//            userRepository.save(userToUpdate);
-//        }
-//    }
-
+    public boolean userExists(Long userId) {
+        return userRepository.existsUserById(userId);
+    }
 }
+
+
+

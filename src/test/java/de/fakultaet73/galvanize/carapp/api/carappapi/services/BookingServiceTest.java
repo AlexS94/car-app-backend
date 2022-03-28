@@ -5,6 +5,7 @@ import de.fakultaet73.galvanize.carapp.api.carappapi.Booking;
 import de.fakultaet73.galvanize.carapp.api.carappapi.CarDetails;
 import de.fakultaet73.galvanize.carapp.api.carappapi.documents.Car;
 import de.fakultaet73.galvanize.carapp.api.carappapi.exceptions.CarNotExistsException;
+import de.fakultaet73.galvanize.carapp.api.carappapi.exceptions.HostNotExistsException;
 import de.fakultaet73.galvanize.carapp.api.carappapi.repositories.BookingRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -82,7 +83,6 @@ class BookingServiceTest {
         List<Booking> bookingList = List.of(
                 validBooking, validBooking
         );
-
         when(bookingRepository.findByUserId(anyLong())).thenReturn(bookingList);
 
         // Act
@@ -146,15 +146,14 @@ class BookingServiceTest {
                 .pricePerDay(15)
                 .address(new Address("Musterstreet", "12", "Berlin", 12345))
                 .build();
-       // when(bookingService.bookingExists(anyLong())).thenReturn(true);
-        when(carService.getCar(anyLong())).thenReturn(Optional.of(car));
+        when(carService.carExists(anyLong())).thenReturn(true);
+        when(userService.userExists(anyLong())).thenReturn(true);
         when(bookingRepository.save(any(Booking.class))).thenReturn(validBooking);
 
-        // Act
+        //Act
         Booking result = bookingService.addBooking(validBooking);
 
         // Assert
-      //  verify(userService).addCarIdToHostUser(anyLong(), anyLong());
         assertEquals(validBooking, result);
     }
 
@@ -162,7 +161,7 @@ class BookingServiceTest {
     @Test
     void addBooking_booking_carNotExists_throwsCarNotExistsException(){
         // when(bookingService.bookingExists(anyLong())).thenReturn(true);
-        when(carService.getCar(anyLong())).thenReturn(Optional.empty());
+        when(carService.carExists(anyLong())).thenReturn(false);
         // Assert
                 assertThrows(CarNotExistsException.class,
                 () -> bookingService.addBooking(validBooking),
@@ -170,24 +169,21 @@ class BookingServiceTest {
 
     }
 
-//    @Test
-//    void addCar_Car_hostUserIdNotExists_throwsHostNotExistsException() {
-//        // Arrange
-//        when(userService.userExists(anyLong())).thenReturn(false);
-//
-//        // Act // Assert
-//        assertThrows(HostNotExistsException.class,
-//                () -> carService.addCar(validCar),
-//                "Exception was expected");
-//    }
+    @Test
+    void addCar_Car_hostUserIdNotExists_throwsHostNotExistsException() {
+        // Arrange
+        when(carService.carExists(anyLong())).thenReturn(true);
+        when(userService.userExists(anyLong())).thenReturn(false);
 
-
+        // Act // Assert
+        assertThrows(HostNotExistsException.class,
+                () -> bookingService.addBooking(validBooking),
+                "Exception was expected");
+    }
 
     @Test
     void updateBooking_booking_returnsCar() {
         // Arrange
-//        when(carRepository.existsCarByIdAndHostUserId(anyLong(), anyLong()))
-//                .thenReturn(true);
         when(bookingRepository.save(any(Booking.class))).thenReturn(validBooking);
 
         // Act
@@ -197,27 +193,10 @@ class BookingServiceTest {
         assertEquals(Optional.of(validBooking), result);
     }
 
-
-//    @Test
-//    void updateCar_hostUserIdDeviating_returnsNotFound() {
-//        // Arrange
-//        when(carRepository.existsCarByIdAndHostUserId(anyLong(), anyLong()))
-//                .thenReturn(false);
-//
-//        // Act
-//        Optional<Car> result = carService.updateCar(validCar);
-//
-//        // Assert
-//        assertTrue(result.isEmpty());
-//    }
-
-
-
     @Test
     void deleteBooking_id_returnsTrue() {
         // Arrange
-        when(bookingRepository.findById(anyLong())).thenReturn(Optional.of(validBooking));
-//      doNothing().when(userService).deleteCarIdFromHostUser(anyLong(), anyLong());
+        when(bookingRepository.existsBookingById(anyLong())).thenReturn(true);
         doNothing().when(bookingRepository).deleteById(anyLong());
 
         // Act
@@ -225,14 +204,12 @@ class BookingServiceTest {
 
         // Assert
         assertTrue(result);
-//        verify(carRepository).deleteById(anyLong());
-//        verify(userService).deleteCarIdFromHostUser(anyLong(), anyLong());
     }
 
     @Test
     void deleteBooking_id_notExists_returnsFalse() {
         // Arrange
-        when(bookingRepository.findById(anyLong())).thenReturn(Optional.empty());
+        when(bookingRepository.existsBookingById(anyLong())).thenReturn(false);
         // Act
         boolean result = bookingService.deleteBooking(validBooking.getId());
 
@@ -240,17 +217,4 @@ class BookingServiceTest {
         assertFalse(result);
     }
 
-/*
-    @Test
-    void deleteAllCarsWithHostUserId_returnNothing() {
-        //Arrange
-        doNothing().when(carRepository).deleteAllByHostUserId(anyLong());
-
-        //Act
-        carService.deleteAllWithHostUserId(validCar.getHostUserId());
-
-        // Assert
-        verify(carRepository).deleteAllByHostUserId(anyLong());
-    }
-*/
 }

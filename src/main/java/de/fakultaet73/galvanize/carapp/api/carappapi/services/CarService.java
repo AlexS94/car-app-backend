@@ -3,9 +3,6 @@ package de.fakultaet73.galvanize.carapp.api.carappapi.services;
 import de.fakultaet73.galvanize.carapp.api.carappapi.documents.Car;
 import de.fakultaet73.galvanize.carapp.api.carappapi.exceptions.HostNotExistsException;
 import de.fakultaet73.galvanize.carapp.api.carappapi.repositories.CarRepository;
-import de.fakultaet73.galvanize.carapp.api.carappapi.services.BookingService;
-import de.fakultaet73.galvanize.carapp.api.carappapi.services.SequenceGeneratorService;
-import de.fakultaet73.galvanize.carapp.api.carappapi.services.UserService;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
@@ -53,7 +50,7 @@ public class CarService {
     }
 
     public Optional<Car> updateCar(Car car) {
-        return carExists(car) ?
+        return carExistsWithIdAndHostUserId(car) ?
                 Optional.of(carRepository.save(car)) : Optional.empty();
     }
 
@@ -68,12 +65,15 @@ public class CarService {
         return false;
     }
 
-    private boolean carExists(Car car) {
-        return carRepository.existsCarByIdAndHostUserId(car.getId(), car.getHostUserId());
-    }
-
     public void deleteAllWithHostUserId(long hostUserId) {
         carRepository.deleteAllByHostUserId(hostUserId);
     }
 
+    private boolean carExistsWithIdAndHostUserId(Car car) {
+        return carRepository.existsCarByIdAndHostUserId(car.getId(), car.getHostUserId());
+    }
+
+    public boolean carExists(long id){
+        return carRepository.existsCarById(id);
+    }
 }

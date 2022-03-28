@@ -243,4 +243,33 @@ class CarServiceTest {
         // Assert
         verify(carRepository).deleteAllByHostUserId(anyLong());
     }
+
+    @Test
+    void carExits_exits_returnTrue(){
+        // Arrange
+        boolean value = true;
+        int id = 1;
+        when(carRepository.existsCarById(anyLong())).thenReturn(value);
+
+        //Act
+        boolean result = carService.carExists(id);
+
+        //Assert
+        assertTrue(result);
+    }
+
+    @Test
+    void carExits_NotExits_returnFalse(){
+        // Arrange
+        boolean value = false;
+        int id = 1;
+        when(carRepository.existsCarById(anyLong())).thenReturn(value);
+
+        //Act
+        boolean result = carService.carExists(id);
+
+        //Assert
+        assertFalse(result);
+    }
+
 }
