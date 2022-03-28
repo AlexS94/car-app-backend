@@ -54,6 +54,7 @@ public class Car {
     @NotNull @Valid
     private CarDetails details;
     private List<Binary> images;
+    @Valid
     private List<Rating> ratings;
 
 }

@@ -55,13 +55,7 @@ public class User {
 
     @NotNull @Valid
     private Address address;
+    @Valid
     private List<Rating> ratings;
-
-//    public void addCarToList(long carId){
-//        cars.add(carId);
-//    }
-//    public void removeCarFromList(long carId){
-//    cars.remove(carId);
-//    }
 
 }

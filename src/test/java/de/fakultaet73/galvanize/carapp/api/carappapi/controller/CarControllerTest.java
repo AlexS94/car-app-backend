@@ -3,7 +3,9 @@ package de.fakultaet73.galvanize.carapp.api.carappapi.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.fakultaet73.galvanize.carapp.api.carappapi.Address;
 import de.fakultaet73.galvanize.carapp.api.carappapi.CarDetails;
+import de.fakultaet73.galvanize.carapp.api.carappapi.documents.Booking;
 import de.fakultaet73.galvanize.carapp.api.carappapi.documents.Car;
+import de.fakultaet73.galvanize.carapp.api.carappapi.dtos.CarDTO;
 import de.fakultaet73.galvanize.carapp.api.carappapi.exceptions.HostNotExistsException;
 import de.fakultaet73.galvanize.carapp.api.carappapi.services.BookingService;
 import de.fakultaet73.galvanize.carapp.api.carappapi.services.CarService;
@@ -11,6 +13,7 @@ import de.fakultaet73.galvanize.carapp.api.carappapi.services.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -18,6 +21,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -46,9 +50,13 @@ public class CarControllerTest {
     @MockBean
     BookingService bookingService;
 
+    @MockBean
+    ModelMapper modelMapper;
+
     ObjectMapper mapper = new ObjectMapper();
 
     Car validCar;
+    CarDTO validCarDTO;
     String validCarJson;
     String json;
 
@@ -68,13 +76,31 @@ public class CarControllerTest {
         json = mapper.writeValueAsString(validCar);
         validCarJson = "{\"id\":0,\"hostUserId\":1,\"make\":\"Volkswagen\",\"model\":\"Golf\",\"type\":\"Hatchback\",\"year\":2013,\"address\":{\"street\":\"Musterstreet\",\"number\":12,\"city\":\"Berlin\",\"zip\":12345},\"features\":null,\"description\":null,\"guidelines\":null,\"pricePerDay\":15,\"distancePerDay\":null,\"details\":{\"fuelType\":\"diesel\",\"seats\":4,\"doors\":5,\"hp\":115,\"transmission\":\"manual\"},\"images\":null,\"ratings\":null,\"bookings\":null}";
 
+        validCarDTO = CarDTO.builder()
+                .hostUserId(1L)
+                .make("Volkswagen")
+                .model("Golf")
+                .type("Hatchback")
+                .year(2013)
+                .details(new CarDetails("diesel", 4, 5, 115, "manual"))
+                .pricePerDay(15)
+                .address(new Address("Musterstreet", "12", "Berlin", 12345))
+                .build();
     }
-
 
     @Test
     void getCar_id_returnsCar() throws Exception {
         // Arrange
         when(carService.getCar(anyLong())).thenReturn(Optional.of(validCar));
+        when(modelMapper.map(any(Car.class), any()))
+                .thenReturn(validCarDTO);
+       when(bookingService.getBookingsByCarId(anyLong())).thenReturn(
+                List.of(
+                        new Booking(1, 2L, 1L, LocalDate.of(2022, 2, 1), LocalDate.of(2022, 2, 5)),
+                        new Booking(2, 4L, 1L, LocalDate.of(2022, 3, 3), LocalDate.of(2022, 3, 12)),
+                        new Booking(3, 6L, 1L, LocalDate.of(2022, 4, 1), LocalDate.of(2022, 4, 15))
+                )
+        );
 
         // Act
         mockMvc.perform(get("/car/1"))
@@ -360,7 +386,6 @@ public class CarControllerTest {
                 // Assert
                 .andExpect(status().isBadRequest());
     }
-
 
 
 }
