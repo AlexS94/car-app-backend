@@ -1,9 +1,8 @@
 package de.fakultaet73.galvanize.carapp.api.carappapi;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import de.fakultaet73.galvanize.carapp.api.carappapi.Address;
-import de.fakultaet73.galvanize.carapp.api.carappapi.CarAppApiApplication;
 import de.fakultaet73.galvanize.carapp.api.carappapi.documents.User;
+import de.fakultaet73.galvanize.carapp.api.carappapi.dtos.UserDTO;
 import de.fakultaet73.galvanize.carapp.api.carappapi.repositories.BookingRepository;
 import de.fakultaet73.galvanize.carapp.api.carappapi.repositories.CarRepository;
 import de.fakultaet73.galvanize.carapp.api.carappapi.repositories.UserRepository;
@@ -15,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.*;
-import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.time.LocalDate;
@@ -54,7 +52,6 @@ class CarAppApiApplicationTests {
     }
 
     private void fillTestUsersList() {
-
 
         String[] firstNameArray = {"David", "Alex", "Marcel", "Marian", "Manfred"};
         String[] userNameArray = {"firefox", "Ddge", "JohnStar", "LowBoy", "SmartDude"};
@@ -174,11 +171,11 @@ class CarAppApiApplicationTests {
     }
 
     @Test
-    void updateAuto_returnsUpdatedAuto() throws Exception {
+    void updateUser_returnsUpdateUser() throws Exception {
         // Arrange
         User expected = testUserList.get(0);
 
-        User user = User.builder()
+        UserDTO user = UserDTO.builder()
                 .id(1)
                 .firstName("David")
                 .lastName("Muller")
@@ -189,14 +186,17 @@ class CarAppApiApplicationTests {
                 .address(new Address("New Street", "13", "Hanover", 11223))
                 .build();
 
+
         String json = mapper.writeValueAsString(user);
+
+        System.out.println(json);
 
         HttpHeaders headers = new HttpHeaders();
         headers.set("Content-Type", MediaType.APPLICATION_JSON_VALUE);
-        HttpEntity<User> request = new HttpEntity<>(user, headers);
+        HttpEntity<UserDTO> request = new HttpEntity<>(user, headers);
 
         // Act
-        ResponseEntity<User> response = restTemplate.exchange("/user", HttpMethod.PUT, request, User.class);
+        ResponseEntity<UserDTO> response = restTemplate.exchange("/user", HttpMethod.PUT, request, UserDTO.class);
 
         //Assert
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);

@@ -10,6 +10,7 @@ import de.fakultaet73.galvanize.carapp.api.carappapi.services.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -32,6 +33,7 @@ public class BookingControllerTest {
     @Autowired
     MockMvc mockMvc;
 
+
     @MockBean
     BookingService bookingService;
 
@@ -40,6 +42,9 @@ public class BookingControllerTest {
 
     @MockBean
     UserService userService;
+
+    @MockBean
+    ModelMapper modelMapper;
 
     ObjectMapper mapper = new ObjectMapper();
 

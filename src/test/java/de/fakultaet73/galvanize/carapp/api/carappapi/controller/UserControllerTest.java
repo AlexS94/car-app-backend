@@ -3,7 +3,10 @@ package de.fakultaet73.galvanize.carapp.api.carappapi.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.fakultaet73.galvanize.carapp.api.carappapi.Address;
+import de.fakultaet73.galvanize.carapp.api.carappapi.documents.Booking;
+import de.fakultaet73.galvanize.carapp.api.carappapi.documents.Car;
 import de.fakultaet73.galvanize.carapp.api.carappapi.documents.User;
+import de.fakultaet73.galvanize.carapp.api.carappapi.dtos.UserDTO;
 import de.fakultaet73.galvanize.carapp.api.carappapi.exceptions.UserAlreadyExistsException;
 import de.fakultaet73.galvanize.carapp.api.carappapi.services.BookingService;
 import de.fakultaet73.galvanize.carapp.api.carappapi.services.CarService;
@@ -11,14 +14,17 @@ import de.fakultaet73.galvanize.carapp.api.carappapi.services.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.ui.Model;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.*;
@@ -36,15 +42,20 @@ public class UserControllerTest {
     @MockBean
     UserService userService;
 
+
     @MockBean
     CarService carService;
 
     @MockBean
     BookingService bookingService;
 
+    @MockBean
+    ModelMapper modelMapper;
+
     ObjectMapper mapper = new ObjectMapper();
 
     User validUser;
+    UserDTO validUserTDO;
     String json;
 
     @BeforeEach
@@ -58,6 +69,24 @@ public class UserControllerTest {
                 .dateOfBirth(LocalDate.of(1999, 1, 1))
                 .address(new Address("Examplestreet", "12", "Berlin", 12345))
                 .build();
+
+        validUserTDO = UserDTO.builder()
+                .firstName("Max")
+                .lastName("Mustermann")
+                .userName("Max")
+                .email("mustermann@web.de")
+                .password("password")
+                .dateOfBirth(LocalDate.of(1999, 1, 1))
+                .address(new Address("Examplestreet", "12", "Berlin", 12345))
+                .bookings(List.of(
+                        new Booking(1, 2L, 1L, LocalDate.of(2022, 2, 1), LocalDate.of(2022, 2, 5)),
+                        new Booking(2, 4L, 1L, LocalDate.of(2022, 3, 3), LocalDate.of(2022, 3, 12)),
+                        new Booking(3, 6L, 1L, LocalDate.of(2022, 4, 1), LocalDate.of(2022, 4, 15))
+                ))
+                .cars(List.of(Car.builder().build()))
+                .build();
+
+
         json = mapper.writeValueAsString(this.validUser);
     }
 
@@ -65,6 +94,7 @@ public class UserControllerTest {
     void getUser_id_returnsUser() throws Exception {
         // Arrange
         when(userService.getUser(anyLong())).thenReturn(Optional.of(validUser));
+        when(modelMapper.map(any(User.class), any())).thenReturn(validUserTDO);
 
         // Act
         mockMvc.perform(get("/user/1"))
@@ -89,6 +119,7 @@ public class UserControllerTest {
         // Arrange
         when(userService.getUser(anyLong())).thenReturn(Optional.empty());
 
+
         // Act
         mockMvc.perform(get("/user/aa"))
                 // Assert
@@ -99,6 +130,8 @@ public class UserControllerTest {
     void validateUser_input_password_returnsUser() throws Exception {
         // Arrange
         when(userService.validate(anyString(), anyString())).thenReturn(Optional.of(validUser));
+        when(modelMapper.map(any(User.class), any())).thenReturn(validUserTDO);
+
 
         // Act
         mockMvc.perform(get("/validate?input=max&password=test"))
@@ -122,6 +155,7 @@ public class UserControllerTest {
     void addUser_User_returnsUser() throws Exception {
         // Arrange
         when(userService.addUser(any(User.class))).thenReturn(validUser);
+        when(modelMapper.map(any(User.class), any())).thenReturn(validUserTDO);
         // Act
         mockMvc.perform(post("/user")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -181,6 +215,7 @@ public class UserControllerTest {
     void addUser_validAddress_returnsUser() throws Exception {
         // Act
         when(userService.addUser(any(User.class))).thenReturn(validUser);
+        when(modelMapper.map(any(User.class), any())).thenReturn(validUserTDO);
 
         mockMvc.perform(post("/user")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -227,6 +262,8 @@ public class UserControllerTest {
     void updateUser_User_returnsUser() throws Exception {
         // Arrange
         when(userService.updateUser(any(User.class))).thenReturn(Optional.of(validUser));
+        when(modelMapper.map(any(User.class), any())).thenReturn(validUserTDO);
+        when(modelMapper.map(any(UserDTO.class), any())).thenReturn(validUser);
 
         // Act
         mockMvc.perform(put("/user")

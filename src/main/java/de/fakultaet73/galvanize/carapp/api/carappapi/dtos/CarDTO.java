@@ -1,13 +1,13 @@
-package de.fakultaet73.galvanize.carapp.api.carappapi.documents;
+package de.fakultaet73.galvanize.carapp.api.carappapi.dtos;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import de.fakultaet73.galvanize.carapp.api.carappapi.Address;
 import de.fakultaet73.galvanize.carapp.api.carappapi.CarDetails;
 import de.fakultaet73.galvanize.carapp.api.carappapi.Rating;
+import de.fakultaet73.galvanize.carapp.api.carappapi.documents.Booking;
 import lombok.*;
 import org.bson.types.Binary;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.annotation.Transient;
-import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
@@ -16,22 +16,18 @@ import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 @Getter
 @Setter
-@Builder
 @ToString
-@Document
-public class Car {
-
-    @Transient
-    public static final String SEQUENCE_NAME = "cars_sequence";
+public class CarDTO {
 
     @Id
-//    @Setter
     private long id;
 
     @NotNull
     private Long hostUserId;
+
     @NotNull @NotEmpty
     private String make;
     @NotNull @NotEmpty
@@ -54,7 +50,10 @@ public class Car {
     @NotNull @Valid
     private CarDetails details;
     private List<Binary> images;
+
     @Valid
     private List<Rating> ratings;
+
+    private List<Booking> bookings;
 
 }
