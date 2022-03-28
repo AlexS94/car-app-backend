@@ -9,12 +9,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
 
-import javax.validation.constraints.AssertTrue;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -33,13 +29,16 @@ class UserServiceTest {
     CarService carService;
 
     @Mock
+    BookingService bookingService;
+
+    @Mock
     SequenceGeneratorService sequenceGeneratorService;
 
     User validUser;
 
     @BeforeEach
     void setUp() {
-        userService = new UserService(userRepository, carService, sequenceGeneratorService);
+        userService = new UserService(userRepository, carService, bookingService, sequenceGeneratorService);
         validUser = User.builder()
                 .firstName("Max")
                 .lastName("Mustermann")
@@ -48,20 +47,32 @@ class UserServiceTest {
                 .password("password")
                 .dateOfBirth(LocalDate.of(1999, 1, 1))
                 .address(new Address("Examplestreet", "12", "Berlin", 12345))
-                .cars(new ArrayList<>())
                 .build();
     }
 
     @Test
     void userExists_id_returnsTrue() {
         // Arrange
-        when(userRepository.existsById(anyLong())).thenReturn(true);
+        when(userRepository.existsUserById(anyLong())).thenReturn(true);
 
         // Act
-        boolean result = userService.userExists(1);
+        boolean result = userService.userExists(1L);
 
         // Assert
         assertTrue(result);
+    }
+
+
+    @Test
+    void userExists_id_returnsFalse() {
+        // Arrange
+        when(userRepository.existsUserById(anyLong())).thenReturn(false);
+
+        // Act
+        boolean result = userService.userExists(1L);
+
+        // Assert
+        assertFalse(result);
     }
 
     @Test
@@ -236,7 +247,7 @@ class UserServiceTest {
     void deleteUser_id_returnsTrue() {
         // Arrange
         when(userRepository.existsById(anyLong())).thenReturn(true);
-        doNothing().when(carService).deleteAllCarsWithHostUserId(anyLong());
+        doNothing().when(carService).deleteAllWithHostUserId(anyLong());
         doNothing().when(userRepository).deleteById(anyLong());
 
         // Act
@@ -245,7 +256,7 @@ class UserServiceTest {
         // Assert
         assertTrue(result);
         verify(userRepository).deleteById(anyLong());
-        verify(carService).deleteAllCarsWithHostUserId(anyLong());
+        verify(carService).deleteAllWithHostUserId(anyLong());
     }
 
     @Test
@@ -259,33 +270,33 @@ class UserServiceTest {
         assertFalse(result);
     }
 
-    @Test
-    void addCarIdToHostUser_addCardIdToUser() {
-        // Arrange
-        long carId = 1;
-        when(userRepository.findById(anyLong())).thenReturn(Optional.of(validUser));
-        when(userRepository.save(any(User.class))).thenReturn(validUser);
-        //Act
-        userService.addCarIdToHostUser(validUser.getId(), carId);
-
-        //Assert
-        verify(userRepository).save(any(User.class));
-        verify(userRepository).findById(anyLong());
-    }
-
-    @Test
-    void deleteCarIdFromHostUser_deleteCarFromUser() {
-        // Arrange
-        long carId = 1;
-        when(userRepository.findById(anyLong())).thenReturn(Optional.of(validUser));
-        when(userRepository.save(any(User.class))).thenReturn(validUser);
-
-        //Act
-        userService.deleteCarIdFromHostUser(validUser.getId(), carId);
-
-        //Assert
-        verify(userRepository).save(any(User.class));
-        verify(userRepository).findById(anyLong());
-    }
+//    @Test
+//    void addCarIdToHostUser_addCardIdToUser() {
+//        // Arrange
+//        long carId = 1;
+//        when(userRepository.findById(anyLong())).thenReturn(Optional.of(validUser));
+//        when(userRepository.save(any(User.class))).thenReturn(validUser);
+//        //Act
+//        userService.addCarIdToHostUser(validUser.getId(), carId);
+//
+//        //Assert
+//        verify(userRepository).save(any(User.class));
+//        verify(userRepository).findById(anyLong());
+//    }
+//
+//    @Test
+//    void deleteCarIdFromHostUser_deleteCarFromUser() {
+//        // Arrange
+//        long carId = 1;
+//        when(userRepository.findById(anyLong())).thenReturn(Optional.of(validUser));
+//        when(userRepository.save(any(User.class))).thenReturn(validUser);
+//
+//        //Act
+//        userService.deleteCarIdFromHostUser(validUser.getId(), carId);
+//
+//        //Assert
+//        verify(userRepository).save(any(User.class));
+//        verify(userRepository).findById(anyLong());
+//    }
 
 }

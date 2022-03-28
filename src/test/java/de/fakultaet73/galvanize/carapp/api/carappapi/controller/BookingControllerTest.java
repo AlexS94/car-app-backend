@@ -1,8 +1,9 @@
 package de.fakultaet73.galvanize.carapp.api.carappapi.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import de.fakultaet73.galvanize.carapp.api.carappapi.Booking;
+import de.fakultaet73.galvanize.carapp.api.carappapi.documents.Booking;
 import de.fakultaet73.galvanize.carapp.api.carappapi.exceptions.BookingAlreadyExistsException;
+import de.fakultaet73.galvanize.carapp.api.carappapi.exceptions.InvalidBookingException;
 import de.fakultaet73.galvanize.carapp.api.carappapi.services.BookingService;
 import de.fakultaet73.galvanize.carapp.api.carappapi.services.CarService;
 import de.fakultaet73.galvanize.carapp.api.carappapi.services.UserService;
@@ -81,6 +82,19 @@ public class BookingControllerTest {
                         .content(json))
                 // Assert
                 .andExpect(status().isConflict());
+    }
+
+    @Test
+    void addBooking_Booking_fromDateBeforeUntilDate_returnsBadRequest() throws Exception {
+        // Arrange
+        when(bookingService.addBooking(any(Booking.class))).thenThrow(InvalidBookingException.class);
+
+        // Act
+        mockMvc.perform(post("/booking")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json))
+                // Assert
+                .andExpect(status().isBadRequest());
     }
 
     @Test

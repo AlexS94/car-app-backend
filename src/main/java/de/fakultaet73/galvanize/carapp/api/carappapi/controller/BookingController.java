@@ -1,11 +1,10 @@
 package de.fakultaet73.galvanize.carapp.api.carappapi.controller;
 
-import de.fakultaet73.galvanize.carapp.api.carappapi.Booking;
+import de.fakultaet73.galvanize.carapp.api.carappapi.documents.Booking;
 import de.fakultaet73.galvanize.carapp.api.carappapi.exceptions.BookingAlreadyExistsException;
-import de.fakultaet73.galvanize.carapp.api.carappapi.exceptions.HostNotExistsException;
+import de.fakultaet73.galvanize.carapp.api.carappapi.exceptions.InvalidBookingException;
 import de.fakultaet73.galvanize.carapp.api.carappapi.services.BookingService;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -38,5 +37,10 @@ public class BookingController {
     @ExceptionHandler
     @ResponseStatus(HttpStatus.CONFLICT)
     public void BookingAlreadyExistsExceptionHandler(BookingAlreadyExistsException exception) {
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public void InvalidBookingExceptionHandler(InvalidBookingException exception) {
     }
 }

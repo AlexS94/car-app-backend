@@ -1,7 +1,6 @@
 package de.fakultaet73.galvanize.carapp.api.carappapi.documents;
 
 import de.fakultaet73.galvanize.carapp.api.carappapi.Rating;
-import de.fakultaet73.galvanize.carapp.api.carappapi.Booking;
 import de.fakultaet73.galvanize.carapp.api.carappapi.Address;
 import de.fakultaet73.galvanize.carapp.api.carappapi.CarDetails;
 import org.junit.jupiter.api.Test;
@@ -23,7 +22,6 @@ public class CarTest {
         String[] guidelines = {"parked behind the red building", "please return after use"};
         List<Rating> ratingsList = new ArrayList<>(List.of(
                 new Rating("Dudebro", 2.8, LocalDate.now(), "Car was meh")));
-        List<Long> bookingsList = List.of(1L, 2L, 3L);
         Address address = new Address("Musterstreet", "12", "Berlin", 12345);
 
         Car car = Car.builder()
@@ -39,7 +37,6 @@ public class CarTest {
                 .ratings(ratingsList)
                 .pricePerDay(15)
                 .distancePerDay(200)
-                .bookingIds(bookingsList)
                 .address(address)
                 .build();
         // Assert
@@ -55,7 +52,6 @@ public class CarTest {
         assertEquals(ratingsList, car.getRatings());
         assertEquals(15, car.getPricePerDay());
         assertEquals(200, car.getDistancePerDay());
-        assertEquals(bookingsList, car.getBookingIds());
         assertEquals(address, car.getAddress());
 
     }

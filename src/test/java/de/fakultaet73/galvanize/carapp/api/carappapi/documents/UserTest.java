@@ -29,7 +29,6 @@ class UserTest {
                 .dateOfBirth(date)
                 .address(address)
                 .ratings(ratings)
-                .bookingIds(bookingList)
                 .build();
         // Assert
         assertEquals("Max", user.getFirstName());
@@ -40,7 +39,6 @@ class UserTest {
         assertEquals(date, user.getDateOfBirth());
         assertEquals(ratings, user.getRatings());
         assertEquals(address, user.getAddress());
-        assertEquals(bookingList, user.getBookingIds());
     }
 
 }

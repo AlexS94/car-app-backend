@@ -1,7 +1,6 @@
 package de.fakultaet73.galvanize.carapp.api.carappapi.documents;
 
 import de.fakultaet73.galvanize.carapp.api.carappapi.Address;
-import de.fakultaet73.galvanize.carapp.api.carappapi.Booking;
 import de.fakultaet73.galvanize.carapp.api.carappapi.CarDetails;
 import de.fakultaet73.galvanize.carapp.api.carappapi.Rating;
 import lombok.AllArgsConstructor;
@@ -56,6 +55,5 @@ public class Car {
     private CarDetails details;
     private List<Binary> images;
     private List<Rating> ratings;
-    private List<Long> bookingIds;
 
 }

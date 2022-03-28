@@ -1,6 +1,5 @@
 package de.fakultaet73.galvanize.carapp.api.carappapi.documents;
 
-import de.fakultaet73.galvanize.carapp.api.carappapi.Booking;
 import org.junit.jupiter.api.Test;
 import java.time.LocalDate;
 import static org.junit.jupiter.api.Assertions.assertEquals;
