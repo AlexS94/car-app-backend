@@ -51,7 +51,7 @@ public class CarDTOUnitTest {
                 .address(address)
                 .build();
 
-        carTDOValid  = CarDTO.builder()
+        carTDOValid = CarDTO.builder()
                 .hostUserId(1L)
                 .make("Volkswagen")
                 .model("Golf")
@@ -60,7 +60,7 @@ public class CarDTOUnitTest {
                 .details(new CarDetails("diesel", 4, 5, 115, "manual"))
                 .pricePerDay(15)
                 .address(new Address("Musterstreet", "12", "Berlin", 12345))
-                .bookings(  List.of(
+                .bookings(List.of(
                         new Booking(1, 2L, 1L, LocalDate.of(2022, 2, 1), LocalDate.of(2022, 2, 5)),
                         new Booking(2, 4L, 1L, LocalDate.of(2022, 3, 3), LocalDate.of(2022, 3, 12)),
                         new Booking(3, 6L, 1L, LocalDate.of(2022, 4, 1), LocalDate.of(2022, 4, 15))
@@ -82,19 +82,12 @@ public class CarDTOUnitTest {
         assertEquals(carValid.getType(), carDTO.getType());
         assertEquals(carValid.getYear(), carDTO.getYear());
         assertEquals(Arrays.toString(carValid.getFeatures()), Arrays.toString(carDTO.getFeatures()));
-    /*    assertEquals(car.getDescription(), carDTO.getDescription());
-        assertEquals(car.getGuidelines(), carDTO.getGuidelines());
-        assertEquals(car.getRatings(), carDTO.getRatings());
-        assertEquals(car.getPricePerDay(), carDTO.getPricePerDay());
-        assertEquals(car.getDistancePerDay(), carDTO.getDistancePerDay() );
-        assertEquals(car.getAddress(), carDTO.getAddress() );*/
         assertNull(carDTO.getBookings());
 
     }
 
     @Test
     public void whenConvertCarDTOToCarEntity_thenCorrect() {
-
         Car car = modelMapper.map(carTDOValid, Car.class);
         System.out.println(carTDOValid.toString());
         System.out.println(car.toString());

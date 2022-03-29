@@ -2,8 +2,9 @@ package de.fakultaet73.galvanize.carapp.api.carappapi.services;
 
 import de.fakultaet73.galvanize.carapp.api.carappapi.Address;
 import de.fakultaet73.galvanize.carapp.api.carappapi.CarDetails;
+import de.fakultaet73.galvanize.carapp.api.carappapi.ReferenceType;
 import de.fakultaet73.galvanize.carapp.api.carappapi.documents.Car;
-import de.fakultaet73.galvanize.carapp.api.carappapi.exceptions.HostNotExistsException;
+import de.fakultaet73.galvanize.carapp.api.carappapi.exceptions.UserNotExistsException;
 import de.fakultaet73.galvanize.carapp.api.carappapi.repositories.CarRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -27,11 +28,15 @@ class CarServiceTest {
 
     @Mock
     CarRepository carRepository;
+
     @Mock
     UserService userService;
+
     @Mock
     BookingService bookingService;
 
+    @Mock
+    ImageFileService imageFileService;
 
     @Mock
     SequenceGeneratorService sequenceGeneratorService;
@@ -40,7 +45,7 @@ class CarServiceTest {
 
     @BeforeEach
     void setUp() {
-        carService = new CarService(carRepository, userService, bookingService, sequenceGeneratorService);
+        carService = new CarService(carRepository, userService, bookingService, imageFileService, sequenceGeneratorService);
         validCar = Car.builder()
                 .hostUserId(1L)
                 .make("Volkswagen")
@@ -168,12 +173,12 @@ class CarServiceTest {
     }
 
     @Test
-    void addCar_Car_hostUserIdNotExists_throwsHostNotExistsException() {
+    void addCar_Car_hostUserIdNotExists_throwsUserNotExistsException() {
         // Arrange
         when(userService.userExists(anyLong())).thenReturn(false);
 
         // Act // Assert
-        assertThrows(HostNotExistsException.class,
+        assertThrows(UserNotExistsException.class,
                 () -> carService.addCar(validCar),
                 "Exception was expected");
     }
@@ -208,8 +213,9 @@ class CarServiceTest {
     @Test
     void deleteCar_id_returnsTrue() {
         // Arrange
-        when(carRepository.findById(anyLong())).thenReturn(Optional.of(validCar));
+        when(carRepository.existsById(anyLong())).thenReturn(true);
         doNothing().when(bookingService).deleteAllWithCarId(anyLong());
+        doNothing().when(imageFileService).deleteAllWithReferenceIdAndType(anyLong(), any(ReferenceType.class));
         doNothing().when(carRepository).deleteById(anyLong());
 
         // Act
@@ -218,13 +224,14 @@ class CarServiceTest {
         // Assert
         assertTrue(result);
         verify(carRepository).deleteById(anyLong());
+        verify(imageFileService).deleteAllWithReferenceIdAndType(anyLong(), any(ReferenceType.class));
         verify(bookingService).deleteAllWithCarId(anyLong());
     }
 
     @Test
     void deleteCar_id_notExists_returnsFalse() {
         // Arrange
-        when(carRepository.findById(anyLong())).thenReturn(Optional.empty());
+        when(carRepository.existsById(anyLong())).thenReturn(false);
         // Act
         boolean result = carService.deleteCar(validCar.getId());
 
@@ -235,17 +242,24 @@ class CarServiceTest {
     @Test
     void deleteAllCarsWithHostUserId_returnNothing() {
         //Arrange
-        doNothing().when(carRepository).deleteAllByHostUserId(anyLong());
+        when(carRepository.findAllByHostUserId(anyLong()))
+                .thenReturn(List.of(validCar));
+        when(carRepository.existsById(anyLong())).thenReturn(true);
+        doNothing().when(bookingService).deleteAllWithCarId(anyLong());
+        doNothing().when(imageFileService).deleteAllWithReferenceIdAndType(anyLong(), any(ReferenceType.class));
+        doNothing().when(carRepository).deleteById(anyLong());
 
         //Act
         carService.deleteAllWithHostUserId(validCar.getHostUserId());
 
         // Assert
-        verify(carRepository).deleteAllByHostUserId(anyLong());
+        verify(bookingService).deleteAllWithCarId(anyLong());
+        verify(imageFileService).deleteAllWithReferenceIdAndType(anyLong(), any(ReferenceType.class));
+        verify(carRepository).deleteById(anyLong());
     }
 
     @Test
-    void carExits_exits_returnTrue(){
+    void carExits_exits_returnTrue() {
         // Arrange
         boolean value = true;
         int id = 1;
@@ -259,7 +273,7 @@ class CarServiceTest {
     }
 
     @Test
-    void carExits_NotExits_returnFalse(){
+    void carExits_NotExits_returnFalse() {
         // Arrange
         boolean value = false;
         int id = 1;

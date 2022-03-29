@@ -6,9 +6,10 @@ import de.fakultaet73.galvanize.carapp.api.carappapi.CarDetails;
 import de.fakultaet73.galvanize.carapp.api.carappapi.documents.Booking;
 import de.fakultaet73.galvanize.carapp.api.carappapi.documents.Car;
 import de.fakultaet73.galvanize.carapp.api.carappapi.dtos.CarDTO;
-import de.fakultaet73.galvanize.carapp.api.carappapi.exceptions.HostNotExistsException;
+import de.fakultaet73.galvanize.carapp.api.carappapi.exceptions.UserNotExistsException;
 import de.fakultaet73.galvanize.carapp.api.carappapi.services.BookingService;
 import de.fakultaet73.galvanize.carapp.api.carappapi.services.CarService;
+import de.fakultaet73.galvanize.carapp.api.carappapi.services.ImageFileService;
 import de.fakultaet73.galvanize.carapp.api.carappapi.services.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -49,6 +50,9 @@ public class CarControllerTest {
 
     @MockBean
     BookingService bookingService;
+
+    @MockBean
+    ImageFileService imageFileService;
 
     @MockBean
     ModelMapper modelMapper;
@@ -94,7 +98,7 @@ public class CarControllerTest {
         when(carService.getCar(anyLong())).thenReturn(Optional.of(validCar));
         when(modelMapper.map(any(Car.class), any()))
                 .thenReturn(validCarDTO);
-       when(bookingService.getBookingsByCarId(anyLong())).thenReturn(
+        when(bookingService.getBookingsByCarId(anyLong())).thenReturn(
                 List.of(
                         new Booking(1, 2L, 1L, LocalDate.of(2022, 2, 1), LocalDate.of(2022, 2, 5)),
                         new Booking(2, 4L, 1L, LocalDate.of(2022, 3, 3), LocalDate.of(2022, 3, 12)),
@@ -314,7 +318,7 @@ public class CarControllerTest {
     @Test
     void addCar_Car_hostUserIdNotExists_returnsBadRequest() throws Exception {
         // Arrange
-        when(carService.addCar(any(Car.class))).thenThrow(HostNotExistsException.class);
+        when(carService.addCar(any(Car.class))).thenThrow(UserNotExistsException.class);
         // Act
         mockMvc.perform(post("/car")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -401,6 +405,5 @@ public class CarControllerTest {
                 // Assert
                 .andExpect(status().isBadRequest());
     }
-
 
 }

@@ -9,8 +9,8 @@ import de.fakultaet73.galvanize.carapp.api.carappapi.Address;
 import de.fakultaet73.galvanize.carapp.api.carappapi.Rating;
 import de.fakultaet73.galvanize.carapp.api.carappapi.documents.Booking;
 import de.fakultaet73.galvanize.carapp.api.carappapi.documents.Car;
+import de.fakultaet73.galvanize.carapp.api.carappapi.documents.ImageFile;
 import lombok.*;
-import org.bson.types.Binary;
 import org.springframework.data.annotation.Id;
 
 import javax.validation.Valid;
@@ -43,14 +43,13 @@ public class UserDTO {
     @NotNull @NotEmpty
     private String password;
 
-
     @JsonDeserialize(using = LocalDateDeserializer.class)
     @JsonSerialize(using = LocalDateSerializer.class)
     @JsonFormat(pattern = "yyyy-MM-dd")
     @NotNull
     private LocalDate dateOfBirth;
 
-    private Binary image;
+    private ImageFile image;
 
     @NotNull @Valid
     private Address address;

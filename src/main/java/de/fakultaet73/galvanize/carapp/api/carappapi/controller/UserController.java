@@ -1,12 +1,12 @@
 package de.fakultaet73.galvanize.carapp.api.carappapi.controller;
 
-import de.fakultaet73.galvanize.carapp.api.carappapi.documents.Car;
+import de.fakultaet73.galvanize.carapp.api.carappapi.ReferenceType;
 import de.fakultaet73.galvanize.carapp.api.carappapi.documents.User;
-import de.fakultaet73.galvanize.carapp.api.carappapi.dtos.CarDTO;
 import de.fakultaet73.galvanize.carapp.api.carappapi.dtos.UserDTO;
 import de.fakultaet73.galvanize.carapp.api.carappapi.exceptions.UserAlreadyExistsException;
 import de.fakultaet73.galvanize.carapp.api.carappapi.services.BookingService;
 import de.fakultaet73.galvanize.carapp.api.carappapi.services.CarService;
+import de.fakultaet73.galvanize.carapp.api.carappapi.services.ImageFileService;
 import de.fakultaet73.galvanize.carapp.api.carappapi.services.UserService;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -24,6 +24,7 @@ public class UserController {
     UserService userService;
     BookingService bookingService;
     CarService carService;
+    ImageFileService imageFileService;
     ModelMapper modelMapper;
 
     @GetMapping("/user/{id}")
@@ -69,12 +70,12 @@ public class UserController {
         UserDTO userDTO = modelMapper.map(user, UserDTO.class);
         userDTO.setBookings(bookingService.getBookingsByUserId(user.getId()));
         userDTO.setCars(carService.getCarsByHostUserId(user.getId()));
+        userDTO.setImage(imageFileService.getImageFile(user.getId(), ReferenceType.USER));
         return userDTO;
     }
 
     private User convertToDocument(UserDTO userDTO) throws Exception {
         return modelMapper.map(userDTO, User.class);
     }
-
 
 }

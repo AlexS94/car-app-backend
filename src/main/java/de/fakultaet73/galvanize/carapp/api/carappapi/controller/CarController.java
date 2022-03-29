@@ -1,10 +1,12 @@
 package de.fakultaet73.galvanize.carapp.api.carappapi.controller;
 
+import de.fakultaet73.galvanize.carapp.api.carappapi.ReferenceType;
 import de.fakultaet73.galvanize.carapp.api.carappapi.documents.Car;
 import de.fakultaet73.galvanize.carapp.api.carappapi.dtos.CarDTO;
-import de.fakultaet73.galvanize.carapp.api.carappapi.exceptions.HostNotExistsException;
+import de.fakultaet73.galvanize.carapp.api.carappapi.exceptions.UserNotExistsException;
 import de.fakultaet73.galvanize.carapp.api.carappapi.services.BookingService;
 import de.fakultaet73.galvanize.carapp.api.carappapi.services.CarService;
+import de.fakultaet73.galvanize.carapp.api.carappapi.services.ImageFileService;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
@@ -22,6 +24,7 @@ public class CarController {
 
     CarService carService;
     BookingService bookingService;
+    ImageFileService imageFileService;
     ModelMapper modelMapper;
 
     @GetMapping("/car/{id}")
@@ -67,12 +70,13 @@ public class CarController {
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public void HostNotExistsExceptionHandler(HostNotExistsException exception) {
+    public void UserNotExistsExceptionHandler(UserNotExistsException exception) {
     }
 
     private CarDTO convertToDTO(Car car) {
         CarDTO carDTO = modelMapper.map(car, CarDTO.class);
         carDTO.setBookings(bookingService.getBookingsByCarId(car.getId()));
+        carDTO.setImages(imageFileService.getImageFiles(car.getId(), ReferenceType.CAR));
         return carDTO;
     }
 

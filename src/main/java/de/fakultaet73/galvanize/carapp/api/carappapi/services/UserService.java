@@ -1,5 +1,6 @@
 package de.fakultaet73.galvanize.carapp.api.carappapi.services;
 
+import de.fakultaet73.galvanize.carapp.api.carappapi.ReferenceType;
 import de.fakultaet73.galvanize.carapp.api.carappapi.documents.User;
 import de.fakultaet73.galvanize.carapp.api.carappapi.exceptions.UserAlreadyExistsException;
 import de.fakultaet73.galvanize.carapp.api.carappapi.repositories.UserRepository;
@@ -14,13 +15,18 @@ public class UserService {
     UserRepository userRepository;
     CarService carService;
     BookingService bookingService;
+    ImageFileService imageFileService;
     SequenceGeneratorService sequenceGeneratorService;
 
-    public UserService(UserRepository userRepository, @Lazy CarService carService, @Lazy BookingService bookingService,
+    public UserService(UserRepository userRepository,
+                       @Lazy CarService carService,
+                       @Lazy BookingService bookingService,
+                       @Lazy ImageFileService imageFileService,
                        SequenceGeneratorService sequenceGeneratorService) {
         this.userRepository = userRepository;
         this.carService = carService;
         this.bookingService = bookingService;
+        this.imageFileService = imageFileService;
         this.sequenceGeneratorService = sequenceGeneratorService;
     }
 
@@ -54,6 +60,7 @@ public class UserService {
         if (userRepository.existsById(id)) {
             bookingService.deleteAllWithUserId(id);
             carService.deleteAllWithHostUserId(id);
+            imageFileService.deleteAllWithReferenceIdAndType(id, ReferenceType.USER);
             userRepository.deleteById(id);
             return true;
         }
