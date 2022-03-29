@@ -6,6 +6,7 @@ import de.fakultaet73.galvanize.carapp.api.carappapi.exceptions.BookingAlreadyEx
 import de.fakultaet73.galvanize.carapp.api.carappapi.exceptions.InvalidBookingException;
 import de.fakultaet73.galvanize.carapp.api.carappapi.services.BookingService;
 import de.fakultaet73.galvanize.carapp.api.carappapi.services.CarService;
+import de.fakultaet73.galvanize.carapp.api.carappapi.services.ImageFileService;
 import de.fakultaet73.galvanize.carapp.api.carappapi.services.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -42,6 +43,9 @@ public class BookingControllerTest {
 
     @MockBean
     UserService userService;
+
+    @MockBean
+    ImageFileService imageFileService;
 
     @MockBean
     ModelMapper modelMapper;

@@ -6,7 +6,7 @@ import de.fakultaet73.galvanize.carapp.api.carappapi.CarDetails;
 import de.fakultaet73.galvanize.carapp.api.carappapi.documents.Car;
 import de.fakultaet73.galvanize.carapp.api.carappapi.exceptions.BookingAlreadyExistsException;
 import de.fakultaet73.galvanize.carapp.api.carappapi.exceptions.CarNotExistsException;
-import de.fakultaet73.galvanize.carapp.api.carappapi.exceptions.HostNotExistsException;
+import de.fakultaet73.galvanize.carapp.api.carappapi.exceptions.UserNotExistsException;
 import de.fakultaet73.galvanize.carapp.api.carappapi.exceptions.InvalidBookingException;
 import de.fakultaet73.galvanize.carapp.api.carappapi.repositories.BookingRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -169,13 +169,13 @@ class BookingServiceTest {
     }
 
     @Test
-    void addBooking_booking_UserIdNotExists_throwsHostNotExistsException() {
+    void addBooking_booking_UserIdNotExists_throwsUserNotExistsException() {
         // Arrange
         when(carService.carExists(anyLong())).thenReturn(true);
         when(userService.userExists(anyLong())).thenReturn(false);
 
         // Act // Assert
-        assertThrows(HostNotExistsException.class,
+        assertThrows(UserNotExistsException.class,
                 () -> bookingService.addBooking(validBooking),
                 "Exception was expected");
     }

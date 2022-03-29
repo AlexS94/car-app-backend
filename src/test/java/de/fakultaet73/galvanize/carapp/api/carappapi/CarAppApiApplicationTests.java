@@ -29,7 +29,6 @@ class CarAppApiApplicationTests {
 
     @Autowired
     TestRestTemplate restTemplate;
-    /*RestTemplate restTemplate;*/
 
     @Autowired
     UserRepository userRepository;

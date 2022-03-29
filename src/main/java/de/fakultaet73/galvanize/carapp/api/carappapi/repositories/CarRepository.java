@@ -17,5 +17,5 @@ public interface CarRepository extends MongoRepository<Car, Long> {
 
     boolean existsCarById(long id);
 
-
+    List<Car> findAllByHostUserId(long hostUserId);
 }

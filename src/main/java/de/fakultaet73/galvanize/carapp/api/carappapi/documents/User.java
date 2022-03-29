@@ -8,7 +8,6 @@ import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import de.fakultaet73.galvanize.carapp.api.carappapi.Address;
 import de.fakultaet73.galvanize.carapp.api.carappapi.Rating;
 import lombok.*;
-import org.bson.types.Binary;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.index.Indexed;
@@ -53,8 +52,6 @@ public class User {
     @JsonFormat(pattern = "yyyy-MM-dd")
     @NotNull
     private LocalDate dateOfBirth;
-
-    private Binary image;
 
     @NotNull @Valid
     private Address address;

@@ -3,7 +3,7 @@ package de.fakultaet73.galvanize.carapp.api.carappapi.services;
 import de.fakultaet73.galvanize.carapp.api.carappapi.documents.Booking;
 import de.fakultaet73.galvanize.carapp.api.carappapi.exceptions.BookingAlreadyExistsException;
 import de.fakultaet73.galvanize.carapp.api.carappapi.exceptions.CarNotExistsException;
-import de.fakultaet73.galvanize.carapp.api.carappapi.exceptions.HostNotExistsException;
+import de.fakultaet73.galvanize.carapp.api.carappapi.exceptions.UserNotExistsException;
 import de.fakultaet73.galvanize.carapp.api.carappapi.exceptions.InvalidBookingException;
 import de.fakultaet73.galvanize.carapp.api.carappapi.repositories.BookingRepository;
 import lombok.AllArgsConstructor;
@@ -80,7 +80,7 @@ public class BookingService {
                 throw new CarNotExistsException("Car does not exist");
             }
             if (!userService.userExists(booking.getUserId())) {
-                throw new HostNotExistsException("User does not exist");
+                throw new UserNotExistsException("User does not exist");
             }
         }
 

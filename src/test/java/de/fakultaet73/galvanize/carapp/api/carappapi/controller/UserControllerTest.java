@@ -10,6 +10,7 @@ import de.fakultaet73.galvanize.carapp.api.carappapi.dtos.UserDTO;
 import de.fakultaet73.galvanize.carapp.api.carappapi.exceptions.UserAlreadyExistsException;
 import de.fakultaet73.galvanize.carapp.api.carappapi.services.BookingService;
 import de.fakultaet73.galvanize.carapp.api.carappapi.services.CarService;
+import de.fakultaet73.galvanize.carapp.api.carappapi.services.ImageFileService;
 import de.fakultaet73.galvanize.carapp.api.carappapi.services.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -21,7 +22,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.ui.Model;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -42,12 +42,14 @@ public class UserControllerTest {
     @MockBean
     UserService userService;
 
-
     @MockBean
     CarService carService;
 
     @MockBean
     BookingService bookingService;
+
+    @MockBean
+    ImageFileService imageFileService;
 
     @MockBean
     ModelMapper modelMapper;
@@ -306,7 +308,7 @@ public class UserControllerTest {
 
         // Act
         mockMvc.perform(delete("/user/1"))
-        // Assert
+                // Assert
                 .andExpect(status().isOk());
     }
 

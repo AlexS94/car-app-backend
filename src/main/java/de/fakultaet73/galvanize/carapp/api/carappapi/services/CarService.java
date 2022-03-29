@@ -1,7 +1,8 @@
 package de.fakultaet73.galvanize.carapp.api.carappapi.services;
 
+import de.fakultaet73.galvanize.carapp.api.carappapi.ReferenceType;
 import de.fakultaet73.galvanize.carapp.api.carappapi.documents.Car;
-import de.fakultaet73.galvanize.carapp.api.carappapi.exceptions.HostNotExistsException;
+import de.fakultaet73.galvanize.carapp.api.carappapi.exceptions.UserNotExistsException;
 import de.fakultaet73.galvanize.carapp.api.carappapi.repositories.CarRepository;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
@@ -15,12 +16,18 @@ public class CarService {
     CarRepository carRepository;
     UserService userService;
     BookingService bookingService;
+    ImageFileService imageFileService;
     SequenceGeneratorService sequenceGeneratorService;
 
-    public CarService(CarRepository carRepository, @Lazy UserService userService, @Lazy BookingService bookingService, SequenceGeneratorService sequenceGeneratorService) {
+    public CarService(CarRepository carRepository,
+                      @Lazy UserService userService,
+                      @Lazy BookingService bookingService,
+                      @Lazy ImageFileService imageFileService,
+                      SequenceGeneratorService sequenceGeneratorService) {
         this.carRepository = carRepository;
         this.userService = userService;
         this.bookingService = bookingService;
+        this.imageFileService = imageFileService;
         this.sequenceGeneratorService = sequenceGeneratorService;
     }
 
@@ -42,7 +49,7 @@ public class CarService {
 
     public Car addCar(Car car) {
         if (!userService.userExists(car.getHostUserId())) {
-            throw new HostNotExistsException("hostUserId does not exist");
+            throw new UserNotExistsException("hostUserId does not exist");
         }
         car.setId(sequenceGeneratorService.generateSequence(Car.SEQUENCE_NAME));
         return carRepository.save(car);
@@ -54,9 +61,9 @@ public class CarService {
     }
 
     public boolean deleteCar(long id) {
-        Optional<Car> car = getCar(id);
-        if (car.isPresent()) {
+        if (carRepository.existsById(id)) {
             bookingService.deleteAllWithCarId(id);
+            imageFileService.deleteAllWithReferenceIdAndType(id, ReferenceType.CAR);
             carRepository.deleteById(id);
             return true;
         }
@@ -64,14 +71,15 @@ public class CarService {
     }
 
     public void deleteAllWithHostUserId(long hostUserId) {
-        carRepository.deleteAllByHostUserId(hostUserId);
+        List<Car> carsToDelete = carRepository.findAllByHostUserId(hostUserId);
+        carsToDelete.forEach(car -> deleteCar(car.getId()));
     }
 
     private boolean carExistsWithIdAndHostUserId(Car car) {
         return carRepository.existsCarByIdAndHostUserId(car.getId(), car.getHostUserId());
     }
 
-    public boolean carExists(long id){
+    public boolean carExists(long id) {
         return carRepository.existsCarById(id);
     }
 }

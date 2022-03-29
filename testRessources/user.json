@@ -1,0 +1,16 @@
+{
+  "id": 1,
+  "firstName": "David",
+  "lastName": "Muller",
+  "userName": "firefox",
+  "email": "muller@web.de",
+  "password": "password",
+  "dateOfBirth": "1999-01-01",
+  "address": {
+    "street": "New Street",
+    "number": "13",
+    "city": "Wolfsburg",
+    "zip": 11223
+  },
+  "ratings": null
+}

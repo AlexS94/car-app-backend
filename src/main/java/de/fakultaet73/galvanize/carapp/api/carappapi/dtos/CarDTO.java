@@ -1,12 +1,11 @@
 package de.fakultaet73.galvanize.carapp.api.carappapi.dtos;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import de.fakultaet73.galvanize.carapp.api.carappapi.Address;
 import de.fakultaet73.galvanize.carapp.api.carappapi.CarDetails;
 import de.fakultaet73.galvanize.carapp.api.carappapi.Rating;
 import de.fakultaet73.galvanize.carapp.api.carappapi.documents.Booking;
+import de.fakultaet73.galvanize.carapp.api.carappapi.documents.ImageFile;
 import lombok.*;
-import org.bson.types.Binary;
 import org.springframework.data.annotation.Id;
 
 import javax.validation.Valid;
@@ -49,7 +48,7 @@ public class CarDTO {
 
     @NotNull @Valid
     private CarDetails details;
-    private List<Binary> images;
+    private List<ImageFile> images;
 
     @Valid
     private List<Rating> ratings;
