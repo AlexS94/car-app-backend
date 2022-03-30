@@ -55,7 +55,7 @@ public class ImageFileControllerTest {
 
     @BeforeEach
     void setUp() throws Exception {
-        File file = new File("testRessources/image1.jpeg");
+        File file = new File("testResources/images/image1.jpg");
         FileInputStream fileInputStream = new FileInputStream(file);
         multipartFile = new MockMultipartFile("file", file.getName(), MediaType.IMAGE_JPEG_VALUE, fileInputStream);
 

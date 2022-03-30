@@ -1,8 +1,8 @@
 plugins {
-	id 'org.springframework.boot' version '2.6.4'
-	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
-	id 'java'
-	id("com.avast.gradle.docker-compose") version "0.14.0"
+    id 'org.springframework.boot' version '2.6.4'
+    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+    id 'java'
+    id("com.avast.gradle.docker-compose") version "0.14.0"
 }
 
 group = 'de.fakultaet73.galvanize.carapp.api'
@@ -10,31 +10,31 @@ version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '11'
 
 configurations {
-	compileOnly {
-		extendsFrom annotationProcessor
-	}
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
 }
 
 repositories {
-	mavenCentral()
+    mavenCentral()
 }
 
 dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
-	implementation 'org.springframework.boot:spring-boot-starter-web'
-	compileOnly 'org.projectlombok:lombok'
-	annotationProcessor 'org.projectlombok:lombok'
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	implementation 'org.hibernate:hibernate-validator:7.0.4.Final'
-	implementation 'org.modelmapper:modelmapper:3.1.0'
+    implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    implementation 'org.hibernate:hibernate-validator:7.0.4.Final'
+    implementation 'org.modelmapper:modelmapper:3.1.0'
 }
 
-// for gradle build add
-/*dockerCompose {
-	useComposeFiles = ["docker-compose.yaml"]
-	isRequiredBy(tasks.test)
-}*/
+dockerCompose {
+    useComposeFiles = ["docker-compose.yaml"]
+    isRequiredBy(tasks.test)
+    isRequiredBy(tasks.bootRun)
+}
 
 tasks.named('test') {
-	useJUnitPlatform()
+    useJUnitPlatform()
 }
