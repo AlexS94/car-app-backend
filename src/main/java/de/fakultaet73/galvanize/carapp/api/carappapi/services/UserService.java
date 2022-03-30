@@ -52,7 +52,6 @@ public class UserService {
     }
 
     public Optional<User> updateUser(User user) {
-        System.out.println(userExistsByIdAndUserNameAndEmail(user));
         return userExistsByIdAndUserNameAndEmail(user) ?
                 Optional.of(userRepository.save(user)) : Optional.empty();
     }

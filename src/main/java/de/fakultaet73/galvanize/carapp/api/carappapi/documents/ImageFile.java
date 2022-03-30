@@ -17,7 +17,6 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 
-@Getter
 @Builder
 @Document
 public class ImageFile {
@@ -27,12 +26,15 @@ public class ImageFile {
 
     @Id
     @Setter
+    @Getter
     private long id;
 
     @NotNull
+    @Getter
     private Long referenceId;
 
     @NotNull
+    @Getter
     private ReferenceType type;
     private String name;
 
