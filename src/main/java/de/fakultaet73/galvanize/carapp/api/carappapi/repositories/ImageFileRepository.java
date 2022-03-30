@@ -2,10 +2,10 @@ package de.fakultaet73.galvanize.carapp.api.carappapi.repositories;
 
 import de.fakultaet73.galvanize.carapp.api.carappapi.ReferenceType;
 import de.fakultaet73.galvanize.carapp.api.carappapi.documents.ImageFile;
-import org.bson.types.Binary;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface ImageFileRepository extends MongoRepository<ImageFile, Long> {
 
@@ -17,5 +17,5 @@ public interface ImageFileRepository extends MongoRepository<ImageFile, Long> {
 
     List<ImageFile> findAllByReferenceIdAndType(long referenceId, ReferenceType type);
 
-    ImageFile findFirstByReferenceIdAndType(long referenceId, ReferenceType type);
+    Optional<ImageFile> findFirstByReferenceIdAndType(long referenceId, ReferenceType type);
 }

@@ -32,7 +32,6 @@ public class User {
     public static final String SEQUENCE_NAME = "users_sequence";
 
     @Id
-    @Setter
     private long id;
 
     @NotNull @NotEmpty

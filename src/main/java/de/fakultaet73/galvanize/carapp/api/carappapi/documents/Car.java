@@ -25,7 +25,6 @@ public class Car {
     public static final String SEQUENCE_NAME = "cars_sequence";
 
     @Id
-//    @Setter
     private long id;
 
     @NotNull

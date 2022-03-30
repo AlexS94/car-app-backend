@@ -1,7 +1,9 @@
 package de.fakultaet73.galvanize.carapp.api.carappapi.controller;
 
 import de.fakultaet73.galvanize.carapp.api.carappapi.ReferenceType;
+import de.fakultaet73.galvanize.carapp.api.carappapi.documents.ImageFile;
 import de.fakultaet73.galvanize.carapp.api.carappapi.documents.User;
+import de.fakultaet73.galvanize.carapp.api.carappapi.dtos.ImageFileDTO;
 import de.fakultaet73.galvanize.carapp.api.carappapi.dtos.UserDTO;
 import de.fakultaet73.galvanize.carapp.api.carappapi.exceptions.UserAlreadyExistsException;
 import de.fakultaet73.galvanize.carapp.api.carappapi.services.BookingService;
@@ -70,7 +72,11 @@ public class UserController {
         UserDTO userDTO = modelMapper.map(user, UserDTO.class);
         userDTO.setBookings(bookingService.getBookingsByUserId(user.getId()));
         userDTO.setCars(carService.getCarsByHostUserId(user.getId()));
-        userDTO.setImage(imageFileService.getImageFile(user.getId(), ReferenceType.USER));
+
+        Optional<ImageFile> optionalImageFile = imageFileService.getImageFile(user.getId(), ReferenceType.USER);
+        optionalImageFile.ifPresent(image -> {
+            userDTO.setImage(modelMapper.map(image, ImageFileDTO.class));
+        });
         return userDTO;
     }
 
