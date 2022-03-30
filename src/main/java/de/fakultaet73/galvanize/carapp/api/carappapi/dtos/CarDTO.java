@@ -47,7 +47,7 @@ public class CarDTO {
 
     @NotNull @Valid
     private CarDetails details;
-    private List<ImageFile> images;
+    private List<ImageFileDTO> images;
 
     @Valid
     private List<Rating> ratings;

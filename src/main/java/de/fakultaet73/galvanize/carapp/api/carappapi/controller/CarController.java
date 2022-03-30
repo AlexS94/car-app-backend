@@ -3,6 +3,7 @@ package de.fakultaet73.galvanize.carapp.api.carappapi.controller;
 import de.fakultaet73.galvanize.carapp.api.carappapi.ReferenceType;
 import de.fakultaet73.galvanize.carapp.api.carappapi.documents.Car;
 import de.fakultaet73.galvanize.carapp.api.carappapi.dtos.CarDTO;
+import de.fakultaet73.galvanize.carapp.api.carappapi.dtos.ImageFileDTO;
 import de.fakultaet73.galvanize.carapp.api.carappapi.exceptions.UserNotExistsException;
 import de.fakultaet73.galvanize.carapp.api.carappapi.services.BookingService;
 import de.fakultaet73.galvanize.carapp.api.carappapi.services.CarService;
@@ -31,7 +32,7 @@ public class CarController {
     public ResponseEntity<CarDTO> getCar(@PathVariable long id) {
         Optional<Car> optionalCar = carService.getCar(id);
         return optionalCar.map(
-                body -> ResponseEntity.ok(convertToDTO(body)))
+                        body -> ResponseEntity.ok(convertToDTO(body)))
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
@@ -59,7 +60,7 @@ public class CarController {
     public ResponseEntity<CarDTO> updateCar(@Valid @RequestBody CarDTO carDTO) throws Exception {
         Optional<Car> optionalCar = carService.updateCar(convertToDocument(carDTO));
         return optionalCar.map(
-                body -> ResponseEntity.ok(convertToDTO(body)))
+                        body -> ResponseEntity.ok(convertToDTO(body)))
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
@@ -76,7 +77,11 @@ public class CarController {
     private CarDTO convertToDTO(Car car) {
         CarDTO carDTO = modelMapper.map(car, CarDTO.class);
         carDTO.setBookings(bookingService.getBookingsByCarId(car.getId()));
-        carDTO.setImages(imageFileService.getImageFiles(car.getId(), ReferenceType.CAR));
+        carDTO.setImages(
+                imageFileService.getImageFiles(car.getId(), ReferenceType.CAR)
+                        .stream().map(image -> modelMapper.map(image, ImageFileDTO.class))
+                        .collect(Collectors.toList())
+        );
         return carDTO;
     }
 

@@ -23,7 +23,7 @@ public class ImageFileController {
     ImageFileService imageFileService;
 
     @PostMapping(value = "/file/image")
-    public ResponseEntity<String> uploadImageFile (
+    public ResponseEntity<String> uploadImageFile(
             @RequestParam long referenceId,
             @RequestParam ReferenceType type,
             @RequestParam MultipartFile file) throws IOException {
@@ -38,7 +38,7 @@ public class ImageFileController {
                     .contentType(file.getContentType())
                     .size(file.getSize()).build();
             imageFileService.uploadImageFile(imageFile);
-        } catch  (UserImageAlreadyExists exception) {
+        } catch (UserImageAlreadyExists exception) {
             return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
         return ResponseEntity.ok("image upload success");

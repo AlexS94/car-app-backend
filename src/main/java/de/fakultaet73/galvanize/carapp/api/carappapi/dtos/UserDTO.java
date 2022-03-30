@@ -48,7 +48,7 @@ public class UserDTO {
     @NotNull
     private LocalDate dateOfBirth;
 
-    private ImageFile image;
+    private ImageFileDTO image;
 
     @NotNull @Valid
     private Address address;
