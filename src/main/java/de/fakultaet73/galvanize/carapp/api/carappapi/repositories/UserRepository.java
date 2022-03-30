@@ -15,4 +15,5 @@ public interface UserRepository extends MongoRepository<User, Long> {
 
     boolean existsUserById(long id);
 
+    boolean existsUserByIdAndUserNameAndEmail(long id, String userName, String email);
 }

@@ -24,7 +24,7 @@ public class CarAppApiApplication {
         SpringApplication.run(CarAppApiApplication.class, args);
     }
 
-    @Bean
+  /*  @Bean
     CommandLineRunner runner(
             MongoOperations mongoOperations,
             UserRepository userRepository,
@@ -91,6 +91,6 @@ public class CarAppApiApplication {
             bookingRepository.insert(testBookingsList);
         };
     }
-
+*/
 }
 

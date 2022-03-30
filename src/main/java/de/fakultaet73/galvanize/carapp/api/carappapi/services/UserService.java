@@ -44,7 +44,7 @@ public class UserService {
     }
 
     public User addUser(User user) {
-        if (userExistsByUserNameAndEmail(user)) {
+        if (userExistsByUserNameOrEmail(user)) {
             throw new UserAlreadyExistsException("User already exists");
         }
         user.setId(sequenceGeneratorService.generateSequence(User.SEQUENCE_NAME));
@@ -52,7 +52,8 @@ public class UserService {
     }
 
     public Optional<User> updateUser(User user) {
-        return userExistsByUserNameAndEmail(user) ?
+        System.out.println(userExistsByIdAndUserNameAndEmail(user));
+        return userExistsByIdAndUserNameAndEmail(user) ?
                 Optional.of(userRepository.save(user)) : Optional.empty();
     }
 
@@ -67,8 +68,14 @@ public class UserService {
         return false;
     }
 
-    private boolean userExistsByUserNameAndEmail(User user) {
+    private boolean userExistsByUserNameOrEmail(User user) {
         return userRepository.existsUserByUserNameOrEmail(
+                user.getUserName(), user.getEmail()
+        );
+    }
+
+    private boolean userExistsByIdAndUserNameAndEmail(User user) {
+        return userRepository.existsUserByIdAndUserNameAndEmail(user.getId(),
                 user.getUserName(), user.getEmail()
         );
     }

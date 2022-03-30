@@ -224,7 +224,7 @@ class UserServiceTest {
     @Test
     void updateUser_user_returnsUser() {
         // Arrange
-        when(userRepository.existsUserByUserNameOrEmail(anyString(), anyString()))
+        when(userRepository.existsUserByIdAndUserNameAndEmail(anyLong(), anyString(), anyString()))
                 .thenReturn(true);
         when(userRepository.save(any(User.class))).thenReturn(validUser);
 
@@ -238,7 +238,7 @@ class UserServiceTest {
     @Test
     void updateUser_user_notExists_returnsNotFound() {
         // Arrange
-        when(userRepository.existsUserByUserNameOrEmail(anyString(), anyString()))
+        when(userRepository.existsUserByIdAndUserNameAndEmail(anyLong(), anyString(), anyString()))
                 .thenReturn(false);
         // Act
         Optional<User> result = userService.updateUser(validUser);
