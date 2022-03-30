@@ -58,7 +58,6 @@ public class ImageFileControllerTest {
         File file = new File("testRessources/image1.jpeg");
         FileInputStream fileInputStream = new FileInputStream(file);
         multipartFile = new MockMultipartFile("file", file.getName(), MediaType.IMAGE_JPEG_VALUE, fileInputStream);
-
     }
 
     @Test
@@ -120,7 +119,7 @@ public class ImageFileControllerTest {
         // Act
         mockMvc.perform(multipart("/file/image")
                         .file(multipartFile)
-                        .param("type", "USER")
+                        .param("type", "CAR")
                         .param("referenceId", "1"))
                 // Assert
                 .andExpect(status().isBadRequest());

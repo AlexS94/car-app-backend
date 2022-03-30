@@ -234,7 +234,6 @@ public class CarControllerTest {
         when(carService.addCar(any(Car.class))).thenReturn(validCar);
         when(modelMapper.map(any(Car.class), any()))
                 .thenReturn(validCarDTO);
-        System.out.println(json);
         // Act
         mockMvc.perform(post("/car")
                         .contentType(MediaType.APPLICATION_JSON)

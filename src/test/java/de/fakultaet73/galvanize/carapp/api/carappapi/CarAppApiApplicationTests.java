@@ -98,7 +98,6 @@ class CarAppApiApplicationTests {
         //Assert
         for (int i = 0; i < userFromDatabaseList.size(); i++) {
             User user = userFromDatabaseList.get(i);
-            System.out.println(user.toString());
             assertEquals(user.getUserName(), testUserList.get(i).getUserName());
         }
     }
@@ -188,8 +187,6 @@ class CarAppApiApplicationTests {
 
         String json = mapper.writeValueAsString(user);
 
-        System.out.println(json);
-
         HttpHeaders headers = new HttpHeaders();
         headers.set("Content-Type", MediaType.APPLICATION_JSON_VALUE);
         HttpEntity<UserDTO> request = new HttpEntity<>(user, headers);
@@ -214,9 +211,7 @@ class CarAppApiApplicationTests {
         //Assert
         assertThat(getUserBeforeDeleteResponse.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(getUserBeforeDeleteResponse.getBody()).isNotNull();
-
         assertThat(deleteUserResponse.getStatusCode()).isEqualTo(HttpStatus.OK);
-
         assertThat(getUserAfterDeleteResponse.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
     }
 

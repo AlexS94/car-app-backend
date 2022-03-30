@@ -26,7 +26,6 @@ import java.util.List;
 @Setter
 @Builder
 @Document
-@ToString
 public class User {
 
     @Transient

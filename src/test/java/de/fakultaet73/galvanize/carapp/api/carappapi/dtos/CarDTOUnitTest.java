@@ -89,8 +89,6 @@ public class CarDTOUnitTest {
     @Test
     public void whenConvertCarDTOToCarEntity_thenCorrect() {
         Car car = modelMapper.map(carTDOValid, Car.class);
-        System.out.println(carTDOValid.toString());
-        System.out.println(car.toString());
         assertEquals(carTDOValid.getId(), car.getId());
         assertEquals(carTDOValid.getHostUserId(), car.getHostUserId());
     }
