@@ -1,8 +1,8 @@
 package de.fakultaet73.galvanize.carapp.api.carappapi.services;
 
-import de.fakultaet73.galvanize.carapp.api.carappapi.Address;
-import de.fakultaet73.galvanize.carapp.api.carappapi.CarDetails;
-import de.fakultaet73.galvanize.carapp.api.carappapi.ReferenceType;
+import de.fakultaet73.galvanize.carapp.api.carappapi.model.Address;
+import de.fakultaet73.galvanize.carapp.api.carappapi.model.CarDetails;
+import de.fakultaet73.galvanize.carapp.api.carappapi.enums.ReferenceType;
 import de.fakultaet73.galvanize.carapp.api.carappapi.documents.Car;
 import de.fakultaet73.galvanize.carapp.api.carappapi.exceptions.UserNotExistsException;
 import de.fakultaet73.galvanize.carapp.api.carappapi.repositories.CarRepository;

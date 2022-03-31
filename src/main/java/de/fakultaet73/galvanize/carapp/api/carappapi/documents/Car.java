@@ -1,8 +1,8 @@
 package de.fakultaet73.galvanize.carapp.api.carappapi.documents;
 
-import de.fakultaet73.galvanize.carapp.api.carappapi.Address;
-import de.fakultaet73.galvanize.carapp.api.carappapi.CarDetails;
-import de.fakultaet73.galvanize.carapp.api.carappapi.Rating;
+import de.fakultaet73.galvanize.carapp.api.carappapi.model.Address;
+import de.fakultaet73.galvanize.carapp.api.carappapi.model.CarDetails;
+import de.fakultaet73.galvanize.carapp.api.carappapi.model.Rating;
 import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Transient;

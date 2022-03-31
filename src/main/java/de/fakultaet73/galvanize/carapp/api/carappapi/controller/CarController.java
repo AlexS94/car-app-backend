@@ -1,6 +1,6 @@
 package de.fakultaet73.galvanize.carapp.api.carappapi.controller;
 
-import de.fakultaet73.galvanize.carapp.api.carappapi.ReferenceType;
+import de.fakultaet73.galvanize.carapp.api.carappapi.enums.ReferenceType;
 import de.fakultaet73.galvanize.carapp.api.carappapi.documents.Car;
 import de.fakultaet73.galvanize.carapp.api.carappapi.dtos.CarDTO;
 import de.fakultaet73.galvanize.carapp.api.carappapi.dtos.ImageFileDTO;
@@ -57,7 +57,7 @@ public class CarController {
     }
 
     @PutMapping("/car")
-    public ResponseEntity<CarDTO> updateCar(@Valid @RequestBody CarDTO carDTO) throws Exception {
+    public ResponseEntity<CarDTO> updateCar(@Valid @RequestBody CarDTO carDTO){
         Optional<Car> optionalCar = carService.updateCar(convertToDocument(carDTO));
         return optionalCar.map(
                         body -> ResponseEntity.ok(convertToDTO(body)))
@@ -85,7 +85,7 @@ public class CarController {
         return carDTO;
     }
 
-    private Car convertToDocument(CarDTO carDTO) throws Exception {
+    private Car convertToDocument(CarDTO carDTO) {
         return modelMapper.map(carDTO, Car.class);
     }
 

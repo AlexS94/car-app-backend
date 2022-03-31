@@ -6,6 +6,7 @@ import de.fakultaet73.galvanize.carapp.api.carappapi.dtos.UserDTO;
 import de.fakultaet73.galvanize.carapp.api.carappapi.repositories.BookingRepository;
 import de.fakultaet73.galvanize.carapp.api.carappapi.repositories.CarRepository;
 import de.fakultaet73.galvanize.carapp.api.carappapi.repositories.UserRepository;
+import de.fakultaet73.galvanize.carapp.api.carappapi.model.Address;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -90,7 +91,7 @@ class CarAppApiApplicationTests {
     @Test
     void checkDatabase() {
         // Arrange
-        List<User> userFromDatabaseList = new ArrayList<>();
+        List<User> userFromDatabaseList;
 
         // Act
         userFromDatabaseList = userRepository.findAll();
@@ -103,7 +104,7 @@ class CarAppApiApplicationTests {
     }
 
     @Test
-    void getUser_id_returnsUser() throws Exception {
+    void getUser_id_returnsUser(){
         // Act
         ResponseEntity<User> response = restTemplate.getForEntity("/user/1", User.class);
 
@@ -114,7 +115,7 @@ class CarAppApiApplicationTests {
     }
 
     @Test
-    void validate_with_Password_Email() throws Exception {
+    void validate_with_Password_Email() {
         // Arrange
         String url = "/validate?input=" + testUserList.get(0).getEmail() + "&password=" + testUserList.get(0).getPassword();
 
@@ -128,7 +129,7 @@ class CarAppApiApplicationTests {
     }
 
     @Test
-    void validate_with_Password_UserName() throws Exception {
+    void validate_with_Password_UserName() {
         // Arrange
         String url = "/validate?input=" + testUserList.get(0).getUserName() + "&password=" + testUserList.get(0).getPassword();
 
@@ -202,7 +203,7 @@ class CarAppApiApplicationTests {
     }
 
     @Test
-    void deleteUser_Id_returnsOk() throws Exception {
+    void deleteUser_Id_returnsOk() {
         // Act
         ResponseEntity<User> getUserBeforeDeleteResponse = restTemplate.getForEntity("/user/1", User.class);
         ResponseEntity<Void> deleteUserResponse = restTemplate.exchange("/user/1", HttpMethod.DELETE, null, Void.class);

@@ -1,9 +1,9 @@
 package de.fakultaet73.galvanize.carapp.api.carappapi.dtos;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import de.fakultaet73.galvanize.carapp.api.carappapi.Address;
-import de.fakultaet73.galvanize.carapp.api.carappapi.CarDetails;
-import de.fakultaet73.galvanize.carapp.api.carappapi.Rating;
+import de.fakultaet73.galvanize.carapp.api.carappapi.model.Address;
+import de.fakultaet73.galvanize.carapp.api.carappapi.model.CarDetails;
+import de.fakultaet73.galvanize.carapp.api.carappapi.model.Rating;
 import de.fakultaet73.galvanize.carapp.api.carappapi.documents.Booking;
 import de.fakultaet73.galvanize.carapp.api.carappapi.documents.Car;
 import org.junit.jupiter.api.BeforeEach;
@@ -69,7 +69,7 @@ public class CarDTOUnitTest {
     }
 
     @Test
-    void convertCarToCarDTO_returnsCarDTO() throws Exception {
+    void convertCarToCarDTO_returnsCarDTO(){
         // Arrange
         // Act
         CarDTO carDTO = modelMapper.map(carValid, CarDTO.class);

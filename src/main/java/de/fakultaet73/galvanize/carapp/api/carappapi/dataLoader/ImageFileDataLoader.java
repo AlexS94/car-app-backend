@@ -1,6 +1,6 @@
 package de.fakultaet73.galvanize.carapp.api.carappapi.dataLoader;
 
-import de.fakultaet73.galvanize.carapp.api.carappapi.ReferenceType;
+import de.fakultaet73.galvanize.carapp.api.carappapi.enums.ReferenceType;
 import de.fakultaet73.galvanize.carapp.api.carappapi.documents.ImageFile;
 import org.bson.types.Binary;
 import org.springframework.stereotype.Component;

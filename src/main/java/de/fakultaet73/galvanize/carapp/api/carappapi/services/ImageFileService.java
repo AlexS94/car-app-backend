@@ -1,6 +1,6 @@
 package de.fakultaet73.galvanize.carapp.api.carappapi.services;
 
-import de.fakultaet73.galvanize.carapp.api.carappapi.ReferenceType;
+import de.fakultaet73.galvanize.carapp.api.carappapi.enums.ReferenceType;
 import de.fakultaet73.galvanize.carapp.api.carappapi.documents.ImageFile;
 import de.fakultaet73.galvanize.carapp.api.carappapi.exceptions.CarNotExistsException;
 import de.fakultaet73.galvanize.carapp.api.carappapi.exceptions.UserImageAlreadyExists;
