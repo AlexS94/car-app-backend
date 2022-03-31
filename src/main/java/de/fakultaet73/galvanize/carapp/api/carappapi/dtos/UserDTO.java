@@ -5,11 +5,10 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
-import de.fakultaet73.galvanize.carapp.api.carappapi.Address;
-import de.fakultaet73.galvanize.carapp.api.carappapi.Rating;
+import de.fakultaet73.galvanize.carapp.api.carappapi.model.Address;
+import de.fakultaet73.galvanize.carapp.api.carappapi.model.Rating;
 import de.fakultaet73.galvanize.carapp.api.carappapi.documents.Booking;
 import de.fakultaet73.galvanize.carapp.api.carappapi.documents.Car;
-import de.fakultaet73.galvanize.carapp.api.carappapi.documents.ImageFile;
 import lombok.*;
 import org.springframework.data.annotation.Id;
 

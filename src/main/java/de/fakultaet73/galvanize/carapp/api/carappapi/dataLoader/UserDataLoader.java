@@ -1,7 +1,7 @@
 package de.fakultaet73.galvanize.carapp.api.carappapi.dataLoader;
 
-import de.fakultaet73.galvanize.carapp.api.carappapi.Address;
-import de.fakultaet73.galvanize.carapp.api.carappapi.Rating;
+import de.fakultaet73.galvanize.carapp.api.carappapi.model.Address;
+import de.fakultaet73.galvanize.carapp.api.carappapi.model.Rating;
 import de.fakultaet73.galvanize.carapp.api.carappapi.documents.User;
 import org.springframework.stereotype.Component;
 

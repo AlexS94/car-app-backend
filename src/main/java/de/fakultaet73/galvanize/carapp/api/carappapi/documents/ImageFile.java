@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
-import de.fakultaet73.galvanize.carapp.api.carappapi.ReferenceType;
+import de.fakultaet73.galvanize.carapp.api.carappapi.enums.ReferenceType;
 import lombok.*;
 import org.bson.types.Binary;
 import org.springframework.data.annotation.Id;

@@ -1,6 +1,6 @@
 package de.fakultaet73.galvanize.carapp.api.carappapi.controller;
 
-import de.fakultaet73.galvanize.carapp.api.carappapi.ReferenceType;
+import de.fakultaet73.galvanize.carapp.api.carappapi.enums.ReferenceType;
 import de.fakultaet73.galvanize.carapp.api.carappapi.documents.ImageFile;
 import de.fakultaet73.galvanize.carapp.api.carappapi.documents.User;
 import de.fakultaet73.galvanize.carapp.api.carappapi.dtos.ImageFileDTO;
@@ -51,7 +51,7 @@ public class UserController {
     }
 
     @PutMapping("/user")
-    public ResponseEntity<UserDTO> updateUser(@Valid @RequestBody UserDTO userDTO) throws Exception {
+    public ResponseEntity<UserDTO> updateUser(@Valid @RequestBody UserDTO userDTO)  {
         Optional<User> optionalUser = userService.updateUser(convertToDocument(userDTO));
         return optionalUser.map(
                         body-> ResponseEntity.ok(convertToDTO(body)))
@@ -74,13 +74,13 @@ public class UserController {
         userDTO.setCars(carService.getCarsByHostUserId(user.getId()));
 
         Optional<ImageFile> optionalImageFile = imageFileService.getImageFile(user.getId(), ReferenceType.USER);
-        optionalImageFile.ifPresent(image -> {
+        optionalImageFile.ifPresent((image) -> {
             userDTO.setImage(modelMapper.map(image, ImageFileDTO.class));
         });
         return userDTO;
     }
 
-    private User convertToDocument(UserDTO userDTO) throws Exception {
+    private User convertToDocument(UserDTO userDTO)  {
         return modelMapper.map(userDTO, User.class);
     }
 

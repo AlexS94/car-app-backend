@@ -1,6 +1,6 @@
 package de.fakultaet73.galvanize.carapp.api.carappapi.repositories;
 
-import de.fakultaet73.galvanize.carapp.api.carappapi.ReferenceType;
+import de.fakultaet73.galvanize.carapp.api.carappapi.enums.ReferenceType;
 import de.fakultaet73.galvanize.carapp.api.carappapi.documents.ImageFile;
 import org.springframework.data.mongodb.repository.MongoRepository;
 

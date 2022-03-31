@@ -1,4 +1,4 @@
-package de.fakultaet73.galvanize.carapp.api.carappapi;
+package de.fakultaet73.galvanize.carapp.api.carappapi.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
