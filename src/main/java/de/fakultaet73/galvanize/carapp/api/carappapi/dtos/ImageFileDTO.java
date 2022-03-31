@@ -16,6 +16,8 @@ public class ImageFileDTO {
     @Id
     private long id;
 
+    private String contentType;
+
     @NotNull
     private Binary content;
 }
