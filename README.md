@@ -112,12 +112,12 @@ This app contains all of the endpoints needed for the:
 **User**:
 ```
   {
-    firstname(String),
+    firstName(String),
     lastName(String),
-    username(String),
+    userName(String),
     email(String),
     password(String),
-    dateOfbirth(YYYY-MM-DD),
+    dateOfBirth(YYYY-MM-DD),
     Address(Address),
     ratings([Rating])
   }
@@ -140,7 +140,7 @@ This app contains all of the endpoints needed for the:
     year(int),
     address(Address),
     pricePerDay(int),
-    carDetails(CarDetails),
+    details(CarDetails),
     ratings([Rating])
     distancePerDay(int)     (not required)
     features(String[])      (not required)
