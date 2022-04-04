@@ -37,7 +37,7 @@ This app contains all of the endpoints needed for the:
 ### User endpoint
 
 - **GET** (user with specific ID): `/user/{id}`
-    - expected: *(REQUIRES valid id)*
+    - expected: *(REQUIRES valid ID)*
     - response: *User* | *404*
 - **GET** (return user when input (username or email) and password exists): `/validate?input=INPUT&password=PASSWORD`
     - expected: *(REQUIRES two String for Username/Email and Password)*
@@ -48,54 +48,58 @@ This app contains all of the endpoints needed for the:
 - **PUT** (update user): `/user`
     - expected *(REQUIRES valid user)*
     - response: *User* | *404*
-    - annotation: ***cannot update id, username or email.***
-- **DELETE** (Delete user with specific ID): `/user/{id}`
-    - expected: *(REQUIRES valid id)*
+    - annotation: ***cannot update ID, username or email.***
+- **PUT** (change password): `/user/password`
+    - expected *(REQUIRES valid passwordContext)*
+    - response: *200* | *404*
+    - annotation: ***old and new password can't be identical.***
+- **DELETE** (delete user with specific ID): `/user/{id}`
+    - expected: *(REQUIRES valid ID)*
     - response: *200* | *204*
 
 ### Car Endpoint
 
-- **GET** (Car with specific ID): `/car/{id}`
-    - expected: *(REQUIRES valid id)*
+- **GET** (car with specific ID): `/car/{id}`
+    - expected: *(REQUIRES valid ID)*
     - response: *Car* | *404*
-- **GET** (All Cars): `/cars`
+- **GET** (all cars): `/cars`
     - response: *List of all cars*
-- **GET** (All Cars with hostUserId): `/cars/host/{id}`
+- **GET** (all cars with hostUserId): `/cars/host/{id}`
     - expected: *(REQUIRES valid hostUserId)*
     - response: *List of all cars with hostUserId*
-- **GET** (Car by City): `/cars/city/{city}`
+- **GET** (car by city): `/cars/city/{city}`
     - expected: *(REQUIRES String city)*
     - response: *List of all Cars with city*
-- **POST** (Add Car): `/car`
+- **POST** (add car): `/car`
     - expected *(REQUIRES valid car(without ID))*
     - response: *Car* | *404*
-- **PUT** (Update Car): `/car`
+- **PUT** (update car): `/car`
     - expected *(REQUIRES valid car)*
     - response: *Car* | *404*
-    - annotation: ***update car -> id cannot be change***
-- **DELETE** (Delete Car with specific id): `/car/{id}`
-    - expected: *(REQUIRES valid id)*
+    - annotation: ***update car -> ID cannot be changed***
+- **DELETE** (delete car with specific ID): `/car/{id}`
+    - expected: *(REQUIRES valid ID)*
     - response: *200* | *204*
 
 ### Image Endpoint
 
-- **POST** (Add Image): `/file/image/`
-    - expected: *(REQUIRES valid id long AND String ReferenceType(CAR|USER),File JPEG)*
+- **POST** (add image): `/file/image/`
+    - expected: *(REQUIRES valid ID long AND String ReferenceType(CAR|USER),File JPEG)*
     - response: *200* | *500*
-- **DELETE** (Delete Image): `/file/image/id`
-    - expected *(REQUIRES valid id)*
-    - response: *id* | *404*
+- **DELETE** (delete image): `/file/image/id`
+    - expected *(REQUIRES valid ID)*
+    - response: *ID* | *404*
 
 ### Booking Endpoint
 
-- **POST** (Add Booking): `/booking`
+- **POST** (add booking): `/booking`
     - expected: *(REQUIRES valid Booking (without ID))*
     - response: *200* | *404*
-- **PUT** (Update Booking): `/booking`
+- **PUT** (update booking): `/booking`
     - expected: *(REQUIRES valid Booking (without ID))*
     - response: *200* | *404*
-- **DELETE** (Delete Booking): `/booking/{id}`
-    - expected: *(REQUIRES valid id)*
+- **DELETE** (delete booking): `/booking/{id}`
+    - expected: *(REQUIRES valid ID)*
     - response: *200* | *204*
 
 ### Valid Models
@@ -176,6 +180,14 @@ This app contains all of the endpoints needed for the:
     rating(double),
     date(YYYY-MM-DD),
     text(String)
+  }
+```
+
+**PasswordContext**:
+```
+  {
+    id(long),
+    password(String)
   }
 ```
 
