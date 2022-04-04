@@ -162,7 +162,6 @@ This app contains all of the endpoints needed for the:
     transmission(String)  
   }
 ```
-  }
 **Address**:
 ```
   {
@@ -172,7 +171,6 @@ This app contains all of the endpoints needed for the:
     zip(int)
   }
 ```
-
 **Rating**:
 ```
   {
@@ -182,7 +180,6 @@ This app contains all of the endpoints needed for the:
     text(String)
   }
 ```
-
 **PasswordContext**:
 ```
   {
