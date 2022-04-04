@@ -180,7 +180,6 @@ class CarAppApiApplicationTests {
                 .lastName("Muller")
                 .userName("firefox")
                 .email("muller@web.de")
-                .password("password")
                 .dateOfBirth(LocalDate.of(1999, 1, 1))
                 .address(new Address("New Street", "13", "Hanover", 11223))
                 .build();

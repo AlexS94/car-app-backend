@@ -1,5 +1,6 @@
 package de.fakultaet73.galvanize.carapp.api.carappapi.services;
 
+import de.fakultaet73.galvanize.carapp.api.carappapi.exceptions.UserNotExistsException;
 import de.fakultaet73.galvanize.carapp.api.carappapi.model.Address;
 import de.fakultaet73.galvanize.carapp.api.carappapi.enums.ReferenceType;
 import de.fakultaet73.galvanize.carapp.api.carappapi.documents.User;
@@ -274,6 +275,64 @@ class UserServiceTest {
 
         // Assert
         assertFalse(result);
+    }
+
+    @Test
+    void getPassword_id_returnsPassword() {
+        // Arrange
+        when(userRepository.findById(anyLong())).thenReturn(Optional.of(validUser));
+        // Act
+        String result = userService.getPassword(validUser.getId());
+
+        // Assert
+        assertEquals(validUser.getPassword(), result);
+    }
+
+    @Test
+    void getPassword_id_notExists_throwsUserNotExistsException() {
+        // Arrange
+        when(userRepository.findById(anyLong())).thenReturn(Optional.empty());
+
+        // Act // Assert
+        assertThrows(UserNotExistsException.class,
+                () -> userService.getPassword(validUser.getId()),
+                "Exception was expected"
+        );
+    }
+
+    @Test
+    void changePassword_id_password_returnsTrue() {
+        // Arrange
+        when(userRepository.findById(anyLong())).thenReturn(Optional.of(validUser));
+
+        // Act
+        boolean result = userService.changePassword(validUser.getId(), "newPassword");
+
+        // Assert
+        assertTrue(result);
+    }
+
+    @Test
+    void changePassword_id_password_samePassword__returnsFalse() {
+        // Arrange
+        when(userRepository.findById(anyLong())).thenReturn(Optional.of(validUser));
+
+        // Act
+        boolean result = userService.changePassword(validUser.getId(), validUser.getPassword());
+
+        // Assert
+        assertFalse(result);
+    }
+
+    @Test
+    void changePassword_id_password_idNotFound_throwsUserNotExistsException() {
+        // Arrange
+        when(userRepository.findById(anyLong())).thenReturn(Optional.empty());
+
+        // Act // Assert
+        assertThrows(UserNotExistsException.class,
+                () -> userService.changePassword(validUser.getId(), validUser.getPassword()),
+                "Exception was expected");
     }
 
 }

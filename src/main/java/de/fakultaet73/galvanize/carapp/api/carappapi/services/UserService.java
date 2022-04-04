@@ -3,6 +3,7 @@ package de.fakultaet73.galvanize.carapp.api.carappapi.services;
 import de.fakultaet73.galvanize.carapp.api.carappapi.enums.ReferenceType;
 import de.fakultaet73.galvanize.carapp.api.carappapi.documents.User;
 import de.fakultaet73.galvanize.carapp.api.carappapi.exceptions.UserAlreadyExistsException;
+import de.fakultaet73.galvanize.carapp.api.carappapi.exceptions.UserNotExistsException;
 import de.fakultaet73.galvanize.carapp.api.carappapi.repositories.UserRepository;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
@@ -32,6 +33,29 @@ public class UserService {
 
     public Optional<User> getUser(long id) {
         return userRepository.findById(id);
+    }
+
+    public String getPassword(long id) {
+        Optional<User> user = userRepository.findById(id);
+        if (user.isEmpty()) {
+            throw new UserNotExistsException("User with this id does not exist");
+        }
+        return user.get().getPassword();
+    }
+
+    public boolean changePassword(long id, String password) {
+        Optional<User> userOptional = userRepository.findById(id);
+
+        if (userOptional.isEmpty()) {
+            throw new UserNotExistsException("User with this id does not exist");
+        }
+
+        if (userOptional.get().getPassword().equals(password)) {
+            return false;
+        }
+        userOptional.get().setPassword(password);
+        userRepository.save(userOptional.get());
+        return true;
     }
 
     public Optional<User> validate(String input, String password) {
@@ -82,6 +106,7 @@ public class UserService {
     public boolean userExists(Long userId) {
         return userRepository.existsUserById(userId);
     }
+
 }
 
 
