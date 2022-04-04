@@ -1,0 +1,55 @@
+mongo --host localhost -u rootuser -p rootpass --authenticationDatabase admin car-app-api-db
+
+show dbs --liste alle dbs
+
+show collections --lstes alle collecitons auf
+
+mongodump -d car-app-api-db -o path/Users/d1ade4u/dbmongodata
+mongoexport –db car-app-api-db –collection students –out C:\Users\Darksider\exportstudents.json
+
+docker exec 709c9c786cef sh -c 'exec mongodump --db car-app-api-db --gzip --archive' > dump_`date "+%Y-%m-%d"`.gz
+
+./gradlew bootBuildImage --imageName=Car-Api-Backenend:Car-Api-Backend
+
+docker build -t carapibackendcartogo .
+
+docker tag carapibackendcartogo redrebelsheep/carapibackendcartogo
+
+docker push redrebelsheep/carapibackendcartogo
+
+docker exec -i a81 /usr/bin/mongodump --username rootuser --password rootpass --authenticationDatabase admin --db car-app-api-db --out /dump
+docker exec -i a81 /usr/bin/mongoexport --username rootuser --password rootpass --authenticationDatabase admin --db car-app-api-db -c booking --out /export3/booking
+docker exec -i a81 /usr/bin/mongoexport --username rootuser --password rootpass --authenticationDatabase admin --db car-app-api-db -c car --out /export3/car
+docker exec -i a81 /usr/bin/mongoexport --username rootuser --password rootpass --authenticationDatabase admin --db car-app-api-db -c database_sequences --out /export3/database_sequences
+docker exec -i a81 /usr/bin/mongoexport --username rootuser --password rootpass --authenticationDatabase admin --db car-app-api-db -c imageFile --out /export3/imageFile
+docker exec -i a81 /usr/bin/mongoexport --username rootuser --password rootpass --authenticationDatabase admin --db car-app-api-db -c user --out /export3/user
+
+mongoexport -d <database-name> -c <collection-name> --out output.json
+
+
+docker cp a81:/dump ~/Downloads/dump
+
+
+docker cp a81:/export3 ~/Downloads/export3
+
+
+
+booking
+car
+database_sequences
+imageFile
+user
+
+
+  carapibackendcartogo:
+    image: carapibackendcartogo
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    volumes:
+      - /data/carapibackendcartogo
+    ports:
+      - "8080:8080"
+
+
+mongoimport --host mongodb --db test --collection census --type json --file /mongo-seed/census.json --jsonArray

@@ -6,7 +6,9 @@ services:
     ports:
       - 27017:27017
     volumes:
-      - data:/dbFiles/db
+      - ./mongo-seed:/mongo-seed
+     #  - data:/dbFiles/db
+    #      - data:/dbFiles/db
     environment:
       - MONGO_INITDB_ROOT_USERNAME=rootuser
       - MONGO_INITDB_ROOT_PASSWORD=rootpass

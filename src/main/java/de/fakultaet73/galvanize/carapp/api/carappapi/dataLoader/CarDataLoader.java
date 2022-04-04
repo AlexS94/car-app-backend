@@ -1,9 +1,12 @@
 package de.fakultaet73.galvanize.carapp.api.carappapi.dataLoader;
 
+import de.fakultaet73.galvanize.carapp.api.carappapi.documents.User;
 import de.fakultaet73.galvanize.carapp.api.carappapi.model.Address;
 import de.fakultaet73.galvanize.carapp.api.carappapi.model.CarDetails;
 import de.fakultaet73.galvanize.carapp.api.carappapi.model.Rating;
 import de.fakultaet73.galvanize.carapp.api.carappapi.documents.Car;
+import de.fakultaet73.galvanize.carapp.api.carappapi.services.SequenceGeneratorService;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
@@ -11,8 +14,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+@AllArgsConstructor
 @Component
 public class CarDataLoader {
+
+    SequenceGeneratorService sequenceGeneratorService;
 
     public List<Car> getCars() {
         List<Car> testCarsList = new ArrayList<>();
@@ -61,7 +67,6 @@ public class CarDataLoader {
         );
         for (int i = 0; i < hostUserIds.length; i++) {
             Car carTmp = Car.builder()
-                    .id(i + 1)
                     .hostUserId(hostUserIds[i])
                     .make(makes[rand.nextInt(makes.length)])
                     .model(models[rand.nextInt(models.length)])
@@ -76,6 +81,7 @@ public class CarDataLoader {
                     .distancePerDay(50 + (int) (Math.random() * ((1000 - 50) + 1)))
                     .address(addressesList.get(i))
                     .build();
+            carTmp.setId(sequenceGeneratorService.generateSequence(Car.SEQUENCE_NAME));
             testCarsList.add(carTmp);
         }
         return testCarsList;

@@ -3,6 +3,8 @@ package de.fakultaet73.galvanize.carapp.api.carappapi.dataLoader;
 import de.fakultaet73.galvanize.carapp.api.carappapi.model.Address;
 import de.fakultaet73.galvanize.carapp.api.carappapi.model.Rating;
 import de.fakultaet73.galvanize.carapp.api.carappapi.documents.User;
+import de.fakultaet73.galvanize.carapp.api.carappapi.services.SequenceGeneratorService;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
@@ -10,8 +12,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+@AllArgsConstructor
 @Component
 public class UserDataLoader {
+
+    SequenceGeneratorService sequenceGeneratorService;
+
 
     public List<User> getUsers() {
         List<User> testUsersList = new ArrayList<>();
@@ -34,7 +40,6 @@ public class UserDataLoader {
         );
         for (int i = 0; i < firstNameArray.length; i++) {
             User userTmp = User.builder()
-                    .id(i + 1)
                     .firstName(firstNameArray[i])
                     .lastName(lastNamesArray[i])
                     .userName(userNameArray[i])
@@ -44,6 +49,7 @@ public class UserDataLoader {
                     .address(addressesList.get(i))
                     .ratings(getRandomRatings())
                     .build();
+            userTmp.setId(sequenceGeneratorService.generateSequence(User.SEQUENCE_NAME));
             testUsersList.add(userTmp);
         }
         return testUsersList;
