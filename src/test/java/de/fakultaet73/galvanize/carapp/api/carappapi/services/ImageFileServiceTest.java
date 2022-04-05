@@ -77,7 +77,6 @@ class ImageFileServiceTest {
         when(userService.userExists(anyLong())).thenReturn(true);
         when(imageFileRepository.existsImageFileByReferenceIdAndType(anyLong(), any(ReferenceType.class))).thenReturn(false);
         when(imageFileRepository.save(any(ImageFile.class))).thenReturn(userImageFile);
-
         // Act
         imageFileService.uploadImageFile(userImageFile);
 
