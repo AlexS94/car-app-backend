@@ -1,5 +1,6 @@
 package de.fakultaet73.galvanize.carapp.api.carappapi.dtos;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import de.fakultaet73.galvanize.carapp.api.carappapi.model.Address;
 import de.fakultaet73.galvanize.carapp.api.carappapi.model.CarDetails;
 import de.fakultaet73.galvanize.carapp.api.carappapi.model.Rating;
@@ -46,6 +47,8 @@ public class CarDTO {
 
     @NotNull @Valid
     private CarDetails details;
+
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private List<ImageFileDTO> images;
 
     @Valid
