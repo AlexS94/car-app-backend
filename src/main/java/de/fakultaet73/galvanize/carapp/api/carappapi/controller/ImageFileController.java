@@ -45,7 +45,6 @@ public class ImageFileController {
     }
 
     // TODO put mapping
-
     @DeleteMapping("/file/image/{id}")
     public ResponseEntity<String> deleteImageFile(@PathVariable long id) {
         return imageFileService.deleteImageFile(id) ? ResponseEntity.ok().build() : ResponseEntity.noContent().build();

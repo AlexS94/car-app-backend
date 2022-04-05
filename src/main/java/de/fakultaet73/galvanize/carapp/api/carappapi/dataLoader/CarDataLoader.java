@@ -28,14 +28,15 @@ public class CarDataLoader {
 
         String[] makes = {"Volkswagen", "Mazda", "Ford", "Dodge", "Opel", "Renault", "Citroen", "Fiat"};
         String[] models = {"Golf", "Mustang", "Pinto", "X", "S Type", "Astra", "Espace", "Ram"};
-        String[] types = {"Hatchback", "Convertible", "SUV", "Truck", "Sedan"};
+        String[] types = {"Luxery", "Classic", "SUV", "Sport", "SUV", "Cabrio", "Van", "Cars"};
         String[] features = {"smoke free", "pets free", "phone charger", "aux support", "nav included"};
 
         List<CarDetails> carDetailsList = List.of(
-                new CarDetails("diesel", 5, 5, 115, "manual"),
-                new CarDetails("regular", 2, 3, 310, "automatic"),
-                new CarDetails("regular", 4, 5, 150, "automatic"),
-                new CarDetails("electric", 4, 5, 86, "manual")
+                new CarDetails("Diesel", 2, 5, 115, "None"),
+                new CarDetails("regular", 2, 3, 310, "Automatic"),
+                new CarDetails("Petrol", 4, 5, 150, "Automatic"),
+                new CarDetails("electric", 7, 5, 86, "Shift"),
+                new CarDetails("Hybrid", 7, 5, 86, "Shift")
         );
 
         String[] guidelines = {
