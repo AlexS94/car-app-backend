@@ -40,7 +40,7 @@ public class CarService {
     }
 
     public List<Car> getCarsByCity(String city) {
-        return carRepository.findByAddressContains(city);
+        return carRepository.findByAddress_City(city);
     }
 
     public List<Car> getCarsByHostUserId(long id) {
