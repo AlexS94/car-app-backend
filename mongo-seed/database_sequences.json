@@ -1,0 +1,18 @@
+[
+  {
+    "_id": "users_sequence",
+    "seq": 10
+  },
+  {
+    "_id": "cars_sequence",
+    "seq": 20
+  },
+  {
+    "_id": "bookings_sequence",
+    "seq": 20
+  },
+  {
+    "_id": "imageFiles_sequence",
+    "seq": 20
+  }
+]

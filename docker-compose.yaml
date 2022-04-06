@@ -7,11 +7,15 @@ services:
       - 27017:27017
     volumes:
       - ./mongo-seed:/mongo-seed
-     #  - data:/dbFiles/db
-    #      - data:/dbFiles/db
     environment:
       - MONGO_INITDB_ROOT_USERNAME=rootuser
       - MONGO_INITDB_ROOT_PASSWORD=rootpass
+  mongo-seed:
+    build: ./mongo-seed
+    depends_on:
+      - mongodb
+    links:
+      - mongodb
   mongo-express:
     image: mongo-express
     container_name: mongo-express
@@ -23,7 +27,7 @@ services:
       - ME_CONFIG_MONGODB_ADMINPASSWORD=rootpass
       - ME_CONFIG_MONGODB_SERVER=mongodb
 volumes:
-  data: {}
+  data: { }
 
 networks:
   default:
