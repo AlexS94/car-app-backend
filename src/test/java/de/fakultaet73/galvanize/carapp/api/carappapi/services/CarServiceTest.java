@@ -112,7 +112,7 @@ class CarServiceTest {
     void getCarsByCity_city_returnsCarList() {
         // Arrange
         List<Car> carList = List.of(validCar);
-        when(carRepository.findByAddressContains(anyString())).thenReturn(carList);
+        when(carRepository.findByAddress_City(anyString())).thenReturn(carList);
 
         // Act
         List<Car> result = carService.getCarsByCity("wolfsburg");
@@ -125,7 +125,7 @@ class CarServiceTest {
     void getCarsByCity_city_returnsEmptyList() {
         // Arrange
         List<Car> carList = new ArrayList<>();
-        when(carRepository.findByAddressContains(anyString())).thenReturn(carList);
+        when(carRepository.findByAddress_City(anyString())).thenReturn(carList);
 
         // Act
         List<Car> result = carService.getCarsByCity("wolfsburg");

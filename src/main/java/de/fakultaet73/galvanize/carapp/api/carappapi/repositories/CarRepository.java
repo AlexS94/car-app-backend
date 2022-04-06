@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface CarRepository extends MongoRepository<Car, Long> {
 
-    List<Car> findByAddressContains(String city);
+    List<Car> findByAddress_City(String city);
 
     List<Car> findByHostUserId(long hostUserId);
 
