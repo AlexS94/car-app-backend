@@ -1,0 +1,227 @@
+[
+  {
+    "_id": 1,
+    "firstName": "Peter",
+    "lastName": "Mustermann",
+    "userName": "PeterM95",
+    "email": "mustermann@web.de",
+    "password": "mustermann123",
+    "dateOfBirth": {
+      "$date": "1995-05-17T23:00:00Z"
+    },
+    "address": {
+      "street": "Schillerstraße",
+      "number": "38",
+      "city": "Wolfsburg",
+      "zip": 38440
+    },
+    "ratings": [
+      {
+        "author": "author",
+        "rating": 4.2
+      }
+    ]
+  },
+  {
+    "_id": 2,
+    "firstName": "Alex",
+    "lastName": "Meier",
+    "userName": "AlexM",
+    "email": "meier@icloud.com",
+    "password": "meier123",
+    "dateOfBirth": {
+      "$date": "1992-01-14T23:00:00Z"
+    },
+    "address": {
+      "street": "Gladiolenweg",
+      "number": "3",
+      "city": "Wolfsburg",
+      "zip": 38440
+    },
+    "ratings": [
+      {
+        "author": "author",
+        "rating": 4.2
+      }
+    ]
+  },
+  {
+    "_id": 3,
+    "firstName": "Marcel",
+    "lastName": "Thompson",
+    "userName": "Marci777",
+    "email": "thompson@mail.com",
+    "password": "thompson123",
+    "dateOfBirth": {
+      "$date": "1997-03-28T23:00:00Z"
+    },
+    "address": {
+      "street": "Waldpfad",
+      "number": "23",
+      "city": "Wolfsburg",
+      "zip": 38446
+    },
+    "ratings": [
+      {
+        "author": "author",
+        "rating": 4.9
+      }
+    ]
+  },
+  {
+    "_id": 4,
+    "firstName": "Marcus",
+    "lastName": "Blank",
+    "userName": "someDude",
+    "email": "oneil@yahoo.de",
+    "password": "oneil123",
+    "dateOfBirth": {
+      "$date": "1999-07-03T22:00:00Z"
+    },
+    "address": {
+      "street": "Behringstraße",
+      "number": "94",
+      "city": "Hamburg",
+      "zip": 22763
+    },
+    "ratings": [
+      {
+        "author": "author",
+        "rating": 4.9
+      }
+    ]
+  },
+  {
+    "_id": 5,
+    "firstName": "Manfred",
+    "lastName": "Elle",
+    "userName": "SmartDude",
+    "email": "meyer@aol.com",
+    "password": "meyer123",
+    "dateOfBirth": {
+      "$date": "1993-08-04T22:00:00Z"
+    },
+    "address": {
+      "street": "Klausstraße",
+      "number": "21",
+      "city": "Hamburg",
+      "zip": 22765
+    },
+    "ratings": [
+      {
+        "author": "author",
+        "rating": 2.5
+      }
+    ]
+  },
+  {
+    "_id": 6,
+    "firstName": "Bob",
+    "lastName": "Bobson",
+    "userName": "bob123",
+    "email": "bobson@bob.com",
+    "password": "Bobson123",
+    "dateOfBirth": {
+      "$date": "1994-06-05T22:00:00Z"
+    },
+    "address": {
+      "street": "Gilbertstraße",
+      "number": 30,
+      "city": "Hamburg",
+      "zip": 22767
+    },
+    "ratings": [
+      {
+        "author": "author",
+        "rating": 3.8
+      }
+    ]
+  },
+  {
+    "_id": 7,
+    "firstName": "Anna",
+    "lastName": "Thiele",
+    "userName": "Anni93",
+    "email": "anni@gmail.com",
+    "password": "thiele123",
+    "dateOfBirth": {
+      "$date": "1993-11-02T22:00:00Z"
+    },
+    "address": {
+      "street": "Friedrichstraße",
+      "number": "151",
+      "city": "Berlin",
+      "zip": 10117
+    },
+    "ratings": []
+  },
+  {
+    "_id": 8,
+    "firstName": "Susanne",
+    "lastName": "Schwarz",
+    "userName": "Susi777",
+    "email": "SusiS@mail.com",
+    "password": "schwarz123",
+    "dateOfBirth": {
+      "$date": "1992-02-02T22:00:00Z"
+    },
+    "address": {
+      "street": "Gormannstraße",
+      "number": "13",
+      "city": "Berlin",
+      "zip": 10119
+    },
+    "ratings": [
+      {
+        "author": "author",
+        "rating": 4.0
+      }
+    ]
+  },
+  {
+    "_id": 9,
+    "firstName": "Jasmine",
+    "lastName": "Fischer",
+    "userName": "FischerJ",
+    "email": "Fischer@yahoo.com",
+    "password": "fischer123",
+    "dateOfBirth": {
+      "$date": "1991-09-13T22:00:00Z"
+    },
+    "address": {
+      "street": "Wilhelmstraße",
+      "number": "49",
+      "city": "Berlin",
+      "zip": 10117
+    },
+    "ratings": [
+      {
+        "author": "author",
+        "rating": 3.7
+      }
+    ]
+  },
+  {
+    "_id": 10,
+    "firstName": "Nadine",
+    "lastName": "Emmrich",
+    "userName": "NaddiE",
+    "email": "emmrichN@gmail.com",
+    "password": "emmrich123",
+    "dateOfBirth": {
+      "$date": "1990-10-01T23:00:00Z"
+    },
+    "address": {
+      "street": "Ziegelstraße",
+      "number": "9",
+      "city": "Berlin",
+      "zip": 10117
+    },
+    "ratings": [
+      {
+        "author": "author",
+        "rating": 4.9
+      }
+    ]
+  }
+]
