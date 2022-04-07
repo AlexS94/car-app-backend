@@ -28,7 +28,7 @@
     "pricePerDay": 50,
     "distancePerDay": 150,
     "details": {
-      "fuelType": "Gas",
+      "fuelType": "Regular",
       "seats": 4,
       "doors": 5,
       "hp": 310,
@@ -142,7 +142,7 @@
     "pricePerDay": 600,
     "distancePerDay": 1200,
     "details": {
-      "fuelType": "Petrol",
+      "fuelType": "Regular",
       "seats": 2,
       "doors": 3,
       "hp": 150,
@@ -410,8 +410,8 @@
     },
     "features": [
       "phone charger",
-      "Child seat",
-      "Leather seats"
+      "child seat",
+      "leather seats"
     ],
     "description": "Everything works fine",
     "guidelines": [
@@ -468,10 +468,10 @@
     },
     "features": [
       "phone charger",
-      "Child seat",
-      "Leather seats",
-      "Backup Camera",
-      "Keyless entry"
+      "child seat",
+      "leather seats",
+      "backup camera",
+      "keyless entry"
     ],
     "description": "If you want to be like Elon then this car is right for you",
     "guidelines": [
@@ -535,8 +535,8 @@
       "zip": 38442
     },
     "features": [
-      "Child seat",
-      "Leather seats"
+      "child seat",
+      "leather seats"
     ],
     "description": "T2 for your  Hippie lifestyle",
     "guidelines": [
@@ -600,8 +600,8 @@
       "zip": 10715
     },
     "features": [
-      "Child seat",
-      "Leather seats"
+      "child seat",
+      "leather seats"
     ],
     "description": "Best rabbit volkswagen ever created",
     "guidelines": [
@@ -673,8 +673,8 @@
       "zip": 10179
     },
     "features": [
-      "Child seat",
-      "Leather seats"
+      "child seat",
+      "leather seats"
     ],
     "description": "Best rabbit volkswagen ever created",
     "guidelines": [
@@ -745,7 +745,7 @@
     "hostUserId": 4,
     "make": "Chevrolet",
     "model": "Thunderbird",
-    "type": "Cabrio",
+    "type": "Convertible",
     "year": 1960,
     "address": {
       "street": "Annenstraße",
@@ -754,14 +754,14 @@
       "zip": 10179
     },
     "features": [
-      "Child seat",
-      "Leather seats"
+      "child seat",
+      "leather seats"
     ],
-    "description": "You're the opportunity to drive my lovely car. You could be the middle-aged man in the red cabrio car",
+    "description": "You have the opportunity to drive my lovely car. You could be the middle-aged man in the red convertible",
     "guidelines": [
       "Everything in life is somewhere else, and you get there in a car. Please be careful"
     ],
-    "pricePerDay": 500,
+    "pricePerDay": 320,
     "distancePerDay": 100,
     "details": {
       "fuelType": "Regular",
@@ -843,18 +843,18 @@
       "zip": 38440
     },
     "features": [
-      "Keyless entry",
+      "keyless entry",
       "phone charger",
-      "Child seat",
-      "Leather seats",
-      "Backup Camera"
+      "child seat",
+      "leather seats",
+      "backup camera"
     ],
     "description": "Oh Lord, won't you buy me a Mercedes Benz. The answer is no, but you can lend mine ",
     "guidelines": [
       "If you don't know where you are going, any road will get you there. Be a ganster, but be careful"
     ],
-    "pricePerDay": 100,
-    "distancePerDay": 1000,
+    "pricePerDay": 320,
+    "distancePerDay": 220,
     "details": {
       "fuelType": "Regular",
       "seats": 4,
@@ -943,14 +943,14 @@
       "zip": 38440
     },
     "features": [
-      "NONE"
+      "none"
     ],
     "description": "drive around in a Fiat 500",
     "guidelines": [
-      "feel the beuty of this classic car"
+      "feel the beauty of this classic"
     ],
     "pricePerDay": 100,
-    "distancePerDay": 1000,
+    "distancePerDay": 99,
     "details": {
       "fuelType": "Regular",
       "seats": 2,
@@ -999,9 +999,9 @@
       "zip": 38440
     },
     "features": [
-      "Smoke free",
-      "No Pets",
-      "Long-term car"
+      "smoke free",
+      "no Pets",
+      "long-term car"
     ],
     "description": "My 2015 Nissan Versa Note is a great car . I maintain it regularly. Oil changes and maintenance done on time. It is very clean inside and outside. It has keyless entry. Please check the pictures. This car is also great on mileage, tires are in great condition. Great for family and friends trip. It has charging ports too. As Turo requires, please return the car is the same condition as taken.",
     "guidelines": [
@@ -1066,9 +1066,9 @@
       "zip": 38446
     },
     "features": [
-      "Apple CarPlay",
-      "Bluetooth",
-      "Keyless entry",
+      "apple carPlay",
+      "bluetooth",
+      "keyless entry",
       "USB input"
     ],
     "description": "Seats up to 7 passengers (3rd row seating) All windows are tinted",
@@ -1134,9 +1134,9 @@
       "zip": 38446
     },
     "features": [
-      "All-wheel drive",
-      "Phone charger",
-      "Nav included"
+      "all-wheel drive",
+      "phone charger",
+      "nav included"
     ],
     "description": "My 2022 Jeep Wrangler is a reliable car to help you get around during your stay.",
     "guidelines": [
