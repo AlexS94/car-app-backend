@@ -14,11 +14,10 @@ To start the app run:
 
 ### `./gradlew bootRun'` or `gradle bootRun` (gradle@7 required)
 
-Start the app with fresh test data:
+<br>
 
-### `./gradlew bootRun --args='--loadData'` or
+ **(Docker is required to initialize the mongoDB)**
 
-### `gradle bootRun --args='--loadData'`
 
 Open [http://localhost:8080](http://localhost:8080) to view it in the browser.
 
@@ -28,7 +27,7 @@ Open [http://localhost:8080](http://localhost:8080) to view it in the browser.
 
 This app contains all of the endpoints needed for the:
 
-`car-app`(work in progress)
+`CarToGo` app
 
 ***
 
