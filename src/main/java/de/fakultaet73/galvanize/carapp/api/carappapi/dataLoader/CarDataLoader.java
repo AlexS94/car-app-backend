@@ -35,7 +35,7 @@ public class CarDataLoader {
                 new CarDetails("Diesel", 2, 5, 115, "None"),
                 new CarDetails("regular", 2, 3, 310, "Automatic"),
                 new CarDetails("Petrol", 4, 5, 150, "Automatic"),
-                new CarDetails("electric", 7, 5, 86, "Shift"),
+                new CarDetails("Electric", 7, 5, 86, "Shift"),
                 new CarDetails("Hybrid", 7, 5, 86, "Shift")
         );
 
