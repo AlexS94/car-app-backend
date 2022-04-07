@@ -5,14 +5,14 @@
   },
   {
     "_id": "cars_sequence",
-    "seq": 20
+    "seq": 16
   },
   {
     "_id": "bookings_sequence",
-    "seq": 20
+    "seq": 16
   },
   {
     "_id": "imageFiles_sequence",
-    "seq": 20
+    "seq": 39
   }
 ]
