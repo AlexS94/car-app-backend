@@ -1,6 +1,6 @@
 # Car App Backend
 
-This project is the backend-api to our car app cnd project.
+This repository is the backend-api to our car app for our cnd project.
 
 Our webapp is a site to rent cars from private people, comparable to AirBnB.
 
@@ -29,6 +29,10 @@ This app contains all of the endpoints needed for the:
 
 `CarToGo` app
 
+Link to the frontend repository: 
+
+### [Frontend Git repository](https://github.com/MarcelWestp/car-app-frontend)
+
 ***
 
 ## API Endpoints
@@ -56,7 +60,7 @@ This app contains all of the endpoints needed for the:
     - expected: *(REQUIRES valid ID)*
     - response: *200* | *204*
 
-### Car Endpoint
+### Car endpoint
 
 - **GET** (car with specific ID): `/car/{id}`
     - expected: *(REQUIRES valid ID)*
@@ -80,7 +84,7 @@ This app contains all of the endpoints needed for the:
     - expected: *(REQUIRES valid ID)*
     - response: *200* | *204*
 
-### Image Endpoint
+### Image endpoint
 
 - **POST** (add image): `/file/image/`
     - expected: *(REQUIRES valid ID long AND String ReferenceType(CAR|USER),File JPEG)*
@@ -89,7 +93,7 @@ This app contains all of the endpoints needed for the:
     - expected *(REQUIRES valid ID)*
     - response: *ID* | *404*
 
-### Booking Endpoint
+### Booking endpoint
 
 - **POST** (add booking): `/booking`
     - expected: *(REQUIRES valid Booking (without ID))*
@@ -101,7 +105,7 @@ This app contains all of the endpoints needed for the:
     - expected: *(REQUIRES valid ID)*
     - response: *200* | *204*
 
-### Valid Models
+### Valid models
 
 **Booking**:
 ```
@@ -202,4 +206,10 @@ This app contains all of the endpoints needed for the:
 
 ## Our team
 
-Marian Kowall, Alex Schulz, David Druecke, Marcel Westphal
+Marian Kowall `Backend`
+
+Alex Schulz `Backend` 
+
+David Druecke `Frontend`
+
+Marcel Westphal `Frontend`
